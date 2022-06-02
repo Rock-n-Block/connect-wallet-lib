@@ -12,9 +12,11 @@ exports.parameters = {
         256: '0x100',
         69: 69,
         24: 24,
+        25: '0x19',
         56: '0x38',
         97: '0x61',
         137: '0x89',
+        338: '0x152',
         80001: '0x13881',
         43113: '0xa869',
         43114: '0xa86a',
@@ -60,6 +62,10 @@ exports.parameters = {
             name: 'Kardiachain',
             chainID: 24
         },
+        '0x19': {
+            name: 'cronos-testnet',
+            chainID: 25
+        },
         '0x38': {
             name: 'binance',
             chainID: 56
@@ -71,6 +77,10 @@ exports.parameters = {
         '0x89': {
             name: 'polygon',
             chainID: 137
+        },
+        '0x152': {
+            name: 'cronos-mainnet',
+            chainID: 338
         },
         '0x13881': {
             name: 'polygon-testnet',
