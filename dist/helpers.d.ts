@@ -10,9 +10,11 @@ export declare const parameters: {
         256: string;
         69: number;
         24: number;
+        25: string;
         56: string;
         97: string;
         137: string;
+        338: string;
         80001: string;
         43113: string;
         43114: string;
@@ -58,6 +60,10 @@ export declare const parameters: {
             name: string;
             chainID: number;
         };
+        '0x19': {
+            name: string;
+            chainID: number;
+        };
         '0x38': {
             name: string;
             chainID: number;
@@ -67,6 +73,10 @@ export declare const parameters: {
             chainID: number;
         };
         '0x89': {
+            name: string;
+            chainID: number;
+        };
+        '0x152': {
             name: string;
             chainID: number;
         };
@@ -142,9 +152,11 @@ export declare const addChains: (chains: IChain[]) => {
         256: string;
         69: number;
         24: number;
+        25: string;
         56: string;
         97: string;
         137: string;
+        338: string;
         80001: string;
         43113: string;
         43114: string;
@@ -190,6 +202,10 @@ export declare const addChains: (chains: IChain[]) => {
             name: string;
             chainID: number;
         };
+        '0x19': {
+            name: string;
+            chainID: number;
+        };
         '0x38': {
             name: string;
             chainID: number;
@@ -199,6 +215,10 @@ export declare const addChains: (chains: IChain[]) => {
             chainID: number;
         };
         '0x89': {
+            name: string;
+            chainID: number;
+        };
+        '0x152': {
             name: string;
             chainID: number;
         };
