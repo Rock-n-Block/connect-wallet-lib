@@ -63,7 +63,7 @@ exports.parameters = {
             chainID: 24
         },
         '0x19': {
-            name: 'cronos-testnet',
+            name: 'cronos-mainnet',
             chainID: 25
         },
         '0x38': {
@@ -79,7 +79,7 @@ exports.parameters = {
             chainID: 137
         },
         '0x152': {
-            name: 'cronos-mainnet',
+            name: 'cronos-testnet',
             chainID: 338
         },
         '0x13881': {
