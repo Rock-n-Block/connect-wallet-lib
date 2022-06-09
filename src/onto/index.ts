@@ -177,7 +177,11 @@ export class OntoConnect extends AbstractConnector {
       if (!window.onto)
         reject({
           code: 4,
-          message: 'User doesn\'t have Onto extension',
+          message: {
+            title: 'Error',
+            subtitle: 'Provider error',
+            message: 'No extension',
+          },
           type: 'Onto',
         });
       this.ethRequestAccounts()
