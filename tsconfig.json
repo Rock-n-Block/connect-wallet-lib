@@ -7,7 +7,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "module": "commonjs",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
   },
   "exclude": [".history/", "node_modules", "dist"]
 }

@@ -10,7 +10,7 @@ This package provides the ability to connect Wallets to website or application v
 - Add Contracts by providing Contract address and ABI code.
 - Work with Contracts methods.
 - Check transactions in blockchain.
-- Add custom blockhain.
+- Add custom blockchain.
 
 ## Usage
 

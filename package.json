@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "webpack serve --mode=development --progress"
   },
   "repository": {
     "type": "git",
@@ -26,15 +27,29 @@
   },
   "homepage": "https://github.com/laumiqv/connect-wallet#readme",
   "dependencies": {
-    "@walletconnect/web3-provider": "^1.6.6",
+    "@walletconnect/web3-provider": "^1.7.8",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "walletlink": "^2.1.11",
     "web3": "^1.6.1"
   },
   "devDependencies": {
+    "@types/node": "^17.0.42",
+    "@types/webpack": "^5.28.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.3.0",
+    "ts-node": "^10.8.1",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "tslint": "~6.1.0",
     "typedoc": "^0.20.37",
-    "typescript": "~4.0.2"
+    "typescript": "^4.7.3",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.2",
+    "webpack-merge": "^5.8.0"
   }
 }

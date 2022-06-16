@@ -10,8 +10,9 @@ import {
 import { parameters, codeMap } from '../helpers';
 import { AbstractConnector } from '../abstract-connector';
 
-export class MetamaskConnect extends AbstractConnector {
+export class MetaMask implements AbstractConnector {
   public connector: any;
+  public name: string = 'MetaMask';
   private chainID: number;
   private chainName: string;
   private nativeCurrency: INativeCurrency;
@@ -23,7 +24,6 @@ export class MetamaskConnect extends AbstractConnector {
    * using connect wallet.
    */
   constructor(network: INetwork) {
-    super();
 
     this.chainID = network.chainID;
     if (network.chainName) this.chainName = network.chainName;
@@ -224,4 +224,8 @@ export class MetamaskConnect extends AbstractConnector {
         });
     });
   }
+
+  public disconnect(): Promise<void> {
+    return new Promise(resolve => resolve(null));
+  } 
 }

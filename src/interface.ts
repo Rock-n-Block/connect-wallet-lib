@@ -1,25 +1,21 @@
-import { WalletLinkProvider } from 'walletlink';
-import { Contract } from 'web3-eth-contract';
-import { AbiItem } from 'web3-utils';
+import { WalletLinkProvider } from "walletlink";
+import { Contract } from "web3-eth-contract";
+import { AbiItem } from "web3-utils";
 
-export interface IProvider {
-  name: string;
-  useProvider?: string;
+export interface IRPCMap {
+  [chainId: number]: string;
+}
+export interface IWalletConnectProviderOptions {
+  useProvider?: "rpc" | "infuraId" | "bridge";
   provider?: {
-    bridge?: {
-      url: string;
-      infura?: string[];
-    };
-    infura?: {
-      infuraId: string;
-    };
-    rpc?: {
-      rpc: {
-        [index: number]: string;
-      };
-      chainId?: number;
-    };
+    bridge?: string;
+    infuraId?: string;
+    rpc?: IRPCMap;
   };
+}
+
+export interface IProvider extends IWalletConnectProviderOptions {
+  name: string;
 }
 
 export type ContractWeb3 = Contract;
@@ -31,6 +27,17 @@ export interface IEvent {
     name: string;
     chainId: number;
   };
+}
+
+export interface ICheckNet {
+  chain: boolean,
+  error?: IError,
+}
+
+export interface INativeCurrency {
+  name: string,
+  symbol: string,
+  decimals: number,
 }
 
 export interface IEventError extends IEvent {
@@ -119,6 +126,21 @@ export interface IChain {
   hex: string;
 }
 
+export interface IKeys extends Record<string, string> {};
+
+export type TChainsConfig<T extends string | number | symbol, K extends string | number | symbol> = {
+  [key in T]: {
+    name: string,
+    network: INetwork
+    provider: {
+      [provider in K]?: IProvider
+    },
+    keys?: IKeys
+  }
+}
+
 declare global {
-  interface Window { onto: WalletLinkProvider; }
+  interface Window {
+    onto: WalletLinkProvider;
+  }
 }

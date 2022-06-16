@@ -4,8 +4,9 @@ import { IConnectorMessage, INetwork, INativeCurrency, IEvent, IEventError } fro
 import { parameters, codeMap } from '../helpers';
 import { AbstractConnector } from '../abstract-connector';
 
-export class OntoConnect extends AbstractConnector {
+export class OntoConnect implements AbstractConnector {
   public connector: any;
+  public name: string = 'Onto';
   private chainID: number;
   private chainName: string;
   private nativeCurrency: INativeCurrency;
@@ -17,8 +18,6 @@ export class OntoConnect extends AbstractConnector {
    * using connect wallet.
    */
   constructor(network: INetwork) {
-    super();
-
     this.chainID = network.chainID;
     if (network.chainName) this.chainName = network.chainName;
     if (network.nativeCurrency) this.nativeCurrency = network.nativeCurrency;
@@ -213,4 +212,8 @@ export class OntoConnect extends AbstractConnector {
         });
     });
   }
+  
+  public disconnect(): Promise<void> {
+    return new Promise(resolve => resolve(null));
+  } 
 }

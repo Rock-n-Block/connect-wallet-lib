@@ -10,8 +10,9 @@ declare global {
   }
 }
 
-export class KardiaChainConnect extends AbstractConnector {
+export class KardiaChainConnect implements AbstractConnector {
   public connector: any;
+  public name: string = 'KardiaChain';
   private chainID: number;
   private currentAddr: string;
 
@@ -20,7 +21,6 @@ export class KardiaChainConnect extends AbstractConnector {
    * using connect wallet.
    */
   constructor() {
-    super();
   }
 
   /**
@@ -183,4 +183,8 @@ export class KardiaChainConnect extends AbstractConnector {
       }
     });
   }
+  
+  public disconnect(): Promise<void> {
+    return new Promise(resolve => resolve(null));
+  } 
 }

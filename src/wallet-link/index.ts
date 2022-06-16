@@ -11,7 +11,8 @@ import {
 import { parameters } from '../helpers';
 import { AbstractConnector } from '../abstract-connector';
 
-export class WalletLinkConnect extends AbstractConnector {
+export class WalletLinkConnect implements AbstractConnector {
+  public name: string = 'WalletLink';
   public connector: any;
   private chainID: any;
 
@@ -21,7 +22,6 @@ export class WalletLinkConnect extends AbstractConnector {
    */
 
   constructor(network: INetwork) {
-    super();
     this.chainID = network.chainID;
   }
 
@@ -56,7 +56,7 @@ export class WalletLinkConnect extends AbstractConnector {
         const chain = parameters.chainsMap[parameters.chainIDMap[this.chainID]];
 
         this.connector = walletLink.makeWeb3Provider(
-          `https://${chain.name}.infura.io/v3/${provider.provider.infura.infuraId}`,
+          `https://${chain.name}.infura.io/v3/${provider.provider.infuraId}`,
           this.chainID
         );
         resolve({
@@ -164,4 +164,8 @@ export class WalletLinkConnect extends AbstractConnector {
       }
     });
   }
+  
+  public disconnect(): Promise<void> {
+    return new Promise(resolve => resolve(null));
+  } 
 }

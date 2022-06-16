@@ -1,17 +1,10 @@
-import Web3 from 'web3';
-import { Observable } from 'rxjs';
-import { Contract } from 'web3-eth-contract';
-import { provider } from 'web3-core';
-
-import { MetamaskConnect } from './metamask';
-import { WalletsConnect } from './wallet-connect';
-import { WalletLinkConnect } from './wallet-link';
-import { KardiaChainConnect } from './kardiachain';
-import { OntoConnect } from './onto';
+import Web3 from "web3";
+import { Observable } from "rxjs";
+import { Contract } from "web3-eth-contract";
+import { provider } from "web3-core";
 
 import {
   INetwork,
-  IMessageProvider,
   IContract,
   IProvider,
   IAddContract,
@@ -24,24 +17,19 @@ import {
   INoNameContract,
   IEvent,
   IEventError,
-} from './interface';
-import { parameters, addChains } from './helpers';
+  IKeys,
+} from "./interface";
+import { parameters, addChains } from "./helpers";
+import { AbstractConnector, AbstractConstructor } from "abstract-connector";
+import { chainError, gettingAddressError, invalidConfig, providerError } from "./errors";
+import { initialSettings } from "./config";
+import { isConfigSufficient, normalizeNetworkConfig } from "./utils";
 
 export class ConnectWallet {
-  private connector:
-    | MetamaskConnect
-    | WalletsConnect
-    | WalletLinkConnect
-    | KardiaChainConnect
-    | OntoConnect;
+  private connector: AbstractConnector;
   private providerName: string;
-  private availableProviders: string[] = [
-    'MetaMask',
-    'WalletConnect',
-    'WalletLink',
-    'KardiaChain',
-    'Onto',
-  ];
+  private connectors: AbstractConstructor[] = [];
+  public availableProviders: string[] = [];
 
   private network: INetwork;
   private settings: ISettings;
@@ -61,6 +49,18 @@ export class ConnectWallet {
   }
 
   /**
+   *
+   * @param {AbstractConstructor[]} wallets - array of wallets which should be add into the wallet lib
+   * @return {ConnectWallet} return instance of the class
+   * @example new ConnectWallet().use([MetaMask, WalletsConnect])
+   */
+  public use = (wallets: AbstractConstructor[]): ConnectWallet => {
+    this.connectors = wallets;
+    this.availableProviders = wallets.map((wallets) => wallets.name);
+    return this;
+  };
+
+  /**
    * Add custom chains to Connect Wallet, provide an array of chains than return chain list parameters.
    *
    * @returns return chains list parameters
@@ -69,7 +69,7 @@ export class ConnectWallet {
   public addChains = (chains: IChain[]): any => addChains(chains);
 
   /**
-   * Create new wallet provider with network and settings valuse by passing it in function arguments.
+   * Create new wallet provider with network and settings values by passing it in function arguments.
    *
    * @param {IProvider} provider provider data with provider name and setting.
    * @param {INetwork} network application working network name and chainID.
@@ -82,36 +82,38 @@ export class ConnectWallet {
     provider: IProvider,
     network: INetwork,
     settings?: ISettings,
+    keys?: IKeys
   ): Promise<IConnectorMessage> {
+    // check providers
     if (!this.availableProviders.includes(provider.name)) {
-      return {
-        code: 2,
-        type: 'error',
-        connected: false,
-        provider,
-        message: {
-          title: 'Error',
-          subtitle: 'Provider Error',
-          text: `Your provider doesn't exists`,
-        },
-      };
+      return providerError(provider);
+    }
+    // normalize network config (add blockExplorerURL, rpc, nativeCurrency)
+    const networkConfig = normalizeNetworkConfig(network, keys);
+    // simple network config validation (check existing of config fields)
+    if (!isConfigSufficient(networkConfig).ok) {
+      return invalidConfig(provider);
     }
 
-    this.network = network;
-    this.settings = settings ? settings : { providerType: false };
+    this.network = networkConfig;
+    this.settings = settings ? settings : initialSettings;
 
     this.connector = this.chooseProvider(provider.name);
 
     return this.connector
-      .connect(provider)
+      .connect(provider, networkConfig)
       .then((connect: IConnectorMessage) => {
         return this.applySettings(connect);
       })
       .then((connect: IConnectorMessage) => {
         if (connect.connected) {
-          this.initWeb3(
-            connect.provider === 'Web3' ? Web3.givenProvider : connect.provider,
-          );
+          if (connect.provider.chainId === networkConfig.chainID) {
+            this.initWeb3(
+              connect.provider === "Web3"
+                ? Web3.givenProvider
+                : connect.provider
+            );
+          }
         }
         return connect;
       })
@@ -123,30 +125,22 @@ export class ConnectWallet {
   /**
    * Find and choose available provider for create connection.
    *
-   * @param {Srtring} name provider name passing from connect function in provider value.
+   * @param {string} name provider name passing from connect function in provider value.
    * @returns return selected provider class.
    * @example connectWallet.chooseProvider('MetaMask'); //=> new MetamaskConnect()
    */
-  private chooseProvider(name: string): MetamaskConnect | WalletsConnect {
+  private chooseProvider(name: string) {
     this.providerName = name;
-    switch (name) {
-      case 'MetaMask':
-        return new MetamaskConnect(this.network);
-      case 'WalletConnect':
-        return new WalletsConnect();
-      case 'WalletLink':
-        return new WalletLinkConnect(this.network);
-      case 'KardiaChain':
-        return new KardiaChainConnect();
-      case 'Onto':
-        return new OntoConnect(this.network);
-    }
+    const provider = this.connectors.find(
+      (connector) => connector.name === name
+    );
+    return new provider(this.network);
   }
 
   /**
    * Initialize a Web3 by set provider after using connect function.
    *
-   * @param {Any} provider array with provider information.
+   * @param {any} provider array with provider information.
    * @example connectWallet.initWeb3(provider);
    */
   private initWeb3(provider: any): void {
@@ -158,25 +152,20 @@ export class ConnectWallet {
   }
 
   /**
-   * Geting current connectror
+   * Getting current connector
    *
    * @example connectWallet.getConnector();
    */
-  public getConnector():
-    | MetamaskConnect
-    | OntoConnect
-    | WalletsConnect
-    | WalletLinkConnect
-    | KardiaChainConnect {
+  public getConnector(): AbstractConnector {
     return this.connector;
   }
 
   /**
-   * Geting current providerName
+   * Getting current providerName
    *
-   * @example connectWallet.getproviderName();
+   * @example connectWallet.getProviderName();
    */
-  public getproviderName(): string {
+  public getProviderName(): string {
     return this.providerName;
   }
 
@@ -184,11 +173,11 @@ export class ConnectWallet {
    * Add settings parameters to connect wallet answers.
    *
    * @param {Array} data array which needs to apply a settings parameters
-   * @returns return completedata with settings parameters
+   * @returns return complete data with settings parameters
    * @example connectWallet.applySettings(data); //=> data.type etc.
    */
   private applySettings(
-    data: IConnectorMessage | IError | IConnect,
+    data: IConnectorMessage | IError | IConnect
   ): IConnectorMessage | IError | IConnect {
     if (this.settings.providerType) {
       data.type = this.providerName;
@@ -202,55 +191,54 @@ export class ConnectWallet {
    * @returns return an Promise array with data error or connected.
    * @example connectWallet.getAccounts().then((account: any)=> console.log('account',account),(err: any => console.log('account', err)));
    */
-  public getAccounts(): Promise<IConnect | IError | { address: string }> {
-    const error: IError = {
-      code: 4,
-      message: {
-        title: 'Error',
-        subtitle: 'Chain error',
-        text: '',
-      },
-    };
-
+  public getAccounts(): Promise<IConnect> {
     return new Promise((resolve, reject) => {
       if (this.currentWeb3() && !this.connector) {
         const { address, accounts } = this.currentWeb3().currentProvider as any;
-        resolve({ address: address || accounts[0] });
+        const connectObject: IConnect = {
+          address: address || accounts[0],
+          network: {
+            name: this.network.chainName,
+            chainID: this.network.chainID,
+          },
+        };
+        resolve(connectObject);
       } else if (this.connector) {
         const { chainID } = this.network;
         const { chainsMap, chainIDMap } = parameters;
-
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
             if (connectInfo.network.chainID !== chainID) {
-              error.message.text = `Please set network: ${
-                chainsMap[chainIDMap[chainID]].name
-              }.`;
-
-              reject(this.applySettings(error));
+              reject(
+                this.applySettings(
+                  chainError(
+                    `Please set network: ${
+                      chainsMap[chainIDMap[chainID]].name
+                    }.`
+                  )
+                )
+              );
             } else {
-              resolve(this.applySettings(connectInfo));
+              resolve(this.applySettings(connectInfo) as IConnect);
             }
           },
           (error: IError) => {
             reject(this.applySettings(error));
-          },
+          }
         );
       } else {
-        error.code = 7;
-        error.message = null;
-        reject(this.applySettings(error));
+        reject(this.applySettings(gettingAddressError()));
       }
     });
   }
 
   /**
    * Create new Observer of transactions and add it to array of all transaction subscribers
-   * variable. You can subscribe to waiting answer from blockchain if your trunsaction
-   * finshed success or not. You will get transaction hash.
+   * variable. You can subscribe to waiting answer from blockchain if your transaction
+   * finished success or not. You will get transaction hash.
    *
    * @returns return new observable value.
-   * @example connectWallet.txSubscribe().subscribe((tx) => {console.log('transacton', tx)});
+   * @example connectWallet.txSubscribe().subscribe((tx) => {console.log('transaction', tx)});
    */
   public txSubscribe(): Observable<any> {
     const newObserver = new Observable((observer) => {
@@ -262,7 +250,7 @@ export class ConnectWallet {
   /**
    * Trigger all transaction subscribers and pass transaction hash if transaction complete.
    *
-   * @param {String} txHash transaction hash of success transaction.
+   * @param {string} txHash transaction hash of success transaction.
    * @example connectWallet.clTxSubscribers(txHash);
    */
   public clTxSubscribers(txHash: string): void {
@@ -272,12 +260,12 @@ export class ConnectWallet {
   }
 
   /**
-   * Checking transaction hash status in blockchain. And return transacrion hash if transaction
-   * was found and success or reject null if dont have enouth data or information.
+   * Checking transaction hash status in blockchain. And return transaction hash if transaction
+   * was found and success or reject null if don't have enough data or information.
    *
-   * @param {String} txHash transaction hash.
-   * @param {Any} resolve resolve transaction hash.
-   * @param {Any} reject reject if transaction not found.
+   * @param {string} txHash transaction hash.
+   * @param {any} resolve resolve transaction hash.
+   * @param {any} reject reject if transaction not found.
    * @returns return transaction hash or reject with null.
    * @example new Promise((resolve, reject) => {connectWallet.checkTx(txHash, resolve, reject);});
    */
@@ -297,11 +285,11 @@ export class ConnectWallet {
   }
 
   /**
-   * Transaction check in blockchain. Use this funnction to start check transaction by his hash.
+   * Transaction check in blockchain. Use this function to start check transaction by his hash.
    * This function will triggered all transaction subscribers when transaction complete successful or
    * with errors. You need to provide transaction hash in function after you approve it.
    *
-   * @param {String} txHash transaction hash.
+   * @param {string} txHash transaction hash.
    * @returns return promise with transaction search info, can return transaction hash or null.
    * @example connectWallet.txCheck(txHash).then((txHash: string) => console.log(txHash),(err) => console.log(err));
    */
@@ -336,7 +324,7 @@ export class ConnectWallet {
       try {
         this.contracts[contract.name] = new this.Web3.eth.Contract(
           contract.abi,
-          contract.address,
+          contract.address
         );
         resolve(true);
       } catch {
@@ -348,7 +336,7 @@ export class ConnectWallet {
   /**
    * Get contract by providing contract name. If you don't have contracts use addContract function to initialize it.
    *
-   * @param {String} name contract name.
+   * @param {string} name contract name.
    * @returns return contract parameters and methods.
    * @example connectWallet.Contract(ContractName);
    */
@@ -363,10 +351,10 @@ export class ConnectWallet {
   public currentWeb3 = (): Web3 => this.Web3;
 
   /**
-   * Get account balance from ethereum blockchain. Provide address in function arguments to recive address balance
+   * Get account balance from ethereum blockchain. Provide address in function arguments to receive address balance
    * from blockchain.
    *
-   * @param {String} address address.
+   * @param {string} address address.
    * @returns return address balance.
    * @example connectWallet.getBalance(address).then((balance: string)=> {console.log(balance)});
    */
@@ -376,20 +364,23 @@ export class ConnectWallet {
 
   /**
    * Logout function. Use this function if you want to do logout from your application. Function will reset
-   * current connection to defoult then you need to initialize connect() function again to connect to your
+   * current connection to default then you need to initialize connect() function again to connect to your
    * provider.
    *
-   * @example connectWallet.resetConect();
+   * @example connectWallet.resetConnect();
    */
-  public resetConect = (): void => (this.connector = undefined);
+  public resetConnect = (): void => {
+    this.connector.disconnect();
+    this.connector = undefined;
+  };
 
   /**
-   * Use this method to sign custom mesaage.
+   * Use this method to sign custom message.
    *
    * @example connectWallet.signMsg('0x0000000000000000000', 'some_data').then(data => console.log('sign:', data),err => console.log('sign err:',err));
    */
   public signMsg = (userAddr: string, msg: string): Promise<any> => {
-    return this.Web3.eth.personal.sign(msg, userAddr, '');
+    return this.Web3.eth.personal.sign(msg, userAddr, "");
   };
 
   /**
@@ -405,7 +396,7 @@ export class ConnectWallet {
     return new Observable((observer) => {
       this.connector.eventSubscriber().subscribe(
         (event: IEvent) => observer.next(event),
-        (error: IEventError) => observer.error(error),
+        (error: IEventError) => observer.error(error)
       );
     });
   }

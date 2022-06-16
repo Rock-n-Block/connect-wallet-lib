@@ -5,16 +5,18 @@ import {
   IProvider,
   IEvent,
   IEventError,
+  INetwork,
 } from '../interface';
 
-export abstract class AbstractConnector {
-  public abstract connector: any;
-
-  constructor() {}
-
-  public abstract connect(provider?: IProvider): Promise<IConnectorMessage>;
-
-  public abstract eventSubscriber(): Observable<IEvent | IEventError>;
-
-  public abstract getAccounts(): Promise<any>;
+export interface AbstractConnector {
+  connector: any;
+  name: string;
+  connect: (provider?: IProvider, network?: INetwork) => Promise<IConnectorMessage>;
+  disconnect: () => Promise<void>;
+  eventSubscriber: () => Observable<IEvent | IEventError>;
+  getAccounts: () => Promise<any>;
 }
+export interface AbstractConstructor {
+  new (network?: INetwork): AbstractConnector;
+}
+
