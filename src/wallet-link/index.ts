@@ -17,7 +17,7 @@ export class WalletLinkConnect implements AbstractConnector {
   private chainID: any;
 
   /**
-   * WalletLinkConnect class to connect browser Coinbase Wallet extention to your application
+   * WalletLinkConnect class to connect browser Coinbase Wallet extension to your application
    * using connect wallet.
    */
 
@@ -119,7 +119,7 @@ export class WalletLinkConnect implements AbstractConnector {
   }
 
   /**
-   * Get account address and chain information from Coinbase Wallet extention.
+   * Get account address and chain information from Coinbase Wallet extension.
    *
    * @returns return an Observable array with data error or connected information.
    * @example this.getAccounts().subscribe((account: any)=> {console.log('account',account)});

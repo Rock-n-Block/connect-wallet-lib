@@ -30,7 +30,7 @@ export class WalletsConnect implements AbstractConnector {
 
   /**
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
-   * in your favourite cryptowallet.
+   * in your favourite crypto wallet.
    */
   constructor(network: INetwork) {
     this.chainID = network.chainID;

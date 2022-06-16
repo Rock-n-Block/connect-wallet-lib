@@ -20,7 +20,7 @@ export class MetaMask implements AbstractConnector {
   private blockExplorerUrl: string;
 
   /**
-   * Metamask class to connect browser metamask extention to your application
+   * Metamask class to connect browser metamask extension to your application
    * using connect wallet.
    */
   constructor(network: INetwork) {
@@ -34,7 +34,7 @@ export class MetaMask implements AbstractConnector {
   }
 
   /**
-   * Connect Metamask browser or mobile extention to application. Create connection with connect
+   * Connect Metamask browser or mobile extension to application. Create connection with connect
    * wallet and return provider for Web3.
    *
    * @returns return connect status and connect information with provider for Web3.
@@ -169,7 +169,7 @@ export class MetaMask implements AbstractConnector {
   }
 
   /**
-   * Get account address and chain information from metamask extention.
+   * Get account address and chain information from metamask extension.
    *
    * @returns return an Observable array with data error or connected information.
    * @example this.getAccounts().subscribe((account: any)=> {console.log('account',account)});

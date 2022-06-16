@@ -114,7 +114,7 @@ export class KardiaChainConnect implements AbstractConnector {
   }
 
   /**
-   * Get account address and chain information from KardiaChain Wallet extention.
+   * Get account address and chain information from KardiaChain Wallet extension.
    *
    * @returns return an Observable array with data error or connected information.
    * @example this.getAccounts().subscribe((account: any)=> {console.log('account',account)});
