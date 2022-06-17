@@ -9,5 +9,5 @@
     "module": "commonjs",
     "lib": ["es2018", "dom"],
   },
-  "exclude": [".history/", "node_modules", "dist", "app", "webpack.config.ts", ".nvmrc"]
+  "exclude": [".history/", "node_modules", "dist", "webpack.config.ts", ".nvmrc"]
 }

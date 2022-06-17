@@ -19,7 +19,7 @@ export const providerError: (provider: IProvider) => IConnectorMessage = (
   message: {
     title: "Error",
     subtitle: "Provider Error",
-    text: `Your provider doesn't exists`,
+    text: `Your provider doesn't exists. Please add ${provider.name}`,
   },
 });
 

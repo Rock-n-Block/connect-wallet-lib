@@ -1,10 +1,9 @@
-import { MetaMask } from "../src/metamask";
 import { ConnectWallet } from "../src/index";
 import { chainsEnum, connectWallet } from "./config";
-import { WalletsConnect } from "../src/wallet-connect";
 import { IError } from "interface";
+import { MetaMask } from 'metamask-wallet/dist'
 
-const wallet = new ConnectWallet().use([MetaMask, WalletsConnect]);
+const wallet = new ConnectWallet().use([MetaMask]);
 const { network, provider, settings, keys } = connectWallet(
   chainsEnum.Ethereum
 );
@@ -18,12 +17,12 @@ const disconnectButton = document.getElementById("disconnect");
 
 connectButton.addEventListener("click", async function () {
   const connected = await wallet.connect(
-    provider["WalletConnect"],
+    provider.MetaMask,
     network,
     settings,
     keys,
   );
-  if (connected) {
+  if (connected.connected) {
     const subscription = wallet.eventSubscriber().subscribe(
       (data) => console.log(data),
       (err) => console.log(err)
@@ -31,6 +30,7 @@ connectButton.addEventListener("click", async function () {
     wallet
       .getAccounts()
       .then((accountsData) => {
+        connectButton.innerText = accountsData.address
         console.log(accountsData);
       })
       .catch((err: IError) => {
@@ -40,5 +40,8 @@ connectButton.addEventListener("click", async function () {
 });
 
 disconnectButton.addEventListener('click', function(){
-  wallet.resetConnect();
+  wallet.resetConnect();  
+  if(connectButton){
+    connectButton.innerText = 'Connect wallet'
+  }
 })

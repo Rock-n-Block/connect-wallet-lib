@@ -31,7 +31,7 @@ export const normalizeNetworkConfig = (
 };
 
 type TConfigCheckerResult = {
-  ok: boolean;
+  valid: boolean;
   errors: string[];
 };
 
@@ -49,7 +49,7 @@ export const isConfigSufficient = (
     emptyFields.push("rpc");
   }
   return {
-    ok: emptyFields.length === 0,
+    valid: emptyFields.length === 0,
     errors: emptyFields,
   };
 };

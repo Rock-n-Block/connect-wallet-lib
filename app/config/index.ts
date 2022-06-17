@@ -12,7 +12,7 @@ export interface IConnectWallet {
   wallets: string[];
   network: INetwork;
   provider: {
-    [index: string]: IProvider;
+    [index in providersEnum]?: IProvider;
   };
   settings: ISettings;
   keys: IKeys;

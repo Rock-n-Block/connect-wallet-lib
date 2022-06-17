@@ -2,6 +2,7 @@ import Web3 from "web3";
 import { Observable } from "rxjs";
 import { Contract } from "web3-eth-contract";
 import { provider } from "web3-core";
+import { TransactionReceipt} from "web3-eth";
 
 import {
   INetwork,
@@ -25,6 +26,7 @@ import { chainError, gettingAddressError, invalidConfig, providerError } from ".
 import { initialSettings } from "./config";
 import { isConfigSufficient, normalizeNetworkConfig } from "./utils";
 
+const { chainsMap, chainIDMap } = parameters;
 export class ConnectWallet {
   private connector: AbstractConnector;
   private providerName: string;
@@ -40,7 +42,6 @@ export class ConnectWallet {
 
   /**
    * Connect provider to web3 and get access to web3 methods, account address and transaction in blockchain.
-   * Supported MetaMask, WalletConnect, Kardiachain and CoinBase providers.
    */
   constructor(initProvider?: provider) {
     if (initProvider) {
@@ -74,6 +75,7 @@ export class ConnectWallet {
    * @param {IProvider} provider provider data with provider name and setting.
    * @param {INetwork} network application working network name and chainID.
    * @param {ISettings} settings connect wallet settings.
+   * @param {IKeys} [keys] keys which will be used in the process (for example `infuraId`)
    * @returns return connection info in boolean (true - connected, false - not connected) or error provider.
    * @example connectWallet.connect(providerWallet, networkWallet, connectSetting).then((connect) =>
    * {console.log(connect);},(error) => {console.log('connect error', error);});
@@ -91,7 +93,7 @@ export class ConnectWallet {
     // normalize network config (add blockExplorerURL, rpc, nativeCurrency)
     const networkConfig = normalizeNetworkConfig(network, keys);
     // simple network config validation (check existing of config fields)
-    if (!isConfigSufficient(networkConfig).ok) {
+    if (!isConfigSufficient(networkConfig).valid) {
       return invalidConfig(provider);
     }
 
@@ -113,6 +115,12 @@ export class ConnectWallet {
                 ? Web3.givenProvider
                 : connect.provider
             );
+          } else {
+            const { chainID } = this.network;
+
+            return this.applySettings(chainError(`Please set network: ${
+              chainsMap[chainIDMap[chainID]].name
+            }.`)) as IConnectorMessage;
           }
         }
         return connect;
@@ -205,7 +213,7 @@ export class ConnectWallet {
         resolve(connectObject);
       } else if (this.connector) {
         const { chainID } = this.network;
-        const { chainsMap, chainIDMap } = parameters;
+
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
             if (connectInfo.network.chainID !== chainID) {
@@ -221,11 +229,10 @@ export class ConnectWallet {
             } else {
               resolve(this.applySettings(connectInfo) as IConnect);
             }
-          },
-          (error: IError) => {
-            reject(this.applySettings(error));
           }
-        );
+        ).catch((error: IError) => {
+          reject(this.applySettings(error));
+        });
       } else {
         reject(this.applySettings(gettingAddressError()));
       }
@@ -270,7 +277,7 @@ export class ConnectWallet {
    * @example new Promise((resolve, reject) => {connectWallet.checkTx(txHash, resolve, reject);});
    */
   private txStatus(txHash: string, resolve: any, reject: any): void {
-    this.Web3.eth.getTransactionReceipt(txHash, (err: any, res: any) => {
+    this.Web3.eth.getTransactionReceipt(txHash, (err: Error, res: TransactionReceipt) => {
       if (err || (res && res.blockNumber && !res.status)) {
         reject(err);
       } else if (res && res.blockNumber) {
