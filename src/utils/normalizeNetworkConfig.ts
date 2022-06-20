@@ -1,4 +1,4 @@
-import { chainIDExplorer, chainIDNativeCurrency, chainIDRPC } from "../helpers";
+import { chainIDChainName, chainIDExplorer, chainIDNativeCurrency, chainIDRPC } from "../helpers";
 import { IKeys, INetwork } from "interface";
 
 export const normalizeNetworkConfig = (
@@ -11,6 +11,9 @@ export const normalizeNetworkConfig = (
   }
   if (!networkConfig.nativeCurrency) {
     networkConfig.nativeCurrency = chainIDNativeCurrency[networkConfig.chainID];
+  }
+  if (!networkConfig.chainName) {
+    networkConfig.nativeCurrency = chainIDChainName[networkConfig.chainID];
   }
   if (!networkConfig.rpc) {
     let requiredRPC = chainIDRPC[networkConfig.chainID];
@@ -47,6 +50,9 @@ export const isConfigSufficient = (
   }
   if (!networkConfig.rpc) {
     emptyFields.push("rpc");
+  }
+  if (!networkConfig.chainName) {
+    emptyFields.push("chainName");
   }
   return {
     valid: emptyFields.length === 0,

@@ -91,8 +91,8 @@ export interface INativeCurrency {
 }
 
 export interface INetwork {
-  chainName: string;
   chainID: number;
+  chainName?: string;
   nativeCurrency?: INativeCurrency;
   rpc?: string;
   blockExplorerUrl?: string;

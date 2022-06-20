@@ -174,7 +174,7 @@ export const chainIDExplorer = {
 export const chainIDRPC = {
   1: "https://mainnet.infura.io/v3/{{infuraId}}",
   3: "https://ropsten.infura.io/v3/{{infuraId}}",
-  4: "https://rinkeby.infura.io/v3/{{infuraId}}",
+  4: "https://ropsten.infura.io/v3/{{infuraId}}",
   5: "https://goerli.infura.io/v3/{{infuraId}}",
   42: "https://kovan.infura.io/v3/{{infuraId}}",
   128: "https://http-mainnet.hecochain.com",
@@ -193,6 +193,30 @@ export const chainIDRPC = {
   44787: "https://alfajores-forno.celo-testnet.org",
   250: "https://rpc.ftm.tools/",
   4002: "https://rpc.testnet.fantom.network/",
+}
+
+export const chainIDChainName = {
+  1: "Ethereum Mainnet",
+  3: "Ropsten",
+  4: "Rinkeby",
+  5: "Goerli",
+  42: "Kovan",
+  128: "Heco Mainnet",
+  256: "Heco Testnet",
+  242: "Kardia Testnet",
+  24: "Kardia Mainnet",
+  25: "Cronos Mainnet",
+  56: "Binance Mainnet",
+  97: "Binance Testnet",
+  137: "Polygon Testnet",
+  338: "Cronos Testnet",
+  80001: "Polygon Testnet",
+  43113: "Avax Mainnet",
+  43114: "Avax Testnet",
+  42220: "Celo Mainnet",
+  44787: "Celo Testnet",
+  250: "Fantom Mainnet",
+  4002: "Fantom Testnet",
 }
 
 export const chainIDNativeCurrency: {[key: number]: INativeCurrency } = {
