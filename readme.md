@@ -2,8 +2,6 @@
 
 This package provides the ability to connect Wallets to website or application via [MetaMask](https://metamask.io) extension (through a browser or the mobile application) and [WalletConnect](https://walletconnect.org) service using QR code scanner.
 
-> Worked only with MetaMask and WalletConnect
-
 ## Features
 
 - Connect to any blockchains.
@@ -11,278 +9,204 @@ This package provides the ability to connect Wallets to website or application v
 - Work with Contracts methods.
 - Check transactions in blockchain.
 - Add custom blockchain.
-
+- 
 ## Usage
 
 #### 1. Install package.
 
-NPM: `npm install @amfi/connect-wallet`
-Yarn: `yarn add @amfi/connect-wallet`
+NPM: 
+```sh
+npm install https://github.com/Rock-n-Block/connect-wallet-lib.git#master
+```
+Yarn:
+```sh
+yarn add https://github.com/Rock-n-Block/connect-wallet-lib.git#master
+```
 
 #### 2. Import and initialize ConnectWallet in project.
 
-```typescrpt
+```typescript
 import { ConnectWallet } from '@amfi/connect-wallet';
 const connectWallet = new ConnectWallet();
 ```
 
-#### 3. Add custom blockchain by using `addChains([chains])` method.
+#### 3. Install wallets instances.
 
-If you need to add custom blockhain use `addChains(...chain)` method before you create connect.
+All wallets instances is located in [`wallet-instances` repo](https://github.com/cucunber/wallet-instances.git)
 
-Usage example:
+Each branch of this repo consist one instance of wallet, to add it like a package use this structure:
+`
+https://github.com/cucunber/wallet-instances.git#wallet/{wallet-name}
+`
+where `wallet-name` is the name of the wallet (now available **MetaMask**, **WalletConnect**)
+
+NPM: 
+```sh
+npm install https://github.com/cucunber/wallet-instances.git#wallet/{wallet-name}
+```
+Yarn:
+```sh
+yarn add https://github.com/cucunber/wallet-instances.git#wallet/{wallet-name}
+```
+
+To add your wallet:
+1. Create branch from `https://github.com/cucunber/wallet-instances.git#abstract-wallet`
+2. update `package.json` fields (name, version and etc)
+3. implement all methods of a `AbstractConnector`
+
+#### 4. Add wallets which will be used in your app with `use` method.
 
 ```typescript
-const chains: IChain[] = [
-	...
-    {
-      name: 'binance',
-      chainID: 56,
-      hex: '0x38',
+import { MetaMask } from 'metamask-wallet/dist';
+connectWallet.use([MetaMask]) ;
+```
+
+`.use` description:
+| option | type                  | default | description                               |
+|---------|-----------------------|---------|-------------------------------------------|
+| wallets | [AbstractConstructor[]](https://github.com/Rock-n-Block/connect-wallet-lib/blob/feature/modular-wallet/src/abstract-connector/index.ts#L19) | []      | List of wallets which will be used in lib |
+
+#### 5. Create `chains` config 
+using [`TChainsConfig<T, K>`](https://github.com/Rock-n-Block/connect-wallet-lib/blob/feature/modular-wallet/src/interface.ts#L131) where `T` is **chains enum** and `K` is **providers enum**:
+
+>> **Attention**, name of the provider should be same as the instance class name, so if the wallet class implementation is called **WalletConnect**, the name in the config must be **Wallet connect**:
+
+```typescript
+    class WalletConnect implements AbstractConnector {
+        // implementation
+    }
+```
+```typescript
+    //connection
+    connectWallet.use([WalletConnect]) ;
+```
+
+```typescript
+export const is_production = true;
+
+enum chainsEnum {
+  Ethereum = 'Ethereum',
+  "Binance-Smart-Chain" = "Binance-Smart-Chain",
+}
+
+enum providersEnum {
+  MetaMask = 'MetaMask',
+  WalletConnect = 'WalletConnect'
+}
+
+export const chains: TChainsConfig<chainsEnum, providersEnum> = {
+  [chainsEnum["Binance-Smart-Chain"]]: {
+    name: chainsEnum["Binance-Smart-Chain"],
+    network: {
+      chainID: is_production ? 56 : 97,
+      chainName: is_production
+        ? "Binance Smart Chain"
+        : "Binance Smart Chain Testnet",
     },
-    {
-      name: 'binance-test',
-      chainID: 97,
-      hex: '0x61',
+    provider: {
+      MetaMask: { name: "MetaMask" },
+      WalletConnect: { name: "WalletConnect" },
     },
-		...
-  ];
-	...
-const chainsInfo = this.connectWallet.addChains(this.chains); // will return chains that added into connectwallet, this method not async.
+  },
+  [chainsEnum.Ethereum]: {
+    name: chainsEnum.Ethereum,
+    network: {
+      chainID: is_production ? 1 : 4,
+      chainName: is_production ? 'Ethereum Mainnet' : 'Rinkeby Testnet',
+    },
+    provider: {
+      MetaMask: { name: "MetaMask" },
+      WalletConnect: { name: "WalletsConnect" },
+    },
+    keys: {
+      infuraId: '2d76b686b0484e9ebecbaddd23cd37c7'
+    }
+  },
+};
 ```
 
-Where:
-`name` - blockchain name.
-`chainID` - blockchain id.
-`hex` - blockchain id in hex format.
+**updates**:
+    1. Now you don't need to set `nativeCurrency`, `rpc`, `blockExplorerUrl` to `network` field, they are includes into the lib. If you pass this fields they will be used in the config.
+    
+List of `Native currencies`:
+| chainId | Native Currency                          |
+|---------|------------------------------------------|
+| 1       | name: ETH, symbol: ETH, decimals: 18     |
+| 3       | name: ROP, symbol: ROP, decimals: 18     |
+| 4       | name: RIN, symbol: RIN, decimals: 18     |
+| 5       | name: GOR, symbol: GOR, decimals: 18     |
+| 42      | name: KOV, symbol: KOV, decimals: 18     |
+| 128     | name: HT, symbol: HT, decimals: 18       |
+| 256     | name: htt, symbol: htt, decimals: 18     |
+| 242     | name: KAI, symbol: KAI, decimals: 18     |
+| 24      | name: KAI, symbol: KAI, decimals: 18     |
+| 25      | name: CRO, symbol: CRO, decimals: 8      |
+| 56      | name: BNB, symbol: BNB, decimals: 18     |
+| 97      | name: tBNB, symbol: tBNB, decimals: 18   |
+| 137     | name: MATIC, symbol: MATIC, decimals: 18 |
+| 338     | name: TCRO, symbol: TCRO, decimals: 8    |
+| 80001   | name: MATIC, symbol: MATIC, decimals: 18 |
+| 43113   | name: AVAX, symbol: AVAX, decimals: 18   |
+| 43114   | name: AVAX, symbol: AVAX, decimals: 18   |
+| 42220   | name: CELO, symbol: CELO, decimals: 18   |
+| 44787   | name: CELO, symbol: CELO, decimals: 18   |
+| 250     | name: FTM, symbol: FTM, decimals: 18     |
+| 4002    | name: FTM, symbol: FTM, decimals: 18     |
 
-#### 4. Create configuration for Connect Wallet that will be used in `connectWallet.connect(provider, network, settings)` method.
-
-Example configuration:
-
-> Want use Ethereum mainnet? Set useProvider: `infura` and provide mainnet Infura. Remove rpc if it needed.
+List of `RPCs`:
+>> **Attention**, chains with id `1`,`3`,`4`,`5`,`42` require **infuraId**. It's passed into chain config as `keys` field with object field `infuraId` like this
 
 ```typescript
-{
-	wallets: ['MetaMask', 'WalletConnect'],
-	network: {
-		name: 'Ropsten',
-		chainID: 3
-	},
-	provider: {
-		MetaMask: {
-			name: 'MetaMask'
-		},
-		WalletConnect: {
-			name: 'WalletConnect',
-			useProvider: 'rpc',
-			provider: {
-				infura: {
-					infuraID: 'PASS_HERE_INFURA_ID',
-				},
-				rpc: {
-					rpc: {
-						3: "PASS_HERE_BLOCKCHAIN_RPC" // if use Ethereum rpc, pass full Infura URL with Infura Id
-					},
-					chainId: 3
-				},
-			},
-		},
-	},
-	settings: {
-		providerType: true
-	},
+keys: {
+    infuraId: '2d76b686b0484e9ebecbaddd23cd37c7'
 }
 ```
 
-RPC configuration:
+| chainId | RPC                                             |
+|---------|-------------------------------------------------|
+| 1       | https://mainnet.infura.io/v3/{{infuraId}}       |
+| 3       | https://ropsten.infura.io/v3/{{infuraId}}       |
+| 4       | https://rinkeby.infura.io/v3/{{infuraId}}       |
+| 5       | https://goerli.infura.io/v3/{{infuraId}}        |
+| 42      | https://kovan.infura.io/v3/{{infuraId}}         |
+| 128     | https://http-mainnet.hecochain.com              |
+| 256     | https://http-testnet.hecochain.com              |
+| 242     | https://dev.kardiachain.io/                     |
+| 24      | https://rpc.kardiachain.io                      |
+| 25      | https://evm.cronos.org/                         |
+| 56      | https://bsc-dataseed.binance.org/               |
+| 97      | https://data-seed-prebsc-2-s1.binance.org:8545/ |
+| 137     | https://polygon-rpc.com/                        |
+| 338     | https://evm-t3.cronos.org/                      |
+| 80001   | https://rpc-mumbai.matic.today                  |
+| 43113   | https://api.avax-test.network/ext/bc/C/rpc      |
+| 43114   | https://api.avax.network/ext/bc/C/rpc           |
+| 42220   | https://forno.celo.org                          |
+| 44787   | https://alfajores-forno.celo-testnet.org        |
+| 250     | https://rpc.ftm.tools/                          |
+| 4002    | https://rpc.testnet.fantom.network/             |
 
-```typescript
-rpc: {
-	rpc: {
-		// if use Ethereum rpc, pass full Infura URL with Infura Id
-		[BLOCKCHAIN_NUMBER]: "BLOCKCHAIN_RPC",
-		[BLOCKCHAIN_NUMBER]: "BLOCKCHAIN_RPC",
-		...
-		[BLOCKCHAIN_NUMBER]: "BLOCKCHAIN_RPC"
-	},
-	// What Blockchain need to use
-	chainId: BLOCKCHAIN_NUMBER
-},
-```
-
-Where:
-
-`BLOCKCHAIN_NUMBER` - blockchain/network/chain ID, for example ropsten = 3, rinkeby = 4, and etc. Used to identify what kind of blockhain need to use.
-`BLOCKCHAIN_RPC` - Blockhain URL.
-
-> `chainId` === `rpc.BLOCKCHAIN_NUMBER`
-
-#### 5. Pass configuration to ConnectWallet in method `connect()`.
-
-You need to pass 3 configuration options: provider, network, settings.
-
-##### Provider
-
-MetaMask:
-
-```typescript
-{
-  name: string;
-}
-```
-
-Wallet Connect:
-
-```typescript
-{
-	name: string;
-	useProvider?: string;
-	provider?: {
-		infura?: {
-			infuraID?: string;
-		}
-		rpc?: {
-			rpc: {
-				[index: number]: string;
-			};
-			chainId?: number;
-		};
-	};
-}
-```
-
-##### Network
-
-```typescript
-{
-  name: string;
-  chainID: number;
-}
-```
-
-Where:
-
-`name` - blockchain name.
-`chainID` - blockchain id.
-
-> All parameters required
-
-##### Settings
-
-```typescript
-{
-	providerType?: boolean;
-}
-```
-
-Where:
-
-`providerType` - show in response your provider type: MetaMask or WalletConnect.
-
-##### Pass configuration
-
-```typescript
-connectWallet.connect(provider, network, settings).then(
-  (connected: boolean) => console.log('connect wallet: ', connected),
-  (err: any) => console.log('connect wallet error: ', err)
-);
-```
-
-#### 6. If connect established use `addContract()` method to add contract in Connect Wallet.
-
-You can pass 3 parameters in method `addContract`: ContractName, address, abi.
-
-interface:
-
-```typescript
-{
-	name: string;
-	address: string;
-	abi: Array<any>;
-}
-```
-
-`ContractName` (`name`) - use for identify your contract in Connect Wallet, for example you add two Staking contracts and one Token contract, so you can create 3 addContract methods and pass in each one params:
-
-```json
-{
-  "ContractName": "Staking1",
-  "ContractName": "Staking2",
-  "ContractName": "Token"
-}
-```
-
-`address` - contract address.
-`abi` - contact ABI.
-
-Example:
-
-```typescript
-connectWallet.addContract({'Staking1', '0x0000000000000000', ABI[]});
-connectWallet.addContract({'Staking2', '0x0000000000000000', ABI[]});
-connectWallet.addContract({'Token', '0x0000000000000000', ABI[]});
-```
-
-#### 7. Use Contracts methods via method `contract()`.
-
-`ContractName` - pass your contact name that was added in step 5.
-
-Example:
-
-```typescript
-connectWallet
-  .contract('Staking1')
-  .stakeStart('123')
-  .send({ from: '0x000000....' })
-  .then((tx: any) => console.log(tx));
-
-connectWallet
-  .contract('Staking2')
-  .stakeStart('123')
-  .send({ from: '0x000000....' })
-  .then((tx: any) => console.log(tx));
-
-connectWallet
-  .contract('Token')
-  .methods.balanceOf('0x0000000,,,')
-  .call()
-  .then(
-    (balance: string) => console.log(balance),
-    (err: any) => console.log(err)
-  );
-```
-
-#### 8. Get account and provider info via `getAccounts()` method.
-
-When connect are established via method `getAccounts()` can get user wallet account information. Also with user information can get what provider are used.
-
-```typescript
-connectWallet.getAccounts().subscribe(
-  (user: any) => console.log('user account: ', user),
-  (err: any) => console.log('user account error: ', err)
-);
-```
-
-#### 9. Check transaction via `txCheck()` method.
-
-Provide transaction Hash to check if transaction are in blockchain or not.
-
-Example:
-
-```typescript
-connectWallet.txCheck('TX_HASH').then(
-  (info: any) => console.log('info: ', info),
-  (err: any) => console.log('info tx error:', err)
-);
-```
-
-#### 10. To get current Web3 via`currentWeb3()` method.
-
-Get current Web3 and access to all Web3 functions.
-
-Example:
-
-```typescript
-const currentWeb3 = connectWallet.currentWeb3();
-```
+List of `Block explorers`:
+| chainId | RPC                                            |
+|---------|------------------------------------------------|
+| 1       | https://etherscan.io/                          |
+| 3       | https://ropsten.etherscan.io/"                 |
+| 4       | https://rinkeby.etherscan.io/                  |
+| 5       | https://goerli.etherscan.io/                   |
+| 42      | https://kovan.etherscan.io/                    |
+| 128     | https://scan.hecochain.com/home/index          |
+| 256     | https://scan-testnet.hecochain.com/            |
+| 242     | https://testnet.cardanoscan.io/                |
+| 24      | https://cardanoscan.io/                        |
+| 25      | https://cronoscan.com/                         |
+| 56      | https://bscscan.com/                           |
+| 97      | https://testnet.bscscan.com/                   |
+| 137     | https://polygonscan.com/                       |
+| 338     | https://testnet.cronoscan.com/                 |
+| 80001   | https://mumbai.polygonscan.com/                |
+| 43113   | https://avascan.info/                          |
+| 43114   | https://testnet.avascan.info/                  |
+| 42220   | https://explorer.celo.org/                     |
+| 44787   | https://alfajores-blockscout.celo-testnet.org/ |
+| 250     | https://explorer.fantom.network/"              |
+| 4002    | https://explorer.testnet.fantom.network/       |
