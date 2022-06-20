@@ -25,9 +25,6 @@ export const chains = {
     name: chainsEnum["Binance-Smart-Chain"],
     network: {
       chainID: is_production ? 56 : 97,
-      chainName: is_production
-        ? "Binance Smart Chain"
-        : "Binance Smart Chain Testnet",
     },
     provider: {
       MetaMask: { name: "MetaMask" },
@@ -38,7 +35,6 @@ export const chains = {
     name: chainsEnum.Ethereum,
     network: {
       chainID: is_production ? 1 : 4,
-      chainName: is_production ? 'Ethereum Mainnet' : 'Rinkeby Testnet',
     },
     provider: {
       MetaMask: { name: "MetaMask" },
