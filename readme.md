@@ -99,9 +99,6 @@ export const chains: TChainsConfig<chainsEnum, providersEnum> = {
     name: chainsEnum["Binance-Smart-Chain"],
     network: {
       chainID: is_production ? 56 : 97,
-      chainName: is_production
-        ? "Binance Smart Chain"
-        : "Binance Smart Chain Testnet",
     },
     provider: {
       MetaMask: { name: "MetaMask" },
@@ -112,7 +109,6 @@ export const chains: TChainsConfig<chainsEnum, providersEnum> = {
     name: chainsEnum.Ethereum,
     network: {
       chainID: is_production ? 1 : 4,
-      chainName: is_production ? 'Ethereum Mainnet' : 'Rinkeby Testnet',
     },
     provider: {
       MetaMask: { name: "MetaMask" },
@@ -126,7 +122,7 @@ export const chains: TChainsConfig<chainsEnum, providersEnum> = {
 ```
 
 **updates**:
-    1. Now you don't need to set `nativeCurrency`, `rpc`, `blockExplorerUrl` to `network` field, they are includes into the lib. If you pass this fields they will be used in the config.
+    1. Now you don't need to set `chainName`, `nativeCurrency`, `rpc`, `blockExplorerUrl` to `network` field, they are includes into the lib. If you pass this fields they will be used in the config.
     
 List of `Native currencies`:
 | chainId | Native Currency                          |
