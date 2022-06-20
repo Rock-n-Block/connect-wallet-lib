@@ -109,7 +109,7 @@ export class ConnectWallet {
       })
       .then((connect: IConnectorMessage) => {
         if (connect.connected) {
-          if (connect.provider.chainId === networkConfig.chainID) {
+          
             this.initWeb3(
               connect.provider === "Web3"
                 ? Web3.givenProvider
@@ -122,7 +122,7 @@ export class ConnectWallet {
               chainsMap[chainIDMap[chainID]].name
             }.`)) as IConnectorMessage;
           }
-        }
+        
         return connect;
       })
       .catch((error: IConnectorMessage) => {

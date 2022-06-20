@@ -13,7 +13,7 @@ export const normalizeNetworkConfig = (
     networkConfig.nativeCurrency = chainIDNativeCurrency[networkConfig.chainID];
   }
   if (!networkConfig.chainName) {
-    networkConfig.nativeCurrency = chainIDChainName[networkConfig.chainID];
+    networkConfig.chainName = chainIDChainName[networkConfig.chainID];
   }
   if (!networkConfig.rpc) {
     let requiredRPC = chainIDRPC[networkConfig.chainID];
