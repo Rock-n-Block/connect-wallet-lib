@@ -69,7 +69,7 @@ connectWallet.use([MetaMask]) ;
 #### 5. Create `chains` config 
 using [`TChainsConfig<T, K>`](https://github.com/Rock-n-Block/connect-wallet-lib/blob/feature/modular-wallet/src/interface.ts#L131) where `T` is **chains enum** and `K` is **providers enum**:
 
->> **Attention**, name of the provider should be same as the instance class name, so if the wallet class implementation is called **WalletConnect**, the name in the config must be **Wallet connect**:
+> **Attention**, name of the provider should be same as the instance class name, so if the wallet class implementation is called **WalletConnect**, the name in the config must be **Wallet connect**:
 
 ```typescript
     class WalletConnect implements AbstractConnector {
@@ -154,7 +154,7 @@ List of `Native currencies`:
 | 4002    | name: FTM, symbol: FTM, decimals: 18     |
 
 List of `RPCs`:
->> **Attention**, chains with id `1`,`3`,`4`,`5`,`42` require **infuraId**. It's passed into chain config as `keys` field with object field `infuraId` like this
+> **Attention**, chains with id `1`,`3`,`4`,`5`,`42` require **infuraId**. It's passed into chain config as `keys` field with object field `infuraId` like this
 
 ```typescript
 keys: {
