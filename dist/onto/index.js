@@ -7,6 +7,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -128,7 +130,7 @@ var OntoConnect = /** @class */ (function (_super) {
                         _a.trys.push([2, 4, , 9]);
                         return [4 /*yield*/, this.connector.request({
                                 method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: "0x" + this.chainID.toString(16) }]
+                                params: [{ chainId: "0x".concat(this.chainID.toString(16)) }]
                             })];
                     case 3:
                         _a.sent();
@@ -146,7 +148,7 @@ var OntoConnect = /** @class */ (function (_super) {
                                 method: 'wallet_addEthereumChain',
                                 params: [
                                     {
-                                        chainId: "0x" + this.chainID.toString(16),
+                                        chainId: "0x".concat(this.chainID.toString(16)),
                                         chainName: this.chainName,
                                         nativeCurrency: this.nativeCurrency,
                                         rpcUrls: [this.rpc],

@@ -7,6 +7,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -62,7 +64,7 @@ var WalletLinkConnect = /** @class */ (function (_super) {
                     overrideIsMetaMask: true
                 });
                 var chain = helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.chainID]];
-                _this.connector = walletLink.makeWeb3Provider("https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId, _this.chainID);
+                _this.connector = walletLink.makeWeb3Provider("https://".concat(chain.name, ".infura.io/v3/").concat(provider.provider.infura.infuraId), _this.chainID);
                 resolve({
                     code: 1,
                     connected: true,

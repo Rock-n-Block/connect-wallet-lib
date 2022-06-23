@@ -7,6 +7,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -114,7 +116,7 @@ var MetamaskConnect = /** @class */ (function (_super) {
     };
     MetamaskConnect.prototype.checkNet = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var currentChain, err_1, err_2, err_3;
+            var currentChain, hexChain, err_1, err_2, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -126,9 +128,10 @@ var MetamaskConnect = /** @class */ (function (_super) {
                         _a.label = 2;
                     case 2:
                         _a.trys.push([2, 4, , 9]);
+                        hexChain = this.chainID.toString(16);
                         return [4 /*yield*/, this.connector.request({
                                 method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: "0x" + this.chainID.toString(16) }]
+                                params: [{ chainId: "".concat(hexChain.startsWith('0x') ? '' : '0x').concat(hexChain) }]
                             })];
                     case 3:
                         _a.sent();
@@ -149,7 +152,7 @@ var MetamaskConnect = /** @class */ (function (_super) {
                                 method: 'wallet_addEthereumChain',
                                 params: [
                                     {
-                                        chainId: "0x" + this.chainID.toString(16),
+                                        chainId: "0x".concat(this.chainID.toString(16)),
                                         chainName: this.chainName,
                                         nativeCurrency: this.nativeCurrency,
                                         rpcUrls: [this.rpc],

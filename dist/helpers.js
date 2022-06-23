@@ -142,8 +142,9 @@ exports.codeMap = {
         name: 'Cant getting user address'
     }
 };
-exports.getCode = function (code) { return exports.codeMap[code]; };
-exports.addChains = function (chains) {
+var getCode = function (code) { return exports.codeMap[code]; };
+exports.getCode = getCode;
+var addChains = function (chains) {
     chains.map(function (chain) {
         var name = chain.name, chainID = chain.chainID, hex = chain.hex;
         exports.parameters.chainIDMap[chainID] = hex;
@@ -151,3 +152,4 @@ exports.addChains = function (chains) {
     });
     return exports.parameters;
 };
+exports.addChains = addChains;
