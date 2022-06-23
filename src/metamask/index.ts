@@ -82,10 +82,9 @@ export class MetamaskConnect extends AbstractConnector {
 
       if (this.chainID !== parseInt(currentChain)) {
         try {
-          const hexChain = this.chainID.toString(16)
           await this.connector.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: `${hexChain.startsWith('0x') ? '' : '0x'}${hexChain}` }],
+            params: [{ chainId: `0x${this.chainID.toString(16)}` }],
           });
           return true;
         } catch (err: any) {
