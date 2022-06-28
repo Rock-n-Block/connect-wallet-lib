@@ -8,6 +8,8 @@ const { network, provider, settings, keys } = connectWallet(
   chainsEnum.Ethereum
 );
 
+console.log(wallet);
+
 const userState = {
   address: "",
 };
@@ -22,6 +24,7 @@ connectButton.addEventListener("click", async function () {
     settings,
     keys,
   );
+  console.log(connected);
   if (connected.connected) {
     const subscription = wallet.eventSubscriber().subscribe(
       (data) => console.log(data),

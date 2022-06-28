@@ -2,7 +2,7 @@ import Web3 from "web3";
 import { Observable } from "rxjs";
 import { Contract } from "web3-eth-contract";
 import { provider } from "web3-core";
-import { TransactionReceipt} from "web3-eth";
+import { TransactionReceipt } from "web3-eth";
 
 import {
   INetwork,
@@ -22,7 +22,12 @@ import {
 } from "./interface";
 import { parameters, addChains } from "./helpers";
 import { AbstractConnector, AbstractConstructor } from "abstract-connector";
-import { chainError, gettingAddressError, invalidConfig, providerError } from "./errors";
+import {
+  chainError,
+  gettingAddressError,
+  invalidConfig,
+  providerError,
+} from "./errors";
 import { initialSettings } from "./config";
 import { isConfigSufficient, normalizeNetworkConfig } from "./utils";
 
@@ -31,7 +36,6 @@ export class ConnectWallet {
   private connector: AbstractConnector;
   private providerName: string;
   private connectors: AbstractConstructor[] = [];
-  public availableProviders: string[] = [];
 
   private network: INetwork;
   private settings: ISettings;
@@ -57,7 +61,6 @@ export class ConnectWallet {
    */
   public use = (wallets: AbstractConstructor[]): ConnectWallet => {
     this.connectors = wallets;
-    this.availableProviders = wallets.map((wallets) => wallets.name);
     return this;
   };
 
@@ -86,15 +89,19 @@ export class ConnectWallet {
     settings?: ISettings,
     keys?: IKeys
   ): Promise<IConnectorMessage> {
-    // check providers
-    if (!this.availableProviders.includes(provider.name)) {
-      return providerError(provider);
-    }
     // normalize network config (add blockExplorerURL, rpc, nativeCurrency)
     const networkConfig = normalizeNetworkConfig(network, keys);
     // simple network config validation (check existing of config fields)
     if (!isConfigSufficient(networkConfig).valid) {
       return invalidConfig(provider);
+    }
+    // check providers
+    if (
+      this.connectors.every(
+        (connector) => new connector(networkConfig).name !== provider.name
+      )
+    ) {
+      return providerError(provider);
     }
 
     this.network = networkConfig;
@@ -109,20 +116,19 @@ export class ConnectWallet {
       })
       .then((connect: IConnectorMessage) => {
         if (connect.connected) {
-          
-            this.initWeb3(
-              connect.provider === "Web3"
-                ? Web3.givenProvider
-                : connect.provider
-            );
-          } else {
-            const { chainID } = this.network;
+          this.initWeb3(
+            connect.provider === "Web3" ? Web3.givenProvider : connect.provider
+          );
+        } else {
+          const { chainID } = this.network;
 
-            return this.applySettings(chainError(`Please set network: ${
-              chainsMap[chainIDMap[chainID]].name
-            }.`)) as IConnectorMessage;
-          }
-        
+          return this.applySettings(
+            chainError(
+              `Please set network: ${chainsMap[chainIDMap[chainID]].name}.`
+            )
+          ) as IConnectorMessage;
+        }
+
         return connect;
       })
       .catch((error: IConnectorMessage) => {
@@ -140,7 +146,7 @@ export class ConnectWallet {
   private chooseProvider(name: string) {
     this.providerName = name;
     const provider = this.connectors.find(
-      (connector) => connector.name === name
+      (connector) => new connector(this.network).name === name
     );
     return new provider(this.network);
   }
@@ -214,8 +220,9 @@ export class ConnectWallet {
       } else if (this.connector) {
         const { chainID } = this.network;
 
-        this.connector.getAccounts().then(
-          (connectInfo: IConnect) => {
+        this.connector
+          .getAccounts()
+          .then((connectInfo: IConnect) => {
             if (connectInfo.network.chainID !== chainID) {
               reject(
                 this.applySettings(
@@ -229,10 +236,10 @@ export class ConnectWallet {
             } else {
               resolve(this.applySettings(connectInfo) as IConnect);
             }
-          }
-        ).catch((error: IError) => {
-          reject(this.applySettings(error));
-        });
+          })
+          .catch((error: IError) => {
+            reject(this.applySettings(error));
+          });
       } else {
         reject(this.applySettings(gettingAddressError()));
       }
@@ -277,18 +284,21 @@ export class ConnectWallet {
    * @example new Promise((resolve, reject) => {connectWallet.checkTx(txHash, resolve, reject);});
    */
   private txStatus(txHash: string, resolve: any, reject: any): void {
-    this.Web3.eth.getTransactionReceipt(txHash, (err: Error, res: TransactionReceipt) => {
-      if (err || (res && res.blockNumber && !res.status)) {
-        reject(err);
-      } else if (res && res.blockNumber) {
-        this.clTxSubscribers(txHash);
-        resolve(res);
-      } else if (!res) {
-        setTimeout(() => {
-          this.txStatus(txHash, resolve, reject);
-        }, 2000);
+    this.Web3.eth.getTransactionReceipt(
+      txHash,
+      (err: Error, res: TransactionReceipt) => {
+        if (err || (res && res.blockNumber && !res.status)) {
+          reject(err);
+        } else if (res && res.blockNumber) {
+          this.clTxSubscribers(txHash);
+          resolve(res);
+        } else if (!res) {
+          setTimeout(() => {
+            this.txStatus(txHash, resolve, reject);
+          }, 2000);
+        }
       }
-    });
+    );
   }
 
   /**
