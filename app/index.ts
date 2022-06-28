@@ -8,8 +8,6 @@ const { network, provider, settings, keys } = connectWallet(
   chainsEnum.Ethereum
 );
 
-console.log(wallet);
-
 const userState = {
   address: "",
 };
