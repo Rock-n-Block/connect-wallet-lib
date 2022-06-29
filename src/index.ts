@@ -222,7 +222,7 @@ export class ConnectWallet {
 
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
-            if (connectInfo.network.chainID !== chainID) {
+            if (connectInfo.network && connectInfo.network.chainID !== chainID) {
               error.message.text = `Please set network: ${
                 chainsMap[chainIDMap[chainID]].name
               }.`;
