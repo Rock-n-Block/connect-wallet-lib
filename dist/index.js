@@ -253,7 +253,7 @@ var ConnectWallet = /** @class */ (function () {
                 var chainID_1 = _this.network.chainID;
                 var chainsMap_1 = helpers_1.parameters.chainsMap, chainIDMap_1 = helpers_1.parameters.chainIDMap;
                 _this.connector.getAccounts().then(function (connectInfo) {
-                    if (connectInfo.network.chainID !== chainID_1) {
+                    if (connectInfo.network && connectInfo.network.chainID !== chainID_1) {
                         error.message.text = "Please set network: ".concat(chainsMap_1[chainIDMap_1[chainID_1]].name, ".");
                         reject(_this.applySettings(error));
                     }
