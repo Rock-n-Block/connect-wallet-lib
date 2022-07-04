@@ -70,7 +70,7 @@ var ConnectWallet = /** @class */ (function () {
          * @returns return chains list parameters
          * @example this.addChains([chain,chain]).then((parameters: any) => console.log(parameters),(err) => console.log(err));
          */
-        this.addChains = function (chains) { return (0, helpers_1.addChains)(chains); };
+        this.addChains = function (chains) { return helpers_1.addChains(chains); };
         /**
          * Get contract by providing contract name. If you don't have contracts use addContract function to initialize it.
          *
@@ -254,7 +254,7 @@ var ConnectWallet = /** @class */ (function () {
                 var chainsMap_1 = helpers_1.parameters.chainsMap, chainIDMap_1 = helpers_1.parameters.chainIDMap;
                 _this.connector.getAccounts().then(function (connectInfo) {
                     if (connectInfo.network && connectInfo.network.chainID !== chainID_1) {
-                        error.message.text = "Please set network: ".concat(chainsMap_1[chainIDMap_1[chainID_1]].name, ".");
+                        error.message.text = "Please set network: " + chainsMap_1[chainIDMap_1[chainID_1]].name + ".";
                         reject(_this.applySettings(error));
                     }
                     else {

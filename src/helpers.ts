@@ -23,6 +23,8 @@ export const parameters = {
     44787: '0xaef3',
     250: '0xfa',
     4002: '0xfa2',
+    2001: '0x7d1',
+    200101: '0x30da5',
   },
   chainsMap: {
     '0x1': {
@@ -108,6 +110,14 @@ export const parameters = {
     '0xfa2': {
       name: 'fantom-testnet',
       chainID: 4002,
+    },
+    '0x7d1': {
+      name: 'Milkomeda C1 Mainnet',
+      chainID: 2001,
+    },
+    '0x30da5': {
+      name: 'Milkomeda C1 Testnet',
+      chainID: 200101,
     },
   },
 };

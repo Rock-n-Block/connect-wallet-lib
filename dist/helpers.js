@@ -23,7 +23,9 @@ exports.parameters = {
         42220: '0xa4ec',
         44787: '0xaef3',
         250: '0xfa',
-        4002: '0xfa2'
+        4002: '0xfa2',
+        2001: '0x7d1',
+        200101: '0x30da5'
     },
     chainsMap: {
         '0x1': {
@@ -109,6 +111,14 @@ exports.parameters = {
         '0xfa2': {
             name: 'fantom-testnet',
             chainID: 4002
+        },
+        '0x7d1': {
+            name: 'Milkomeda C1 Mainnet',
+            chainID: 2001
+        },
+        '0x30da5': {
+            name: 'Milkomeda C1 Testnet',
+            chainID: 200101
         }
     }
 };
@@ -142,9 +152,8 @@ exports.codeMap = {
         name: 'Cant getting user address'
     }
 };
-var getCode = function (code) { return exports.codeMap[code]; };
-exports.getCode = getCode;
-var addChains = function (chains) {
+exports.getCode = function (code) { return exports.codeMap[code]; };
+exports.addChains = function (chains) {
     chains.map(function (chain) {
         var name = chain.name, chainID = chain.chainID, hex = chain.hex;
         exports.parameters.chainIDMap[chainID] = hex;
@@ -152,4 +161,3 @@ var addChains = function (chains) {
     });
     return exports.parameters;
 };
-exports.addChains = addChains;
