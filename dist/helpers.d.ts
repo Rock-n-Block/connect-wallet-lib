@@ -22,6 +22,8 @@ export declare const parameters: {
         44787: string;
         250: string;
         4002: string;
+        2001: string;
+        200101: string;
     };
     chainsMap: {
         '0x1': {
@@ -105,6 +107,14 @@ export declare const parameters: {
             chainID: number;
         };
         '0xfa2': {
+            name: string;
+            chainID: number;
+        };
+        '0x7d1': {
+            name: string;
+            chainID: number;
+        };
+        '0x30da5': {
             name: string;
             chainID: number;
         };
@@ -164,6 +174,8 @@ export declare const addChains: (chains: IChain[]) => {
         44787: string;
         250: string;
         4002: string;
+        2001: string;
+        200101: string;
     };
     chainsMap: {
         '0x1': {
@@ -247,6 +259,14 @@ export declare const addChains: (chains: IChain[]) => {
             chainID: number;
         };
         '0xfa2': {
+            name: string;
+            chainID: number;
+        };
+        '0x7d1': {
+            name: string;
+            chainID: number;
+        };
+        '0x30da5': {
             name: string;
             chainID: number;
         };
