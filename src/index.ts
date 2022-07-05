@@ -91,7 +91,7 @@ export class ConnectWallet {
    */
   public async connect(
     provider: IProvider,
-    network: INetwork,
+    network?: INetwork,
     settings?: ISettings
   ): Promise<IConnectorMessage> {
     if (!this.availableProviders.includes(provider.name)) {
@@ -107,8 +107,22 @@ export class ConnectWallet {
         },
       };
     }
-
-    this.network = network;
+    if(!this.network && !network){
+      return {
+        code: 4,
+        type: "error",
+        connected: false, 
+        provider,
+        message: {
+          title: "Error",
+          subtitle: "Network config is undefined",
+          text: "Network config is undefined",
+        }
+      }
+    }
+    if(network){
+      this.network = network;
+    }
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
