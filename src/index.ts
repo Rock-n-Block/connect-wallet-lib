@@ -1,13 +1,13 @@
-import Web3 from 'web3';
-import { Observable } from 'rxjs';
-import { Contract } from 'web3-eth-contract';
-import { provider } from 'web3-core';
+import Web3 from "web3";
+import { Observable } from "rxjs";
+import { Contract } from "web3-eth-contract";
+import { provider } from "web3-core";
 
-import { MetamaskConnect } from './metamask';
-import { WalletsConnect } from './wallet-connect';
-import { WalletLinkConnect } from './wallet-link';
-import { KardiaChainConnect } from './kardiachain';
-import { OntoConnect } from './onto';
+import { MetamaskConnect } from "./metamask";
+import { WalletsConnect } from "./wallet-connect";
+import { WalletLinkConnect } from "./wallet-link";
+import { KardiaChainConnect } from "./kardiachain";
+import { OntoConnect } from "./onto";
 
 import {
   INetwork,
@@ -25,8 +25,8 @@ import {
   IEvent,
   IEventError,
   IGetScannerLink,
-} from './interface';
-import { parameters, addChains } from './helpers';
+} from "./interface";
+import { parameters, addChains } from "./helpers";
 
 export class ConnectWallet {
   private connector:
@@ -37,11 +37,11 @@ export class ConnectWallet {
     | OntoConnect;
   private providerName: string;
   private availableProviders: string[] = [
-    'MetaMask',
-    'WalletConnect',
-    'WalletLink',
-    'KardiaChain',
-    'Onto',
+    "MetaMask",
+    "WalletConnect",
+    "WalletLink",
+    "KardiaChain",
+    "Onto",
   ];
 
   private network: INetwork;
@@ -55,9 +55,19 @@ export class ConnectWallet {
    * Connect provider to web3 and get access to web3 methods, account address and transaction in blockchain.
    * Supported MetaMask, WalletConnect, Kardiachain and CoinBase providers.
    */
-  constructor(initProvider?: provider) {
+  constructor(
+    initProvider?: provider,
+    network?: INetwork,
+    settings?: ISettings
+  ) {
     if (initProvider) {
       this.Web3 = new Web3(initProvider);
+    }
+    if (network) {
+      this.network = network;
+    }
+    if (settings) {
+      this.settings = settings;
     }
   }
 
@@ -82,17 +92,17 @@ export class ConnectWallet {
   public async connect(
     provider: IProvider,
     network: INetwork,
-    settings?: ISettings,
+    settings?: ISettings
   ): Promise<IConnectorMessage> {
     if (!this.availableProviders.includes(provider.name)) {
       return {
         code: 2,
-        type: 'error',
+        type: "error",
         connected: false,
         provider,
         message: {
-          title: 'Error',
-          subtitle: 'Provider Error',
+          title: "Error",
+          subtitle: "Provider Error",
           text: `Your provider doesn't exists`,
         },
       };
@@ -111,7 +121,7 @@ export class ConnectWallet {
       .then((connect: IConnectorMessage) => {
         if (connect.connected) {
           this.initWeb3(
-            connect.provider === 'Web3' ? Web3.givenProvider : connect.provider,
+            connect.provider === "Web3" ? Web3.givenProvider : connect.provider
           );
         }
         return connect;
@@ -131,15 +141,15 @@ export class ConnectWallet {
   private chooseProvider(name: string): MetamaskConnect | WalletsConnect {
     this.providerName = name;
     switch (name) {
-      case 'MetaMask':
+      case "MetaMask":
         return new MetamaskConnect(this.network);
-      case 'WalletConnect':
+      case "WalletConnect":
         return new WalletsConnect();
-      case 'WalletLink':
+      case "WalletLink":
         return new WalletLinkConnect(this.network);
-      case 'KardiaChain':
+      case "KardiaChain":
         return new KardiaChainConnect();
-      case 'Onto':
+      case "Onto":
         return new OntoConnect(this.network);
     }
   }
@@ -192,13 +202,25 @@ export class ConnectWallet {
    * @param {string} [scannerUrl] - pass scanner url
    * @returns valid link to the current network scanner
    */
-  public getScannerLink({hash, type='tx', params = {}, scannerUrl }: IGetScannerLink): string {
-    if(!this.network.blockExplorerUrl && !scannerUrl){
-      console.warn('There is no blockExplorerUrl and scannerUrl, return empty string');
-      return ''
+  public getScannerLink({
+    hash,
+    type = "tx",
+    params = {},
+    scannerUrl,
+  }: IGetScannerLink): string {
+    if (!this.network.blockExplorerUrl && !scannerUrl) {
+      console.warn(
+        "There is no blockExplorerUrl and scannerUrl, return empty string"
+      );
+      return "";
     }
-    const paramsToString = `?${Object.entries(params).map(([queryKey, queryValue]) => `${queryKey}=${queryValue}`).join('&')}`
-    return new URL(`${type}/${hash}${paramsToString}`, scannerUrl || this.network.blockExplorerUrl).toString()
+    const paramsToString = `?${Object.entries(params)
+      .map(([queryKey, queryValue]) => `${queryKey}=${queryValue}`)
+      .join("&")}`;
+    return new URL(
+      `${type}/${hash}${paramsToString}`,
+      scannerUrl || this.network.blockExplorerUrl
+    ).toString();
   }
 
   /**
@@ -209,7 +231,7 @@ export class ConnectWallet {
    * @example connectWallet.applySettings(data); //=> data.type etc.
    */
   private applySettings(
-    data: IConnectorMessage | IError | IConnect,
+    data: IConnectorMessage | IError | IConnect
   ): IConnectorMessage | IError | IConnect {
     if (this.settings.providerType) {
       data.type = this.providerName;
@@ -227,9 +249,9 @@ export class ConnectWallet {
     const error: IError = {
       code: 4,
       message: {
-        title: 'Error',
-        subtitle: 'Chain error',
-        text: '',
+        title: "Error",
+        subtitle: "Chain error",
+        text: "",
       },
     };
 
@@ -243,7 +265,10 @@ export class ConnectWallet {
 
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
-            if (connectInfo.network && connectInfo.network.chainID !== chainID) {
+            if (
+              connectInfo.network &&
+              connectInfo.network.chainID !== chainID
+            ) {
               error.message.text = `Please set network: ${
                 chainsMap[chainIDMap[chainID]].name
               }.`;
@@ -255,7 +280,7 @@ export class ConnectWallet {
           },
           (error: IError) => {
             reject(this.applySettings(error));
-          },
+          }
         );
       } else {
         error.code = 7;
@@ -357,7 +382,7 @@ export class ConnectWallet {
       try {
         this.contracts[contract.name] = new this.Web3.eth.Contract(
           contract.abi,
-          contract.address,
+          contract.address
         );
         resolve(true);
       } catch {
@@ -410,7 +435,7 @@ export class ConnectWallet {
    * @example connectWallet.signMsg('0x0000000000000000000', 'some_data').then(data => console.log('sign:', data),err => console.log('sign err:',err));
    */
   public signMsg = (userAddr: string, msg: string): Promise<any> => {
-    return this.Web3.eth.personal.sign(msg, userAddr, '');
+    return this.Web3.eth.personal.sign(msg, userAddr, "");
   };
 
   /**
@@ -426,7 +451,7 @@ export class ConnectWallet {
     return new Observable((observer) => {
       this.connector.eventSubscriber().subscribe(
         (event: IEvent) => observer.next(event),
-        (error: IEventError) => observer.error(error),
+        (error: IEventError) => observer.error(error)
       );
     });
   }
