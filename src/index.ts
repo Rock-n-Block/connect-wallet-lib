@@ -189,15 +189,16 @@ export class ConnectWallet {
    * * token - token address
    * @param {IGetScannerLinkParams} [params] - object which contains params
    * @example {token: ETH, decimals: 18}
+   * @param {string} [scannerUrl] - pass scanner url
    * @returns valid link to the current network scanner
    */
-  public getScannerLink({hash, type='tx', params = {} }: IGetScannerLink): string {
-    if(!this.network.blockExplorerUrl){
-      console.warn('There is no blockExplorerUrl, return empty string');
+  public getScannerLink({hash, type='tx', params = {}, scannerUrl }: IGetScannerLink): string {
+    if(!this.network.blockExplorerUrl && !scannerUrl){
+      console.warn('There is no blockExplorerUrl and scannerUrl, return empty string');
       return ''
     }
     const paramsToString = `?${Object.entries(params).map(([queryKey, queryValue]) => `${queryKey}=${queryValue}`).join('&')}`
-    return new URL(`${type}/${hash}${paramsToString}`,this.network.blockExplorerUrl).toString()
+    return new URL(`${type}/${hash}${paramsToString}`, scannerUrl || this.network.blockExplorerUrl).toString()
   }
 
   /**

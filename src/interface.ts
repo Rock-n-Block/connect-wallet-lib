@@ -107,6 +107,7 @@ export interface IGetScannerLink {
   hash: string,
   type?: 'tx' | 'account' | 'token',
   params?: IGetScannerLinkParams,
+  scannerUrl?: string,
 }
 
 export interface IContract {
