@@ -100,6 +100,15 @@ export interface IMessageProvider {
   provider?: string;
 }
 
+export interface IGetScannerLinkParams {
+  [key: string]: string | number | boolean
+}
+export interface IGetScannerLink {
+  hash: string,
+  type?: 'tx' | 'account' | 'token',
+  params?: IGetScannerLinkParams,
+}
+
 export interface IContract {
   [index: string]: Contract;
 }

@@ -24,6 +24,7 @@ import {
   INoNameContract,
   IEvent,
   IEventError,
+  IGetScannerLink,
 } from './interface';
 import { parameters, addChains } from './helpers';
 
@@ -178,6 +179,25 @@ export class ConnectWallet {
    */
   public getproviderName(): string {
     return this.providerName;
+  }
+
+  /**
+   * @param {string} hash - transaction hash
+   * @param {'tx' | 'account' | 'token'} [type] - type of the transaction
+   * * tx - transaction
+   * * address - user address
+   * * token - token address
+   * @param {IGetScannerLinkParams} [params] - object which contains params
+   * @example {token: ETH, decimals: 18}
+   * @returns valid link to the current network scanner
+   */
+  public getScannerLink({hash, type='tx', params = {} }: IGetScannerLink): string {
+    if(!this.network.blockExplorerUrl){
+      console.warn('There is no blockExplorerUrl, return empty string');
+      return ''
+    }
+    const paramsToString = `?${Object.entries(params).map(([queryKey, queryValue]) => `${queryKey}=${queryValue}`).join('&')}`
+    return new URL(`${type}/${hash}${paramsToString}`,this.network.blockExplorerUrl).toString()
   }
 
   /**
