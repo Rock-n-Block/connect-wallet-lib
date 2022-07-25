@@ -112,7 +112,7 @@ export const chains: TChainsConfig<chainsEnum, providersEnum> = {
     },
     provider: {
       MetaMask: { name: "MetaMask" },
-      WalletConnect: { name: "WalletsConnect" },
+      WalletConnect: { name: "WalletConnect" },
     },
     keys: {
       infuraId: '2d76b686b0484e9ebecbaddd23cd37c7'
