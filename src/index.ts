@@ -5,7 +5,7 @@ import { provider } from 'web3-core';
 
 import { MetamaskConnect } from './metamask';
 import { WalletsConnect } from './wallet-connect';
-import { WalletLinkConnect } from './wallet-link';
+import { CoinbaseWalletConnect } from './coinbase-wallet';
 import { KardiaChainConnect } from './kardiachain';
 import { OntoConnect } from './onto';
 
@@ -31,14 +31,14 @@ export class ConnectWallet {
   private connector:
     | MetamaskConnect
     | WalletsConnect
-    | WalletLinkConnect
+    | CoinbaseWalletConnect
     | KardiaChainConnect
     | OntoConnect;
   private providerName: string;
   private availableProviders: string[] = [
     'MetaMask',
     'WalletConnect',
-    'WalletLink',
+    'CoinbaseWallet',
     'KardiaChain',
     'Onto',
   ];
@@ -127,8 +127,8 @@ export class ConnectWallet {
         return new MetamaskConnect(this.network);
       case 'WalletConnect':
         return new WalletsConnect();
-      case 'WalletLink':
-        return new WalletLinkConnect(this.network);
+      case 'CoinbaseWallet':
+        return new CoinbaseWalletConnect(this.network);
       case 'KardiaChain':
         return new KardiaChainConnect();
       case 'Onto':
@@ -159,7 +159,7 @@ export class ConnectWallet {
     | MetamaskConnect
     | OntoConnect
     | WalletsConnect
-    | WalletLinkConnect
+    | CoinbaseWalletConnect
     | KardiaChainConnect {
     return this.connector;
   }

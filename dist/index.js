@@ -44,7 +44,7 @@ var web3_1 = __importDefault(require("web3"));
 var rxjs_1 = require("rxjs");
 var metamask_1 = require("./metamask");
 var wallet_connect_1 = require("./wallet-connect");
-var wallet_link_1 = require("./wallet-link");
+var coinbase_wallet_1 = require("./coinbase-wallet");
 var kardiachain_1 = require("./kardiachain");
 var onto_1 = require("./onto");
 var helpers_1 = require("./helpers");
@@ -58,7 +58,7 @@ var ConnectWallet = /** @class */ (function () {
         this.availableProviders = [
             'MetaMask',
             'WalletConnect',
-            'WalletLink',
+            'CoinbaseWallet',
             'KardiaChain',
             'Onto',
         ];
@@ -173,8 +173,8 @@ var ConnectWallet = /** @class */ (function () {
                 return new metamask_1.MetamaskConnect(this.network);
             case 'WalletConnect':
                 return new wallet_connect_1.WalletsConnect();
-            case 'WalletLink':
-                return new wallet_link_1.WalletLinkConnect(this.network);
+            case 'CoinbaseWallet':
+                return new coinbase_wallet_1.CoinbaseWalletConnect(this.network);
             case 'KardiaChain':
                 return new kardiachain_1.KardiaChainConnect();
             case 'Onto':
