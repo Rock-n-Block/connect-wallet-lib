@@ -101,23 +101,16 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
-
-    return this.connector
+    
+    return new Promise<IConnectorMessage>((resolve, reject) => {
+      this.connector
       .connect(provider)
+      .then((connect) => this.applySettings(connect))
       .then((connect: IConnectorMessage) => {
-        return this.applySettings(connect);
-      })
-      .then((connect: IConnectorMessage) => {
-        if (connect.connected) {
-          this.initWeb3(
-            connect.provider === 'Web3' ? Web3.givenProvider : connect.provider,
-          );
-        }
-        return connect;
-      })
-      .catch((error: IConnectorMessage) => {
-        return this.applySettings(error) as IConnectorMessage;
-      });
+        connect.connected ? this.initWeb3(connect.provider) : reject(connect);
+        resolve(connect);
+      },(err) => reject(this.applySettings(err)));
+    });
   }
 
   /**
