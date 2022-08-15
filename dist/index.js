@@ -147,18 +147,14 @@ var ConnectWallet = /** @class */ (function () {
                 this.network = network;
                 this.settings = settings ? settings : { providerType: false };
                 this.connector = this.chooseProvider(provider.name);
-                return [2 /*return*/, this.connector
-                        .connect(provider)
-                        .then(function (connect) {
-                        return _this.applySettings(connect);
-                    })
-                        .then(function (connect) {
-                        if (connect.connected) {
-                            _this.initWeb3(connect.provider === 'Web3' ? web3_1["default"].givenProvider : connect.provider);
-                        }
-                        return connect;
-                    })["catch"](function (error) {
-                        return _this.applySettings(error);
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        _this.connector
+                            .connect(provider)
+                            .then(function (connect) { return _this.applySettings(connect); })
+                            .then(function (connect) {
+                            connect.connected ? _this.initWeb3(connect.provider) : reject(connect);
+                            resolve(connect);
+                        }, function (err) { return reject(_this.applySettings(err)); });
                     })];
             });
         });

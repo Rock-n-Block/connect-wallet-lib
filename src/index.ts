@@ -46,7 +46,7 @@ export class ConnectWallet {
   private network: INetwork;
   private settings: ISettings;
 
-  private Web3: Web3;
+  public Web3: Web3;
   private contracts: IContract = {};
   private allTxSubscribers = [];
 
@@ -101,7 +101,7 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
-    
+
     return new Promise<IConnectorMessage>((resolve, reject) => {
       this.connector
       .connect(provider)

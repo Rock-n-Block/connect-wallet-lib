@@ -81,13 +81,16 @@ var MetamaskConnect = /** @class */ (function (_super) {
      */
     MetamaskConnect.prototype.connect = function () {
         var _this = this;
+        var ethereum = window.ethereum;
         return new Promise(function (resolve, reject) {
-            if (typeof window.ethereum !== 'undefined') {
-                _this.connector = window.ethereum;
+            if (Boolean(ethereum && ethereum.isMetaMask)) {
+                // @ts-ignore
+                _this.connector = ethereum.providers ? ethereum.providers.filter(function (provider) { return provider.isMetaMask; })[0] : window.ethereum;
+                console.log(_this.connector);
                 resolve({
                     code: 1,
                     connected: true,
-                    provider: 'Web3',
+                    provider: _this.connector,
                     message: {
                         title: 'Success',
                         subtitle: 'Connect success',

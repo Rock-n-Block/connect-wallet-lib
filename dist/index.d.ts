@@ -14,7 +14,7 @@ export declare class ConnectWallet {
     private availableProviders;
     private network;
     private settings;
-    private Web3;
+    Web3: Web3;
     private contracts;
     private allTxSubscribers;
     /**
