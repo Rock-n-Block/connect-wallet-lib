@@ -4,7 +4,7 @@ import { Contract } from 'web3-eth-contract';
 import { provider } from 'web3-core';
 import { MetamaskConnect } from './metamask';
 import { WalletsConnect } from './wallet-connect';
-import { WalletLinkConnect } from './wallet-link';
+import { CoinbaseWalletConnect } from './coinbase-wallet';
 import { KardiaChainConnect } from './kardiachain';
 import { OntoConnect } from './onto';
 import { INetwork, IProvider, IAddContract, IConnect, ISettings, IError, IConnectorMessage, ContractWeb3, IChain, INoNameContract, IEvent, IEventError } from './interface';
@@ -14,7 +14,7 @@ export declare class ConnectWallet {
     private availableProviders;
     private network;
     private settings;
-    private Web3;
+    Web3: Web3;
     private contracts;
     private allTxSubscribers;
     /**
@@ -60,7 +60,7 @@ export declare class ConnectWallet {
      *
      * @example connectWallet.getConnector();
      */
-    getConnector(): MetamaskConnect | OntoConnect | WalletsConnect | WalletLinkConnect | KardiaChainConnect;
+    getConnector(): MetamaskConnect | OntoConnect | WalletsConnect | CoinbaseWalletConnect | KardiaChainConnect;
     /**
      * Geting current providerName
      *

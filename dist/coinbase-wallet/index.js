@@ -48,18 +48,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-exports.MetamaskConnect = void 0;
+exports.CoinbaseWalletConnect = void 0;
 var rxjs_1 = require("rxjs");
+var wallet_sdk_1 = __importDefault(require("@coinbase/wallet-sdk"));
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
-var MetamaskConnect = /** @class */ (function (_super) {
-    __extends(MetamaskConnect, _super);
+var CoinbaseWalletConnect = /** @class */ (function (_super) {
+    __extends(CoinbaseWalletConnect, _super);
     /**
-     * Metamask class to connect browser metamask extention to your application
+     * CoinbaseWalletConnect class to connect browser Coinbase Wallet extention to your application
      * using connect wallet.
      */
-    function MetamaskConnect(network) {
+    function CoinbaseWalletConnect(network) {
         var _this = _super.call(this) || this;
         _this.chainID = network.chainID;
         if (network.chainName)
@@ -73,26 +77,49 @@ var MetamaskConnect = /** @class */ (function (_super) {
         return _this;
     }
     /**
-     * Connect Metamask browser or mobile extention to application. Create connection with connect
+     * Connect Coinbase Wallet browser. Create connection with connect
      * wallet and return provider for Web3.
      *
      * @returns return connect status and connect information with provider for Web3.
      * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
      */
-    MetamaskConnect.prototype.connect = function () {
+    CoinbaseWalletConnect.prototype.connect = function (provider) {
         var _this = this;
-        var ethereum = window.ethereum;
         return new Promise(function (resolve, reject) {
-            if (Boolean(ethereum && ethereum.isMetaMask)) {
-                _this.connector = ethereum.providers ? ethereum.providers.filter(function (provider) { return provider.isMetaMask; })[0] : window.ethereum;
-                resolve({
-                    code: 1,
-                    connected: true,
-                    provider: _this.connector,
+            if (typeof window.ethereum && window.coinbaseWalletExtension) {
+                if (window.coinbaseWalletExtension.isCoinbaseWallet) {
+                    var coinbaseWallet = new wallet_sdk_1["default"]({
+                        darkMode: false,
+                        appName: 'RnB Connect Wallet',
+                        overrideIsMetaMask: true
+                    });
+                    var chain = helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.chainID]];
+                    var rpcProvider = null;
+                    if (provider.useProvider) {
+                        rpcProvider =
+                            provider.useProvider === 'rpc'
+                                ? provider.provider.rpc.rpc[_this.chainID]
+                                : "https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId;
+                    }
+                    _this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, _this.chainID);
+                    resolve({
+                        code: 1,
+                        connected: true,
+                        provider: _this.connector,
+                        message: {
+                            title: 'Success',
+                            subtitle: 'CoinbaseWallet Connect',
+                            text: "CoinbaseWallet found and connected."
+                        }
+                    });
+                }
+                reject({
+                    code: 2,
+                    connected: false,
                     message: {
-                        title: 'Success',
-                        subtitle: 'Connect success',
-                        text: "Metamask found and connected."
+                        title: 'Error',
+                        subtitle: 'Error connect',
+                        text: "CoinbaseWallet not found. Please install a wallet using an extension."
                     }
                 });
             }
@@ -102,18 +129,42 @@ var MetamaskConnect = /** @class */ (function (_super) {
                 message: {
                     title: 'Error',
                     subtitle: 'Error connect',
-                    text: "Metamask not found, please install it from <a href='https://metamask.io/' target=\"_blank\">metamask.io</a>."
+                    text: "Ethereum not found. Please install a wallet using an extension."
                 }
             });
         });
     };
-    MetamaskConnect.prototype.ethRequestAccounts = function () {
-        return this.connector.request({ method: 'eth_requestAccounts' });
+    CoinbaseWalletConnect.prototype.ethRequestAccounts = function () {
+        return this.connector.enable();
     };
-    MetamaskConnect.prototype.getChainId = function () {
+    CoinbaseWalletConnect.prototype.eventSubscriber = function () {
+        var _this = this;
+        return new rxjs_1.Observable(function (observer) {
+            _this.connector.on('accountsChanged', function (address) {
+                if (address.length) {
+                    observer.next({
+                        address: address[0],
+                        network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[+_this.chainID]],
+                        name: 'accountsChanged'
+                    });
+                }
+                else {
+                    observer.error({
+                        code: 3,
+                        message: {
+                            title: 'Error',
+                            subtitle: 'Authorized error',
+                            text: 'You are not authorized.'
+                        }
+                    });
+                }
+            });
+        });
+    };
+    CoinbaseWalletConnect.prototype.getChainId = function () {
         return this.connector.request({ method: 'eth_chainId' });
     };
-    MetamaskConnect.prototype.checkNet = function () {
+    CoinbaseWalletConnect.prototype.checkNet = function () {
         return __awaiter(this, void 0, void 0, function () {
             var currentChain, err_1, err_2, err_3;
             return __generator(this, function (_a) {
@@ -137,10 +188,7 @@ var MetamaskConnect = /** @class */ (function (_super) {
                     case 4:
                         err_1 = _a.sent();
                         if (!(err_1.code === 4902)) return [3 /*break*/, 8];
-                        if (!this.chainName ||
-                            !this.nativeCurrency ||
-                            !this.rpc ||
-                            !this.blockExplorerUrl) {
+                        if (!this.chainName || !this.nativeCurrency || !this.rpc || !this.blockExplorerUrl) {
                             return [2 /*return*/, true];
                         }
                         _a.label = 5;
@@ -174,64 +222,13 @@ var MetamaskConnect = /** @class */ (function (_super) {
             });
         });
     };
-    MetamaskConnect.prototype.eventSubscriber = function () {
-        var _this = this;
-        return new rxjs_1.Observable(function (observer) {
-            _this.connector.on('chainChanged', function (chainId) { return __awaiter(_this, void 0, void 0, function () {
-                var accounts;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.ethRequestAccounts()];
-                        case 1:
-                            accounts = _a.sent();
-                            if (this.chainID !== parseInt(chainId)) {
-                                observer.error({
-                                    code: 4,
-                                    address: accounts[0],
-                                    message: {
-                                        title: 'Error',
-                                        subtitle: 'chainChanged error',
-                                        message: helpers_1.codeMap[4].name
-                                    }
-                                });
-                            }
-                            observer.next({
-                                address: accounts[0],
-                                network: helpers_1.parameters.chainsMap[chainId],
-                                name: 'chainChanged'
-                            });
-                            return [2 /*return*/];
-                    }
-                });
-            }); });
-            _this.connector.on('accountsChanged', function (address) {
-                if (address.length) {
-                    observer.next({
-                        address: address[0],
-                        network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[+_this.chainID]],
-                        name: 'accountsChanged'
-                    });
-                }
-                else {
-                    observer.error({
-                        code: 3,
-                        message: {
-                            title: 'Error',
-                            subtitle: 'Authorized error',
-                            message: helpers_1.codeMap[3].name
-                        }
-                    });
-                }
-            });
-        });
-    };
     /**
-     * Get account address and chain information from metamask extention.
+     * Get account address and chain information from Coinbase Wallet extention.
      *
      * @returns return an Observable array with data error or connected information.
      * @example this.getAccounts().subscribe((account: any)=> {console.log('account',account)});
      */
-    MetamaskConnect.prototype.getAccounts = function () {
+    CoinbaseWalletConnect.prototype.getAccounts = function () {
         var _this = this;
         var error = {
             code: 3,
@@ -278,6 +275,6 @@ var MetamaskConnect = /** @class */ (function (_super) {
             });
         });
     };
-    return MetamaskConnect;
+    return CoinbaseWalletConnect;
 }(abstract_connector_1.AbstractConnector));
-exports.MetamaskConnect = MetamaskConnect;
+exports.CoinbaseWalletConnect = CoinbaseWalletConnect;
