@@ -41,13 +41,17 @@ export class MetamaskConnect extends AbstractConnector {
    * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
    */
   public connect(): Promise<IConnectorMessage> {
+    const { ethereum } = window;
     return new Promise<any>((resolve, reject) => {
-      if (typeof window.ethereum !== 'undefined') {
-        this.connector = window.ethereum;
+      if (Boolean(ethereum && ethereum.isMetaMask )) {
+        // @ts-ignore
+        this.connector = ethereum.providers ? ethereum.providers.filter((provider: any) => provider.isMetaMask)[0] : window.ethereum;
+      
         resolve({
           code: 1,
           connected: true,
-          provider: 'Web3',
+          // provider: 'Web3',
+          provider: this.connector,
           message: {
             title: 'Success',
             subtitle: 'Connect success',
