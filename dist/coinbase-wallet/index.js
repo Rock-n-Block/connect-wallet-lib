@@ -94,9 +94,14 @@ var CoinbaseWalletConnect = /** @class */ (function (_super) {
                         overrideIsMetaMask: true
                     });
                     var chain = helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.chainID]];
-                    _this.connector = coinbaseWallet.makeWeb3Provider(provider.useProvider === 'rpc'
-                        ? provider.provider[provider.useProvider].rpc[_this.chainID]
-                        : "https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId, _this.chainID);
+                    var rpcProvider = null;
+                    if (provider.useProvider) {
+                        rpcProvider =
+                            provider.useProvider === 'rpc'
+                                ? provider.provider.rpc.rpc[_this.chainID]
+                                : "https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId;
+                    }
+                    _this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, _this.chainID);
                     resolve({
                         code: 1,
                         connected: true,
