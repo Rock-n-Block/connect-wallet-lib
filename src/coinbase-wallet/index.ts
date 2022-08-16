@@ -52,7 +52,7 @@ export class CoinbaseWalletConnect extends AbstractConnector {
           });
           const chain = parameters.chainsMap[parameters.chainIDMap[this.chainID]];
 
-          let rpcProvider;
+          let rpcProvider = "";
           if (provider.useProvider) {
             rpcProvider =
               provider.useProvider === 'rpc'
