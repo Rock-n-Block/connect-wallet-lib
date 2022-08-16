@@ -52,15 +52,16 @@ export class CoinbaseWalletConnect extends AbstractConnector {
           });
           const chain = parameters.chainsMap[parameters.chainIDMap[this.chainID]];
 
-          let rpcProvider = "";
-          if (provider.useProvider) {
-            rpcProvider =
+          if (!provider.useProvider) {
+            this.connector = coinbaseWallet.makeWeb3Provider();
+          } else {
+            const rpcProvider =
               provider.useProvider === 'rpc'
                 ? provider.provider.rpc.rpc[this.chainID]
                 : `https://${chain.name}.infura.io/v3/${provider.provider.infura.infuraId}`;
-          }
 
-          this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, this.chainID);
+            this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, this.chainID);
+          }
 
           resolve({
             code: 1,
