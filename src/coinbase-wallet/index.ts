@@ -43,55 +43,32 @@ export class CoinbaseWalletConnect extends AbstractConnector {
    */
   public connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>((resolve, reject) => {
-      if (typeof window.ethereum && window.coinbaseWalletExtension) {
-        if (window.coinbaseWalletExtension.isCoinbaseWallet) {
-          const coinbaseWallet = new CoinbaseWalletSDK({
-            darkMode: false,
-            appName: 'RnB Connect Wallet',
-            overrideIsMetaMask: true,
-          });
-          const chain = parameters.chainsMap[parameters.chainIDMap[this.chainID]];
+      const coinbaseWallet = new CoinbaseWalletSDK({
+        darkMode: false,
+        appName: 'RnB Connect Wallet',
+        overrideIsMetaMask: true,
+      });
+      const chain = parameters.chainsMap[parameters.chainIDMap[this.chainID]];
 
-          if (!provider.useProvider) {
-            this.connector = coinbaseWallet.makeWeb3Provider();
-          } else {
-            const rpcProvider =
-              provider.useProvider === 'rpc'
-                ? provider.provider.rpc.rpc[this.chainID]
-                : `https://${chain.name}.infura.io/v3/${provider.provider.infura.infuraId}`;
+      if (!provider.useProvider) {
+        this.connector = coinbaseWallet.makeWeb3Provider();
+      } else {
+        const rpcProvider =
+          provider.useProvider === 'rpc'
+            ? provider.provider.rpc.rpc[this.chainID]
+            : `https://${chain.name}.infura.io/v3/${provider.provider.infura.infuraId}`;
 
-            this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, this.chainID);
-          }
-
-          resolve({
-            code: 1,
-            connected: true,
-            provider: this.connector,
-            message: {
-              title: 'Success',
-              subtitle: 'CoinbaseWallet Connect',
-              text: `CoinbaseWallet found and connected.`,
-            },
-          } as IConnectorMessage);
-        }
-
-        reject({
-          code: 2,
-          connected: false,
-          message: {
-            title: 'Error',
-            subtitle: 'Error connect',
-            text: `CoinbaseWallet not found. Please install a wallet using an extension.`,
-          },
-        } as IConnectorMessage);
+        this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, this.chainID);
       }
-      reject({
-        code: 2,
-        connected: false,
+
+      resolve({
+        code: 1,
+        connected: true,
+        provider: this.connector,
         message: {
-          title: 'Error',
-          subtitle: 'Error connect',
-          text: `Ethereum not found. Please install a wallet using an extension.`,
+          title: 'Success',
+          subtitle: 'CoinbaseWallet Connect',
+          text: `CoinbaseWallet found and connected.`,
         },
       } as IConnectorMessage);
     });
