@@ -86,50 +86,29 @@ var CoinbaseWalletConnect = /** @class */ (function (_super) {
     CoinbaseWalletConnect.prototype.connect = function (provider) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            if (typeof window.ethereum && window.coinbaseWalletExtension) {
-                if (window.coinbaseWalletExtension.isCoinbaseWallet) {
-                    var coinbaseWallet = new wallet_sdk_1["default"]({
-                        darkMode: false,
-                        appName: 'RnB Connect Wallet',
-                        overrideIsMetaMask: true
-                    });
-                    var chain = helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.chainID]];
-                    var rpcProvider = null;
-                    if (provider.useProvider) {
-                        rpcProvider =
-                            provider.useProvider === 'rpc'
-                                ? provider.provider.rpc.rpc[_this.chainID]
-                                : "https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId;
-                    }
-                    _this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, _this.chainID);
-                    resolve({
-                        code: 1,
-                        connected: true,
-                        provider: _this.connector,
-                        message: {
-                            title: 'Success',
-                            subtitle: 'CoinbaseWallet Connect',
-                            text: "CoinbaseWallet found and connected."
-                        }
-                    });
-                }
-                reject({
-                    code: 2,
-                    connected: false,
-                    message: {
-                        title: 'Error',
-                        subtitle: 'Error connect',
-                        text: "CoinbaseWallet not found. Please install a wallet using an extension."
-                    }
-                });
+            var coinbaseWallet = new wallet_sdk_1["default"]({
+                darkMode: false,
+                appName: 'RnB Connect Wallet',
+                overrideIsMetaMask: true
+            });
+            var chain = helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.chainID]];
+            if (!provider.useProvider) {
+                _this.connector = coinbaseWallet.makeWeb3Provider();
             }
-            reject({
-                code: 2,
-                connected: false,
+            else {
+                var rpcProvider = provider.useProvider === 'rpc'
+                    ? provider.provider.rpc.rpc[_this.chainID]
+                    : "https://" + chain.name + ".infura.io/v3/" + provider.provider.infura.infuraId;
+                _this.connector = coinbaseWallet.makeWeb3Provider(rpcProvider, _this.chainID);
+            }
+            resolve({
+                code: 1,
+                connected: true,
+                provider: _this.connector,
                 message: {
-                    title: 'Error',
-                    subtitle: 'Error connect',
-                    text: "Ethereum not found. Please install a wallet using an extension."
+                    title: 'Success',
+                    subtitle: 'CoinbaseWallet Connect',
+                    text: "CoinbaseWallet found and connected."
                 }
             });
         });
