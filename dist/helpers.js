@@ -25,7 +25,9 @@ exports.parameters = {
         250: '0xfa',
         4002: '0xfa2',
         2001: '0x7d1',
-        200101: '0x30da5'
+        200101: '0x30da5',
+        42161: '0xa4b1',
+        421613: '0x66eed'
     },
     chainsMap: {
         '0x1': {
@@ -119,6 +121,14 @@ exports.parameters = {
         '0x30da5': {
             name: 'Milkomeda C1 Testnet',
             chainID: 200101
+        },
+        '0xa4b1': {
+            name: 'Arbitrum One',
+            chainID: 42161
+        },
+        '0x66eed': {
+            name: 'Arbitrum Goerli Testnet',
+            chainID: 421613
         }
     }
 };
