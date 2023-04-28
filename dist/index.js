@@ -48,6 +48,7 @@ var coinbase_wallet_1 = require("./coinbase-wallet");
 var kardiachain_1 = require("./kardiachain");
 var onto_1 = require("./onto");
 var helpers_1 = require("./helpers");
+var okx_1 = require("okx");
 var ConnectWallet = /** @class */ (function () {
     /**
      * Connect provider to web3 and get access to web3 methods, account address and transaction in blockchain.
@@ -61,6 +62,7 @@ var ConnectWallet = /** @class */ (function () {
             'CoinbaseWallet',
             'KardiaChain',
             'Onto',
+            'Okx',
         ];
         this.contracts = {};
         this.allTxSubscribers = [];
@@ -179,6 +181,8 @@ var ConnectWallet = /** @class */ (function () {
                 return new kardiachain_1.KardiaChainConnect();
             case 'Onto':
                 return new onto_1.OntoConnect(this.network);
+            case 'Okx':
+                return new okx_1.OkxConnect(this.network);
         }
     };
     /**
