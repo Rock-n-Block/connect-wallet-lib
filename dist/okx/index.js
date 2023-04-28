@@ -81,22 +81,22 @@ var OkxConnect = /** @class */ (function (_super) {
      */
     OkxConnect.prototype.connect = function () {
         var _this = this;
-        var ethereum = window.ethereum;
         return new Promise(function (resolve, reject) {
-            if (Boolean(ethereum && ethereum.isOkxWallet)) {
-                _this.connector = ethereum.providers
-                    ? ethereum.providers.filter(function (provider) { return provider.isOkxWallet; })[0]
-                    : window.ethereum;
-                resolve({
-                    code: 1,
-                    connected: true,
-                    provider: _this.connector,
-                    message: {
-                        title: "Success",
-                        subtitle: "Connect success",
-                        text: "Okx found and connected."
-                    }
-                });
+            if (typeof window.okxwallet !== "undefined") {
+                _this.connector = window.okxwallet;
+                if (window.okxwallet.isOkxWallet) {
+                    _this.connector.enable();
+                    resolve({
+                        code: 1,
+                        connected: true,
+                        provider: _this.connector,
+                        message: {
+                            title: "Success",
+                            subtitle: "Connect success",
+                            text: "Okx found and connected."
+                        }
+                    });
+                }
             }
             reject({
                 code: 2,

@@ -10,14 +10,12 @@ import {
 import { parameters, codeMap } from "../helpers";
 import { AbstractConnector } from "../abstract-connector";
 
-interface IWindow extends Window {
-  ethereum: {
-    isMetaMask: boolean;
-    isWalletLink: boolean;
-    isOkxWallet: boolean;
-    providers: any;
-  };
+declare global {
+  interface Window {
+    okxwallet: any;
+  }
 }
+
 export class OkxConnect extends AbstractConnector {
   public connector: any;
   private chainID: number;
@@ -49,25 +47,22 @@ export class OkxConnect extends AbstractConnector {
    * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
    */
   public connect(): Promise<IConnectorMessage> {
-    const { ethereum } = window as IWindow;
     return new Promise<any>((resolve, reject) => {
-      if (Boolean(ethereum && ethereum.isOkxWallet)) {
-        this.connector = ethereum.providers
-          ? ethereum.providers.filter(
-              (provider: any) => provider.isOkxWallet
-            )[0]
-          : window.ethereum;
-
-        resolve({
-          code: 1,
-          connected: true,
-          provider: this.connector,
-          message: {
-            title: "Success",
-            subtitle: "Connect success",
-            text: `Okx found and connected.`,
-          },
-        } as IConnectorMessage);
+      if (typeof window.okxwallet !== "undefined") {
+        this.connector = window.okxwallet;
+        if (window.okxwallet.isOkxWallet) {
+          this.connector.enable();
+          resolve({
+            code: 1,
+            connected: true,
+            provider: this.connector,
+            message: {
+              title: "Success",
+              subtitle: "Connect success",
+              text: `Okx found and connected.`,
+            },
+          } as IConnectorMessage);
+        }
       }
 
       reject({

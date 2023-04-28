@@ -1,6 +1,11 @@
 import { Observable } from "rxjs";
 import { IConnectorMessage, INetwork, IEvent, IEventError } from "../interface";
 import { AbstractConnector } from "../abstract-connector";
+declare global {
+    interface Window {
+        okxwallet: any;
+    }
+}
 export declare class OkxConnect extends AbstractConnector {
     connector: any;
     private chainID;
