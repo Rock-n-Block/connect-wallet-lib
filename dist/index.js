@@ -47,8 +47,8 @@ var wallet_connect_1 = require("./wallet-connect");
 var coinbase_wallet_1 = require("./coinbase-wallet");
 var kardiachain_1 = require("./kardiachain");
 var onto_1 = require("./onto");
+var okx_1 = require("./okx");
 var helpers_1 = require("./helpers");
-var okx_1 = require("okx");
 var ConnectWallet = /** @class */ (function () {
     /**
      * Connect provider to web3 and get access to web3 methods, account address and transaction in blockchain.

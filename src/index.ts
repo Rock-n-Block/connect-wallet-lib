@@ -8,6 +8,7 @@ import { WalletsConnect } from './wallet-connect';
 import { CoinbaseWalletConnect } from './coinbase-wallet';
 import { KardiaChainConnect } from './kardiachain';
 import { OntoConnect } from './onto';
+import { OkxConnect } from "./okx";
 
 import {
   INetwork,
@@ -26,7 +27,6 @@ import {
   IEventError,
 } from './interface';
 import { parameters, addChains } from './helpers';
-import { OkxConnect } from 'okx';
 
 export class ConnectWallet {
   private connector:
