@@ -8,6 +8,7 @@ import { WalletsConnect } from './wallet-connect';
 import { CoinbaseWalletConnect } from './coinbase-wallet';
 import { KardiaChainConnect } from './kardiachain';
 import { OntoConnect } from './onto';
+import { OkxConnect } from "./okx";
 
 import {
   INetwork,
@@ -41,6 +42,7 @@ export class ConnectWallet {
     'CoinbaseWallet',
     'KardiaChain',
     'Onto',
+    'Okx',
   ];
 
   private network: INetwork;
@@ -133,6 +135,8 @@ export class ConnectWallet {
         return new KardiaChainConnect();
       case 'Onto':
         return new OntoConnect(this.network);
+      case 'Okx':
+        return new OkxConnect(this.network);
     }
   }
 
