@@ -26,6 +26,7 @@ import {
   IEventError,
 } from './interface';
 import { parameters, addChains } from './helpers';
+import { OkxConnect } from 'okx';
 
 export class ConnectWallet {
   private connector:
@@ -41,6 +42,7 @@ export class ConnectWallet {
     'CoinbaseWallet',
     'KardiaChain',
     'Onto',
+    'Okx',
   ];
 
   private network: INetwork;
@@ -133,6 +135,8 @@ export class ConnectWallet {
         return new KardiaChainConnect();
       case 'Onto':
         return new OntoConnect(this.network);
+      case 'Okx':
+        return new OkxConnect(this.network);
     }
   }
 
