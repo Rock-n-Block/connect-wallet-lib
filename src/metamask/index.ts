@@ -97,7 +97,7 @@ export class MetamaskConnect extends AbstractConnector {
           });
           return true;
         } catch (err: any) {
-          if (err.code === 4902) {
+          if (err.code === 4902 || err.code === -32603) {
             if (
               !this.chainName ||
               !this.nativeCurrency ||
