@@ -54,7 +54,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.WalletsConnect = void 0;
 var rxjs_1 = require("rxjs");
-var web3_provider_1 = __importDefault(require("@walletconnect/ethereum-provider"));
+var { EthereumProvider } = __importDefault(require("@walletconnect/ethereum-provider"));
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
 var WalletsConnect = /** @class */ (function (_super) {
@@ -73,6 +73,7 @@ var WalletsConnect = /** @class */ (function (_super) {
      * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
      */
     WalletsConnect.prototype.connect = function (provider) {
+        console.log('provider.provider[provider.useProvider]', provider.provider[provider.useProvider])
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -81,7 +82,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                         return __generator(this, async function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    this.connector = await web3_provider_1.EthereumProvider.init["default"](provider.provider[provider.useProvider]);
+                                    this.connector = await EthereumProvider.init(provider.provider[provider.useProvider]);
                                     return [4 /*yield*/, this.connector
                                             .enable()
                                             .then(function () {

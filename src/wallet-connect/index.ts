@@ -28,8 +28,8 @@ export class WalletsConnect extends AbstractConnector {
    * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
+    console.log('provider.provider[provider.useProvider]', provider.provider[provider.useProvider])
     return new Promise<any>(async (resolve, reject) => {
-      console.log('provider.provider[provider.useProvider]', provider.provider[provider.useProvider])
       this.connector = await EthereumProvider.init(
         provider.provider[provider.useProvider],
       );
