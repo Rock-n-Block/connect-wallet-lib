@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { IConnectorMessage, IProvider, IEvent, IEventError } from '../interface';
 import { AbstractConnector } from '../abstract-connector';
 export declare class WalletsConnect extends AbstractConnector {

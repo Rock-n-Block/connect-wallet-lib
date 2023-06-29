@@ -1,4 +1,6 @@
 "use strict";
+import { EthereumProvider } from '@walletconnect/ethereum-provider'
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -54,7 +56,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.WalletsConnect = void 0;
 var rxjs_1 = require("rxjs");
-var web3_provider_1 = __importDefault(require("@walletconnect/web3-provider"));
+var web3_provider_1 = __importDefault(require("@walletconnect/ethereum-provider"));
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
 var WalletsConnect = /** @class */ (function (_super) {
@@ -81,9 +83,10 @@ var WalletsConnect = /** @class */ (function (_super) {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
+                                    console.log('EthereumProvider', EthereumProvider)
                                     this.connector = new web3_provider_1["default"](provider.provider[provider.useProvider]);
-                                    return [4 /*yield*/, this.connector
-                                            .enable()
+                                    return [4 /*yield*/, EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,})
+                                            .connect()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
