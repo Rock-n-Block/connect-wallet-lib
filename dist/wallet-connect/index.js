@@ -83,7 +83,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                             console.log('_a.label', _a.label)
                             switch (_a.label) {
                                 case 0:
-                                    this.connector = await EthereumProvider.init(provider.provider[provider.useProvider]);
+                                    console.log('EthereumProvider', EthereumProvider)
+                                    this.connector = await EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,});
                                     console.log('WalletsConnect this.connector', this.connector)
                                     return [4 /*yield*/, this.connector
                                             .connect()
