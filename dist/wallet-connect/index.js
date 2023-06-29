@@ -54,7 +54,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.WalletsConnect = void 0;
 var rxjs_1 = require("rxjs");
-var { EthereumProvider } = __importDefault(require("@walletconnect/ethereum-provider"));
+var web3_provider_1 = __importDefault(require("@walletconnect/ethereum-provider"));
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
 var WalletsConnect = /** @class */ (function (_super) {
@@ -83,8 +83,9 @@ var WalletsConnect = /** @class */ (function (_super) {
                             console.log('_a.label', _a.label)
                             switch (_a.label) {
                                 case 0:
-                                    console.log('EthereumProvider', EthereumProvider)
-                                    this.connector = await EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,});
+                                    console.log('web3_provider_1', web3_provider_1)
+                                    console.log('{projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,}', {projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,})
+                                    this.connector = await web3_provider_1["default"].EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal,});
                                     console.log('WalletsConnect this.connector', this.connector)
                                     return [4 /*yield*/, this.connector
                                             .connect()
