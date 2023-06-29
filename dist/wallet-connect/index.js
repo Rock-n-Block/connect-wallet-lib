@@ -85,7 +85,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     this.connector = new web3_provider_1["default"](provider.provider[provider.useProvider]);
                                     console.log('web3_provider_1.EthereumProvider', web3_provider_1.EthereumProvider)
                                     console.log('this.connector.EthereumProvider', this.connector.EthereumProvider)
-                                    return [4 /*yield*/, web3_provider_1.EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal})
+                                    return [4 /*yield*/, web3_provider_1.EthereumProvider.init({projectId: provider.provider[provider.useProvider].projectId,chains: provider.provider[provider.useProvider].chains,showQrModal: provider.provider[provider.useProvider].showQrModal}).then()
                                             .connect()
                                             .then(function () {
                                             resolve({
