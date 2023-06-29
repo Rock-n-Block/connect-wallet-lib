@@ -199,18 +199,6 @@ var WalletsConnect = /** @class */ (function (_super) {
               return __generator(this, function (_a) {
                 switch (_a.label) {
                   case 0:
-                    console.log('web3_provider_1', web3_provider_1);
-                    this.connector = new web3_provider_1['default'](
-                      provider.provider[provider.useProvider]
-                    );
-                    console.log(
-                      'web3_provider_1.EthereumProvider',
-                      web3_provider_1.EthereumProvider
-                    );
-                    console.log(
-                      'this.connector.EthereumProvider',
-                      this.connector.EthereumProvider
-                    );
                     return [
                       4 /*yield*/,
                       web3_provider_1.EthereumProvider.init({
@@ -226,7 +214,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                             resolve({
                               code: 1,
                               connected: true,
-                              provider: _this.connector,
+                              provider,
                               message: {
                                 title: 'Success',
                                 subtitle: 'Wallet Connect',
