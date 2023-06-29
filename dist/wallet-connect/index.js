@@ -95,7 +95,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                                     text: "Wallet Connect connected."
                                                 }
                                             });
-                                        })["catch"](function () {
+                                        })["catch"](function (error) {
+                                            console.error(error)
                                             reject({
                                                 code: 5,
                                                 connected: false,
