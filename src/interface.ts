@@ -18,6 +18,7 @@ export interface IProvider {
       };
       chainId?: number;
     };
+    projectId?: string;
   };
 }
 
