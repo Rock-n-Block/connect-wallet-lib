@@ -80,11 +80,13 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, async function (_a) {
+                            console.log('_a.label', _a.label)
                             switch (_a.label) {
                                 case 0:
                                     this.connector = await EthereumProvider.init(provider.provider[provider.useProvider]);
+                                    console.log('WalletsConnect this.connector', this.connector)
                                     return [4 /*yield*/, this.connector
-                                            .enable()
+                                            .connect()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
