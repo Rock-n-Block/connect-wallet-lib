@@ -133,6 +133,7 @@ var ConnectWallet = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
+                console.log('this.availableProviders.includes(provider.name', this.availableProviders.includes(provider.name))
                 if (!this.availableProviders.includes(provider.name)) {
                     return [2 /*return*/, {
                             code: 2,
@@ -149,6 +150,8 @@ var ConnectWallet = /** @class */ (function () {
                 this.network = network;
                 this.settings = settings ? settings : { providerType: false };
                 this.connector = this.chooseProvider(provider.name);
+                console.log('this.connector', this.connector)
+                console.log('provider', provider)
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         _this.connector
                             .connect(provider)
