@@ -123,6 +123,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this_1 = this;
         return new rxjs_1.Observable(function (observer) {
             _this_1.connector.on('connect', function (payload) {
+                console.log('payload', payload);
                 // if (error) {
                 //   observer.error({
                 //     code: 3,
@@ -137,6 +138,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                 // observer.next({ address: accounts, network: chainId, name: 'connect' });
             });
             _this_1.connector.on('disconnect', function (payload) {
+                console.log('payload', payload);
                 // if (error) {
                 //   console.log('wallet connect on connect error', error, payload);
                 //   observer.error({
@@ -150,6 +152,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                 // }
             });
             _this_1.connector.on('accountsChanged', function (payload) {
+                console.log('payload', payload);
                 // console.log('WalletConnect account changed', accounts, payload);
                 // observer.next({
                 //   address: accounts[0],
@@ -189,6 +192,7 @@ var WalletsConnect = /** @class */ (function (_super) {
     WalletsConnect.prototype.getAccounts = function () {
         var _this_1 = this;
         return new Promise(function (resolve) {
+            console.log('this.connector', _this_1.connector);
             if (!_this_1.connector.connected) {
                 // this.connector.createSessithis.connector.on();
             }

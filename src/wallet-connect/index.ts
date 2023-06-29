@@ -68,6 +68,7 @@ export class WalletsConnect extends AbstractConnector {
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
       this.connector.on('connect', (payload: any) => {
+        console.log('payload', payload)
         // if (error) {
         //   observer.error({
         //     code: 3,
@@ -85,6 +86,8 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       this.connector.on('disconnect', (payload) => {
+        console.log('payload', payload)
+        
         // if (error) {
         //   console.log('wallet connect on connect error', error, payload);
         //   observer.error({
@@ -101,6 +104,7 @@ export class WalletsConnect extends AbstractConnector {
       this.connector.on(
         'accountsChanged',
         (payload: any) => {
+          console.log('payload', payload)
           // console.log('WalletConnect account changed', accounts, payload);
 
           // observer.next({
@@ -148,6 +152,7 @@ export class WalletsConnect extends AbstractConnector {
    */
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
+      console.log('this.connector', this.connector)
       if (!this.connector.connected) {
         // this.connector.createSessithis.connector.on();
       }
