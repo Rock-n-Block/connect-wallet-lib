@@ -69,50 +69,50 @@ export class WalletsConnect extends AbstractConnector {
     return new Observable((observer) => {
       this.connector.on('connect', (payload: any) => {
         console.log('payload', payload);
-        // if (error) {
-        //   observer.error({
-        //     code: 3,
-        //     message: {
-        //       title: 'Error',
-        //       subtitle: 'Authorized error',
-        //       message: 'You are not authorized.',
-        //     },
-        //   });
-        // }
+        if (payload.error) {
+          observer.error({
+            code: 3,
+            message: {
+              title: 'Error',
+              subtitle: 'Authorized error',
+              message: 'You are not authorized.',
+            },
+          });
+        }
 
-        // const { accounts, chainId } = payload.params[0];
+        const { accounts, chainId } = payload.params[0];
 
-        // observer.next({ address: accounts, network: chainId, name: 'connect' });
+        observer.next({ address: accounts, network: chainId, name: 'connect' });
       });
 
-      this.connector.on('disconnect', (payload) => {
-        console.log('payload', payload);
+      this.connector.on('disconnect', (error) => {
+        console.log('error', error);
 
-        // if (error) {
-        //   console.log('wallet connect on connect error', error, payload);
-        //   observer.error({
-        //     code: 6,
-        //     message: {
-        //       title: 'Error',
-        //       subtitle: 'Disconnect',
-        //       message: 'Wallet disconnected',
-        //     },
-        //   });
-        // }
+        if (error) {
+          console.log('wallet connect on connect error', error, error.data);
+          observer.error({
+            code: 6,
+            message: {
+              title: 'Error',
+              subtitle: 'Disconnect',
+              message: 'Wallet disconnected',
+            },
+          });
+        }
       });
 
-      this.connector.on('accountsChanged', (payload: any) => {
-        console.log('payload', payload);
-        // console.log('WalletConnect account changed', accounts, payload);
+      this.connector.on('accountsChanged', (accounts: any) => {
+        console.log('accounts', accounts);
+        console.log('WalletConnect account changed', accounts, accounts);
 
-        // observer.next({
-        //   address: accounts[0],
-        //   network:
-        //     parameters.chainsMap[
-        //       parameters.chainIDMap[this.connector.chainId]
-        //     ],
-        //   name: 'accountsChanged',
-        // });
+        observer.next({
+          address: accounts[0],
+          network:
+            parameters.chainsMap[
+              parameters.chainIDMap[this.connector.chainId]
+            ],
+          name: 'accountsChanged',
+        });
       });
 
       this.connector.on('chainChanged', (chainId: any) => {
@@ -151,7 +151,7 @@ export class WalletsConnect extends AbstractConnector {
     return new Promise((resolve) => {
       console.log('this.connector', this.connector);
       if (!this.connector.connected) {
-        // this.connector.createSessithis.connector.on();
+        this.connector.enable();
       }
 
       resolve({

@@ -126,44 +126,41 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new rxjs_1.Observable(function (observer) {
             _this_1.connector.on('connect', function (payload) {
                 console.log('payload', payload);
-                // if (error) {
-                //   observer.error({
-                //     code: 3,
-                //     message: {
-                //       title: 'Error',
-                //       subtitle: 'Authorized error',
-                //       message: 'You are not authorized.',
-                //     },
-                //   });
-                // }
-                // const { accounts, chainId } = payload.params[0];
-                // observer.next({ address: accounts, network: chainId, name: 'connect' });
+                if (payload.error) {
+                    observer.error({
+                        code: 3,
+                        message: {
+                            title: 'Error',
+                            subtitle: 'Authorized error',
+                            message: 'You are not authorized.'
+                        }
+                    });
+                }
+                var _a = payload.params[0], accounts = _a.accounts, chainId = _a.chainId;
+                observer.next({ address: accounts, network: chainId, name: 'connect' });
             });
-            _this_1.connector.on('disconnect', function (payload) {
-                console.log('payload', payload);
-                // if (error) {
-                //   console.log('wallet connect on connect error', error, payload);
-                //   observer.error({
-                //     code: 6,
-                //     message: {
-                //       title: 'Error',
-                //       subtitle: 'Disconnect',
-                //       message: 'Wallet disconnected',
-                //     },
-                //   });
-                // }
+            _this_1.connector.on('disconnect', function (error) {
+                console.log('error', error);
+                if (error) {
+                    console.log('wallet connect on connect error', error, error.data);
+                    observer.error({
+                        code: 6,
+                        message: {
+                            title: 'Error',
+                            subtitle: 'Disconnect',
+                            message: 'Wallet disconnected'
+                        }
+                    });
+                }
             });
-            _this_1.connector.on('accountsChanged', function (payload) {
-                console.log('payload', payload);
-                // console.log('WalletConnect account changed', accounts, payload);
-                // observer.next({
-                //   address: accounts[0],
-                //   network:
-                //     parameters.chainsMap[
-                //       parameters.chainIDMap[this.connector.chainId]
-                //     ],
-                //   name: 'accountsChanged',
-                // });
+            _this_1.connector.on('accountsChanged', function (accounts) {
+                console.log('accounts', accounts);
+                console.log('WalletConnect account changed', accounts, accounts);
+                observer.next({
+                    address: accounts[0],
+                    network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this_1.connector.chainId]],
+                    name: 'accountsChanged'
+                });
             });
             _this_1.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
@@ -196,7 +193,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new Promise(function (resolve) {
             console.log('this.connector', _this_1.connector);
             if (!_this_1.connector.connected) {
-                // this.connector.createSessithis.connector.on();
+                _this_1.connector.enable();
             }
             resolve({
                 address: _this_1.connector.accounts[0],
