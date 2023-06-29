@@ -88,30 +88,32 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    _this.connector
-                                        .connect()
-                                        .then(function () {
-                                        resolve({
-                                            code: 1,
-                                            connected: true,
-                                            provider: _this.connector,
-                                            message: {
-                                                title: 'Success',
-                                                subtitle: 'Wallet Connect',
-                                                text: "Wallet Connect connected."
-                                            }
-                                        });
-                                    })["catch"](function () {
-                                        reject({
-                                            code: 5,
-                                            connected: false,
-                                            message: {
-                                                title: 'Error',
-                                                subtitle: 'Error connect',
-                                                text: "User closed qr modal window."
-                                            }
-                                        });
-                                    });
+                                    return [4 /*yield*/, _this.connector
+                                            .connect()
+                                            .then(function () {
+                                            resolve({
+                                                code: 1,
+                                                connected: true,
+                                                provider: _this.connector,
+                                                message: {
+                                                    title: 'Success',
+                                                    subtitle: 'Wallet Connect',
+                                                    text: "Wallet Connect connected."
+                                                }
+                                            });
+                                        })["catch"](function () {
+                                            reject({
+                                                code: 5,
+                                                connected: false,
+                                                message: {
+                                                    title: 'Error',
+                                                    subtitle: 'Error connect',
+                                                    text: "User closed qr modal window."
+                                                }
+                                            });
+                                        })];
+                                case 2:
+                                    _b.sent();
                                     return [2 /*return*/];
                             }
                         });

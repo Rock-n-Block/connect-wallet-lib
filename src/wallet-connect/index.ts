@@ -37,7 +37,7 @@ export class WalletsConnect extends AbstractConnector {
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
-      _this.connector
+      await _this.connector
         .connect()
         .then(() => {
           resolve({
@@ -68,7 +68,7 @@ export class WalletsConnect extends AbstractConnector {
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
       this.connector.on('connect', (payload: any) => {
-        console.log('payload', payload)
+        console.log('payload', payload);
         // if (error) {
         //   observer.error({
         //     code: 3,
@@ -86,8 +86,8 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       this.connector.on('disconnect', (payload) => {
-        console.log('payload', payload)
-        
+        console.log('payload', payload);
+
         // if (error) {
         //   console.log('wallet connect on connect error', error, payload);
         //   observer.error({
@@ -101,22 +101,19 @@ export class WalletsConnect extends AbstractConnector {
         // }
       });
 
-      this.connector.on(
-        'accountsChanged',
-        (payload: any) => {
-          console.log('payload', payload)
-          // console.log('WalletConnect account changed', accounts, payload);
+      this.connector.on('accountsChanged', (payload: any) => {
+        console.log('payload', payload);
+        // console.log('WalletConnect account changed', accounts, payload);
 
-          // observer.next({
-          //   address: accounts[0],
-          //   network:
-          //     parameters.chainsMap[
-          //       parameters.chainIDMap[this.connector.chainId]
-          //     ],
-          //   name: 'accountsChanged',
-          // });
-        }
-      );
+        // observer.next({
+        //   address: accounts[0],
+        //   network:
+        //     parameters.chainsMap[
+        //       parameters.chainIDMap[this.connector.chainId]
+        //     ],
+        //   name: 'accountsChanged',
+        // });
+      });
 
       this.connector.on('chainChanged', (chainId: any) => {
         console.log('WalletConnect chain changed:', chainId);
@@ -152,7 +149,7 @@ export class WalletsConnect extends AbstractConnector {
    */
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
-      console.log('this.connector', this.connector)
+      console.log('this.connector', this.connector);
       if (!this.connector.connected) {
         // this.connector.createSessithis.connector.on();
       }
