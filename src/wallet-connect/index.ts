@@ -47,7 +47,8 @@ export class WalletsConnect extends AbstractConnector {
             },
           });
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error)
           reject({
             code: 5,
             connected: false,

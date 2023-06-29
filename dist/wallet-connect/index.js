@@ -78,10 +78,10 @@ var WalletsConnect = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
-                        return __generator(this, function (_a) {
+                        return __generator(this, async function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    this.connector = new web3_provider_1["default"](provider.provider[provider.useProvider]);
+                                    this.connector = await web3_provider_1.EthereumProvider.init["default"](provider.provider[provider.useProvider]);
                                     return [4 /*yield*/, this.connector
                                             .enable()
                                             .then(function () {
