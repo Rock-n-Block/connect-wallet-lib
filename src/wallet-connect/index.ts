@@ -19,8 +19,13 @@ export class WalletsConnect extends AbstractConnector {
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
    * in your favourite cryptowallet.
    */
-  constructor() {
+  constructor(provider) {
     super();
+    EthereumProvider.init({
+      projectId: provider.provider[provider.useProvider].projectId,
+      chains: provider.provider[provider.useProvider].chains,
+      showQrModal: provider.provider[provider.useProvider].showQrModal,
+    }).then((provider) => (this.connector = provider));
   }
 
   /**
@@ -31,46 +36,12 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      console.log('public async connect(provider', provider);
-      this.connector = await EthereumProvider.init({
-        projectId: provider.provider[provider.useProvider].projectId,
-        chains: provider.provider[provider.useProvider].chains,
-        showQrModal: provider.provider[provider.useProvider].showQrModal,
-        // rpcMap: provider.provider[provider.useProvider].rpc,
-        // events: [
-        //   'accountsChanged',
-        //   'chainChanged',
-        //   'message',
-        //   'disconnect',
-        //   'connect',
-        // ],
-        // methods: [
-        //   'personal_sign',
-        //   'eth_sendTransaction',
-        //   'eth_accounts',
-        //   'eth_requestAccounts',
-        //   'eth_call',
-        //   'eth_getBalance',
-        //   'eth_sendRawTransaction',
-        //   'eth_sign',
-        //   'eth_signTransaction',
-        //   'eth_signTypedData',
-        //   'eth_signTypedData_v3',
-        //   'eth_signTypedData_v4',
-        //   'wallet_switchEthereumChain',
-        //   'wallet_addEthereumChain',
-        //   'wallet_getPermissions',
-        //   'wallet_requestPermissions',
-        //   'wallet_registerOnboarding',
-        //   'wallet_watchAsset',
-        //   'wallet_scanQRCode',
-        // ],
-      });
+      console.log('public async connect(provider this.connector', this.connector);
 
-      this.connector
+      await this.connector
         .connect({
-          // chains: provider.provider[provider.useProvider].chains,
-          // rpcMap: provider.provider[provider.useProvider].rpc,
+          chains: provider.provider[provider.useProvider].chains,
+          rpcMap: provider.provider[provider.useProvider].rpc,
         })
         .then(() => {
           console.log(`Wallet Connect connected.`);

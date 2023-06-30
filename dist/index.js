@@ -131,40 +131,48 @@ var ConnectWallet = /** @class */ (function () {
      */
     ConnectWallet.prototype.connect = function (provider, network, settings) {
         return __awaiter(this, void 0, void 0, function () {
+            var _a;
             var _this = this;
-            return __generator(this, function (_a) {
-                if (!this.availableProviders.includes(provider.name)) {
-                    return [2 /*return*/, {
-                            code: 2,
-                            type: 'error',
-                            connected: false,
-                            provider: provider,
-                            message: {
-                                title: 'Error',
-                                subtitle: 'Provider Error',
-                                text: "Your provider doesn't exists"
-                            }
-                        }];
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.availableProviders.includes(provider.name)) {
+                            return [2 /*return*/, {
+                                    code: 2,
+                                    type: 'error',
+                                    connected: false,
+                                    provider: provider,
+                                    message: {
+                                        title: 'Error',
+                                        subtitle: 'Provider Error',
+                                        text: "Your provider doesn't exists"
+                                    }
+                                }];
+                        }
+                        this.provider = provider;
+                        this.network = network;
+                        this.settings = settings ? settings : { providerType: false };
+                        _a = this;
+                        return [4 /*yield*/, this.chooseProvider(provider.name)];
+                    case 1:
+                        _a.connector = _b.sent();
+                        console.log('public async connect', this.connector.connect);
+                        return [2 /*return*/, new Promise(function (resolve, reject) {
+                                _this.connector
+                                    .connect(provider)
+                                    .then(function (connect) {
+                                    console.log('.then((connect) ', connect);
+                                    return _this.applySettings(connect);
+                                })
+                                    .then(function (connect) {
+                                    console.log('connect IConnectorMessage', connect);
+                                    connect.connected
+                                        ? _this.initWeb3(connect.provider)
+                                        : reject(connect);
+                                    resolve(connect);
+                                }, function (err) { return reject(_this.applySettings(err)); });
+                            })];
                 }
-                this.network = network;
-                this.settings = settings ? settings : { providerType: false };
-                this.connector = this.chooseProvider(provider.name);
-                console.log('public async connect', this.connector.connect);
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        _this.connector
-                            .connect(provider)
-                            .then(function (connect) {
-                            console.log('.then((connect) ', connect);
-                            return _this.applySettings(connect);
-                        })
-                            .then(function (connect) {
-                            console.log('connect IConnectorMessage', connect);
-                            connect.connected
-                                ? _this.initWeb3(connect.provider)
-                                : reject(connect);
-                            resolve(connect);
-                        }, function (err) { return reject(_this.applySettings(err)); });
-                    })];
             });
         });
     };
@@ -176,21 +184,38 @@ var ConnectWallet = /** @class */ (function () {
      * @example connectWallet.chooseProvider('MetaMask'); //=> new MetamaskConnect()
      */
     ConnectWallet.prototype.chooseProvider = function (name) {
-        this.providerName = name;
-        switch (name) {
-            case 'MetaMask':
-                return new metamask_1.MetamaskConnect(this.network);
-            case 'WalletConnect':
-                return new wallet_connect_1.WalletsConnect();
-            case 'CoinbaseWallet':
-                return new coinbase_wallet_1.CoinbaseWalletConnect(this.network);
-            case 'KardiaChain':
-                return new kardiachain_1.KardiaChainConnect();
-            case 'Onto':
-                return new onto_1.OntoConnect(this.network);
-            case 'Okx':
-                return new okx_1.OkxConnect(this.network);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        this.providerName = name;
+                        _a = name;
+                        switch (_a) {
+                            case 'MetaMask': return [3 /*break*/, 1];
+                            case 'WalletConnect': return [3 /*break*/, 2];
+                            case 'CoinbaseWallet': return [3 /*break*/, 5];
+                            case 'KardiaChain': return [3 /*break*/, 6];
+                            case 'Onto': return [3 /*break*/, 7];
+                            case 'Okx': return [3 /*break*/, 8];
+                        }
+                        return [3 /*break*/, 9];
+                    case 1: return [2 /*return*/, new metamask_1.MetamaskConnect(this.network)];
+                    case 2:
+                        _c = (_b = console).log;
+                        return [4 /*yield*/, new wallet_connect_1.WalletsConnect(this.provider)];
+                    case 3:
+                        _c.apply(_b, [_d.sent()]);
+                        return [4 /*yield*/, new wallet_connect_1.WalletsConnect(this.provider)];
+                    case 4: return [2 /*return*/, _d.sent()];
+                    case 5: return [2 /*return*/, new coinbase_wallet_1.CoinbaseWalletConnect(this.network)];
+                    case 6: return [2 /*return*/, new kardiachain_1.KardiaChainConnect()];
+                    case 7: return [2 /*return*/, new onto_1.OntoConnect(this.network)];
+                    case 8: return [2 /*return*/, new okx_1.OkxConnect(this.network)];
+                    case 9: return [2 /*return*/];
+                }
+            });
+        });
     };
     /**
      * Initialize a Web3 by set provider after using connect function.

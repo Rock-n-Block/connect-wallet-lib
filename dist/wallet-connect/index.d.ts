@@ -7,7 +7,7 @@ export declare class WalletsConnect extends AbstractConnector {
      * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
      * in your favourite cryptowallet.
      */
-    constructor();
+    constructor(provider: any);
     /**
      * Connect WalletConnect to application. Create connection with connect wallet and return provider for Web3.
      *
