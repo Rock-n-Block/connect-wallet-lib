@@ -31,7 +31,7 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      await EthereumProvider.init({
+      this.connector = await EthereumProvider.init({
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
@@ -64,10 +64,10 @@ export class WalletsConnect extends AbstractConnector {
           'wallet_watchAsset',
           'wallet_scanQRCode',
         ],
-      }).then((provider) => (this.connector = provider));
+      });
 
       await this.connector
-        .enable()
+        .connect()
         .then(() => {
           resolve({
             code: 1,
@@ -149,25 +149,25 @@ export class WalletsConnect extends AbstractConnector {
         console.log('WalletConnect chain changed:', chainId);
       });
 
-      // this.connector.on('wc_sessionUpdate', (error, payload) => {
-      //   console.log(error || payload, 'wc_sessionUpdate');
-      // });
+      this.connector.on('wc_sessionUpdate', (error, payload) => {
+        console.log(error || payload, 'wc_sessionUpdate');
+      });
 
-      // this.connector.on('wc_sessionRequest', (error, payload) => {
-      //   console.log(error || payload, 'wc_sessionRequest');
-      // });
+      this.connector.on('wc_sessionRequest', (error, payload) => {
+        console.log(error || payload, 'wc_sessionRequest');
+      });
 
-      // this.connector.on('call_request', (error, payload) => {
-      //   console.log(error || payload, 'call_request');
-      // });
+      this.connector.on('call_request', (error, payload) => {
+        console.log(error || payload, 'call_request');
+      });
 
-      // this.connector.on('session_update', (error, payload) => {
-      //   console.log(error || payload, 'session_update');
-      // });
+      this.connector.on('session_update', (error, payload) => {
+        console.log(error || payload, 'session_update');
+      });
 
-      // this.connector.on('session_request', (error, payload) => {
-      //   console.log(error || payload, 'session_request');
-      // });
+      this.connector.on('session_request', (error, payload) => {
+        console.log(error || payload, 'session_request');
+      });
     });
   }
 

@@ -74,47 +74,50 @@ var WalletsConnect = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                        var _a;
                         var _this = this;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0: return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
-                                        projectId: provider.provider[provider.useProvider].projectId,
-                                        chains: provider.provider[provider.useProvider].chains,
-                                        showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                        rpcMap: provider.provider[provider.useProvider].rpc,
-                                        events: [
-                                            'accountsChanged',
-                                            'chainChanged',
-                                            'message',
-                                            'disconnect',
-                                            'connect',
-                                        ],
-                                        methods: [
-                                            'personal_sign',
-                                            'eth_sendTransaction',
-                                            'eth_accounts',
-                                            'eth_requestAccounts',
-                                            'eth_call',
-                                            'eth_getBalance',
-                                            'eth_sendRawTransaction',
-                                            'eth_sign',
-                                            'eth_signTransaction',
-                                            'eth_signTypedData',
-                                            'eth_signTypedData_v3',
-                                            'eth_signTypedData_v4',
-                                            'wallet_switchEthereumChain',
-                                            'wallet_addEthereumChain',
-                                            'wallet_getPermissions',
-                                            'wallet_requestPermissions',
-                                            'wallet_registerOnboarding',
-                                            'wallet_watchAsset',
-                                            'wallet_scanQRCode',
-                                        ]
-                                    }).then(function (provider) { return (_this.connector = provider); })];
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    _a = this;
+                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
+                                            projectId: provider.provider[provider.useProvider].projectId,
+                                            chains: provider.provider[provider.useProvider].chains,
+                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
+                                            rpcMap: provider.provider[provider.useProvider].rpc,
+                                            events: [
+                                                'accountsChanged',
+                                                'chainChanged',
+                                                'message',
+                                                'disconnect',
+                                                'connect',
+                                            ],
+                                            methods: [
+                                                'personal_sign',
+                                                'eth_sendTransaction',
+                                                'eth_accounts',
+                                                'eth_requestAccounts',
+                                                'eth_call',
+                                                'eth_getBalance',
+                                                'eth_sendRawTransaction',
+                                                'eth_sign',
+                                                'eth_signTransaction',
+                                                'eth_signTypedData',
+                                                'eth_signTypedData_v3',
+                                                'eth_signTypedData_v4',
+                                                'wallet_switchEthereumChain',
+                                                'wallet_addEthereumChain',
+                                                'wallet_getPermissions',
+                                                'wallet_requestPermissions',
+                                                'wallet_registerOnboarding',
+                                                'wallet_watchAsset',
+                                                'wallet_scanQRCode',
+                                            ]
+                                        })];
                                 case 1:
-                                    _a.sent();
+                                    _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
-                                            .enable()
+                                            .connect()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
@@ -138,7 +141,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 2:
-                                    _a.sent();
+                                    _b.sent();
                                     return [2 /*return*/];
                             }
                         });
@@ -193,21 +196,21 @@ var WalletsConnect = /** @class */ (function (_super) {
             _this.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
             });
-            // this.connector.on('wc_sessionUpdate', (error, payload) => {
-            //   console.log(error || payload, 'wc_sessionUpdate');
-            // });
-            // this.connector.on('wc_sessionRequest', (error, payload) => {
-            //   console.log(error || payload, 'wc_sessionRequest');
-            // });
-            // this.connector.on('call_request', (error, payload) => {
-            //   console.log(error || payload, 'call_request');
-            // });
-            // this.connector.on('session_update', (error, payload) => {
-            //   console.log(error || payload, 'session_update');
-            // });
-            // this.connector.on('session_request', (error, payload) => {
-            //   console.log(error || payload, 'session_request');
-            // });
+            _this.connector.on('wc_sessionUpdate', function (error, payload) {
+                console.log(error || payload, 'wc_sessionUpdate');
+            });
+            _this.connector.on('wc_sessionRequest', function (error, payload) {
+                console.log(error || payload, 'wc_sessionRequest');
+            });
+            _this.connector.on('call_request', function (error, payload) {
+                console.log(error || payload, 'call_request');
+            });
+            _this.connector.on('session_update', function (error, payload) {
+                console.log(error || payload, 'session_update');
+            });
+            _this.connector.on('session_request', function (error, payload) {
+                console.log(error || payload, 'session_request');
+            });
         });
     };
     /**
