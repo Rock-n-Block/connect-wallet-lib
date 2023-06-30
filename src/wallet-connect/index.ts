@@ -38,7 +38,7 @@ export class WalletsConnect extends AbstractConnector {
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
       await _this.connector
-        .connect()
+        .enable()
         .then(() => {
           resolve({
             code: 1,
@@ -67,6 +67,8 @@ export class WalletsConnect extends AbstractConnector {
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
+      console.log('observer', observer);
+      console.log('this.connector', this.connector);
       this.connector.on('connect', (payload: any) => {
         console.log('payload', payload);
         if (payload.error) {
