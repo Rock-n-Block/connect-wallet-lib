@@ -228,7 +228,8 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve) {
             console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
-            if (!_this.connector.connected()) {
+            console.log('this.connector.connected', _this.connector.connected);
+            if (!_this.connector.connected) {
                 _this.connector.enable();
             }
             resolve({
