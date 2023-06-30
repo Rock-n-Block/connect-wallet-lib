@@ -8,7 +8,7 @@ import { WalletsConnect } from './wallet-connect';
 import { CoinbaseWalletConnect } from './coinbase-wallet';
 import { KardiaChainConnect } from './kardiachain';
 import { OntoConnect } from './onto';
-import { OkxConnect } from "./okx";
+import { OkxConnect } from './okx';
 
 import {
   INetwork,
@@ -83,7 +83,7 @@ export class ConnectWallet {
   public async connect(
     provider: IProvider,
     network: INetwork,
-    settings?: ISettings,
+    settings?: ISettings
   ): Promise<IConnectorMessage> {
     if (!this.availableProviders.includes(provider.name)) {
       return {
@@ -103,17 +103,25 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
-    console.log('public async connect', this.connector)
+    console.log('public async connect', this.connector);
 
     return new Promise<IConnectorMessage>((resolve, reject) => {
       this.connector
-      .connect(provider)
-      .then((connect) => this.applySettings(connect))
-      .then((connect: IConnectorMessage) => {
-        console.log('connect IConnectorMessage', connect)
-        connect.connected ? this.initWeb3(connect.provider) : reject(connect);
-        resolve(connect);
-      },(err) => reject(this.applySettings(err)));
+        .connect(provider)
+        .then((connect) => {
+          console.log('.then((connect) ', connect);
+          return this.applySettings(connect);
+        })
+        .then(
+          (connect: IConnectorMessage) => {
+            console.log('connect IConnectorMessage', connect);
+            connect.connected
+              ? this.initWeb3(connect.provider)
+              : reject(connect);
+            resolve(connect);
+          },
+          (err) => reject(this.applySettings(err))
+        );
     });
   }
 
@@ -149,7 +157,7 @@ export class ConnectWallet {
    * @example connectWallet.initWeb3(provider);
    */
   private initWeb3(provider: any): void {
-    console.log('initWeb3', provider)
+    console.log('initWeb3', provider);
     if (this.Web3) {
       this.Web3.setProvider(provider);
     } else {
@@ -188,7 +196,7 @@ export class ConnectWallet {
    * @example connectWallet.applySettings(data); //=> data.type etc.
    */
   private applySettings(
-    data: IConnectorMessage | IError | IConnect,
+    data: IConnectorMessage | IError | IConnect
   ): IConnectorMessage | IError | IConnect {
     if (this.settings.providerType) {
       data.type = this.providerName;
@@ -213,8 +221,8 @@ export class ConnectWallet {
     };
 
     return new Promise((resolve, reject) => {
-      console.log('this.currentWeb3()', this.currentWeb3())
-      console.log('this.connector', this.connector)
+      console.log('this.currentWeb3()', this.currentWeb3());
+      console.log('this.connector', this.connector);
       if (this.currentWeb3() && !this.connector) {
         const { address, accounts } = this.currentWeb3().currentProvider as any;
         resolve({ address: address || accounts[0] });
@@ -224,8 +232,11 @@ export class ConnectWallet {
 
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
-            console.log('connectInfo', connectInfo)
-            if (connectInfo.network && connectInfo.network.chainID !== chainID) {
+            console.log('connectInfo', connectInfo);
+            if (
+              connectInfo.network &&
+              connectInfo.network.chainID !== chainID
+            ) {
               error.message.text = `Please set network: ${
                 chainsMap[chainIDMap[chainID]].name
               }.`;
@@ -237,7 +248,7 @@ export class ConnectWallet {
           },
           (error: IError) => {
             reject(this.applySettings(error));
-          },
+          }
         );
       } else {
         error.code = 7;
@@ -339,7 +350,7 @@ export class ConnectWallet {
       try {
         this.contracts[contract.name] = new this.Web3.eth.Contract(
           contract.abi,
-          contract.address,
+          contract.address
         );
         resolve(true);
       } catch {
@@ -408,7 +419,7 @@ export class ConnectWallet {
     return new Observable((observer) => {
       this.connector.eventSubscriber().subscribe(
         (event: IEvent) => observer.next(event),
-        (error: IEventError) => observer.error(error),
+        (error: IEventError) => observer.error(error)
       );
     });
   }

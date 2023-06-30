@@ -153,10 +153,15 @@ var ConnectWallet = /** @class */ (function () {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         _this.connector
                             .connect(provider)
-                            .then(function (connect) { return _this.applySettings(connect); })
+                            .then(function (connect) {
+                            console.log('.then((connect) ', connect);
+                            return _this.applySettings(connect);
+                        })
                             .then(function (connect) {
                             console.log('connect IConnectorMessage', connect);
-                            connect.connected ? _this.initWeb3(connect.provider) : reject(connect);
+                            connect.connected
+                                ? _this.initWeb3(connect.provider)
+                                : reject(connect);
                             resolve(connect);
                         }, function (err) { return reject(_this.applySettings(err)); });
                     })];
@@ -259,7 +264,8 @@ var ConnectWallet = /** @class */ (function () {
                 var chainsMap_1 = helpers_1.parameters.chainsMap, chainIDMap_1 = helpers_1.parameters.chainIDMap;
                 _this.connector.getAccounts().then(function (connectInfo) {
                     console.log('connectInfo', connectInfo);
-                    if (connectInfo.network && connectInfo.network.chainID !== chainID_1) {
+                    if (connectInfo.network &&
+                        connectInfo.network.chainID !== chainID_1) {
                         error.message.text = "Please set network: " + chainsMap_1[chainIDMap_1[chainID_1]].name + ".";
                         reject(_this.applySettings(error));
                     }

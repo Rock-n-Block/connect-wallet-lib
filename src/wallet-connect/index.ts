@@ -35,6 +35,35 @@ export class WalletsConnect extends AbstractConnector {
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
+        rpcMap: provider.provider[provider.useProvider].rpc,
+        events: [
+          'accountsChanged',
+          'chainChanged',
+          'message',
+          'disconnect',
+          'connect',
+        ],
+        methods: [
+          'personal_sign',
+          'eth_sendTransaction',
+          'eth_accounts',
+          'eth_requestAccounts',
+          'eth_call',
+          'eth_getBalance',
+          'eth_sendRawTransaction',
+          'eth_sign',
+          'eth_signTransaction',
+          'eth_signTypedData',
+          'eth_signTypedData_v3',
+          'eth_signTypedData_v4',
+          'wallet_switchEthereumChain',
+          'wallet_addEthereumChain',
+          'wallet_getPermissions',
+          'wallet_requestPermissions',
+          'wallet_registerOnboarding',
+          'wallet_watchAsset',
+          'wallet_scanQRCode',
+        ],
       }).then((provider) => (this.connector = provider));
 
       await this.connector
@@ -70,7 +99,7 @@ export class WalletsConnect extends AbstractConnector {
     return new Observable((observer) => {
       console.log('observer', observer);
       console.log('this.connector', this.connector);
-      this.connector.on('connect', (error:any, payload: any) => {
+      this.connector.on('connect', (error: any, payload: any) => {
         console.log('payload', payload);
         if (error) {
           observer.error({
