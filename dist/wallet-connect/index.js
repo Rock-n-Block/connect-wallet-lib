@@ -84,7 +84,36 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal
+                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
+                                            rpcMap: provider.provider[provider.useProvider].rpc,
+                                            events: [
+                                                'accountsChanged',
+                                                'chainChanged',
+                                                'message',
+                                                'disconnect',
+                                                'connect',
+                                            ],
+                                            methods: [
+                                                'personal_sign',
+                                                'eth_sendTransaction',
+                                                'eth_accounts',
+                                                'eth_requestAccounts',
+                                                'eth_call',
+                                                'eth_getBalance',
+                                                'eth_sendRawTransaction',
+                                                'eth_sign',
+                                                'eth_signTransaction',
+                                                'eth_signTypedData',
+                                                'eth_signTypedData_v3',
+                                                'eth_signTypedData_v4',
+                                                'wallet_switchEthereumChain',
+                                                'wallet_addEthereumChain',
+                                                'wallet_getPermissions',
+                                                'wallet_requestPermissions',
+                                                'wallet_registerOnboarding',
+                                                'wallet_watchAsset',
+                                                'wallet_scanQRCode',
+                                            ]
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
