@@ -37,12 +37,12 @@ export class WalletsConnect extends AbstractConnector {
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
       await this.connector
-        .connect()
-        .then(() => {
+        .enable()
+        .then((provider) => {
           resolve({
             code: 1,
             connected: true,
-            provider: this.connector,
+            provider,
             message: {
               title: 'Success',
               subtitle: 'Wallet Connect',
