@@ -31,11 +31,12 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      this.connector = await EthereumProvider.init({
+      await EthereumProvider.init({
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
-      });
+      }).then((provider) => (this.connector = provider));
+      
       await this.connector
         .connect()
         .then(() => {

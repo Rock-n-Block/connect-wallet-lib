@@ -155,6 +155,7 @@ var ConnectWallet = /** @class */ (function () {
                             .connect(provider)
                             .then(function (connect) { return _this.applySettings(connect); })
                             .then(function (connect) {
+                            console.log('connect IConnectorMessage', connect);
                             connect.connected ? _this.initWeb3(connect.provider) : reject(connect);
                             resolve(connect);
                         }, function (err) { return reject(_this.applySettings(err)); });

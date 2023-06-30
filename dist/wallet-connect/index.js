@@ -74,19 +74,16 @@ var WalletsConnect = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a;
                         var _this = this;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    _a = this;
-                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
-                                            projectId: provider.provider[provider.useProvider].projectId,
-                                            chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal
-                                        })];
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
+                                        projectId: provider.provider[provider.useProvider].projectId,
+                                        chains: provider.provider[provider.useProvider].chains,
+                                        showQrModal: provider.provider[provider.useProvider].showQrModal
+                                    }).then(function (provider) { return (_this.connector = provider); })];
                                 case 1:
-                                    _a.connector = _b.sent();
+                                    _a.sent();
                                     return [4 /*yield*/, this.connector
                                             .connect()
                                             .then(function () {
@@ -112,7 +109,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 2:
-                                    _b.sent();
+                                    _a.sent();
                                     return [2 /*return*/];
                             }
                         });

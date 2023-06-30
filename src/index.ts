@@ -110,6 +110,7 @@ export class ConnectWallet {
       .connect(provider)
       .then((connect) => this.applySettings(connect))
       .then((connect: IConnectorMessage) => {
+        console.log('connect IConnectorMessage', connect)
         connect.connected ? this.initWeb3(connect.provider) : reject(connect);
         resolve(connect);
       },(err) => reject(this.applySettings(err)));
