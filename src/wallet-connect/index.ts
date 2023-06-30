@@ -98,7 +98,16 @@ export class WalletsConnect extends AbstractConnector {
             });
           });
       } else {
-        this.connector.enable();
+        resolve({
+          code: 1,
+          connected: true,
+          provider: this.connector,
+          message: {
+            title: 'Success',
+            subtitle: 'Wallet Connect',
+            text: `Wallet Connect connected.`,
+          },
+        });
       }
     });
   }

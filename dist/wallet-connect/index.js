@@ -151,7 +151,16 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _b.sent();
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    this.connector.enable();
+                                    resolve({
+                                        code: 1,
+                                        connected: true,
+                                        provider: this.connector,
+                                        message: {
+                                            title: 'Success',
+                                            subtitle: 'Wallet Connect',
+                                            text: "Wallet Connect connected."
+                                        }
+                                    });
                                     _b.label = 4;
                                 case 4: return [2 /*return*/];
                             }
