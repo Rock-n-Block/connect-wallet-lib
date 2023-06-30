@@ -60,14 +60,8 @@ var WalletsConnect = /** @class */ (function (_super) {
      * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
      * in your favourite cryptowallet.
      */
-    function WalletsConnect(provider) {
-        var _this = _super.call(this) || this;
-        ethereum_provider_1.EthereumProvider.init({
-            projectId: provider.provider[provider.useProvider].projectId,
-            chains: provider.provider[provider.useProvider].chains,
-            showQrModal: provider.provider[provider.useProvider].showQrModal
-        }).then(function (provider) { return (_this.connector = provider); });
-        return _this;
+    function WalletsConnect() {
+        return _super.call(this) || this;
     }
     /**
      * Connect WalletConnect to application. Create connection with connect wallet and return provider for Web3.
@@ -80,11 +74,20 @@ var WalletsConnect = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                        var _a;
                         var _this = this;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
-                                    console.log('public async connect(provider this.connector', this.connector);
+                                    console.log('public async connect(provider', provider);
+                                    _a = this;
+                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
+                                            projectId: provider.provider[provider.useProvider].projectId,
+                                            chains: provider.provider[provider.useProvider].chains,
+                                            showQrModal: provider.provider[provider.useProvider].showQrModal
+                                        })];
+                                case 1:
+                                    _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
                                             .connect({
                                             chains: provider.provider[provider.useProvider].chains,
@@ -113,8 +116,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                                 }
                                             });
                                         })];
-                                case 1:
-                                    _a.sent();
+                                case 2:
+                                    _b.sent();
                                     return [2 /*return*/];
                             }
                         });

@@ -19,13 +19,8 @@ export class WalletsConnect extends AbstractConnector {
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
    * in your favourite cryptowallet.
    */
-  constructor(provider) {
+  constructor() {
     super();
-    EthereumProvider.init({
-      projectId: provider.provider[provider.useProvider].projectId,
-      chains: provider.provider[provider.useProvider].chains,
-      showQrModal: provider.provider[provider.useProvider].showQrModal,
-    }).then((provider) => (this.connector = provider));
   }
 
   /**
@@ -36,7 +31,12 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      console.log('public async connect(provider this.connector', this.connector);
+      console.log('public async connect(provider', provider);
+      this.connector = await EthereumProvider.init({
+        projectId: provider.provider[provider.useProvider].projectId,
+        chains: provider.provider[provider.useProvider].chains,
+        showQrModal: provider.provider[provider.useProvider].showQrModal,
+      });
 
       await this.connector
         .connect({

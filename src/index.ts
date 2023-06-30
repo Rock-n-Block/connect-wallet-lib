@@ -47,7 +47,6 @@ export class ConnectWallet {
 
   private network: INetwork;
   private settings: ISettings;
-  private provider: any;
 
   public Web3: Web3;
   private contracts: IContract = {};
@@ -100,11 +99,10 @@ export class ConnectWallet {
       };
     }
 
-    this.provider = provider;
     this.network = network;
     this.settings = settings ? settings : { providerType: false };
 
-    this.connector = await this.chooseProvider(provider.name);
+    this.connector = this.chooseProvider(provider.name);
     console.log('public async connect', this.connector.connect);
 
     return new Promise<IConnectorMessage>((resolve, reject) => {
@@ -134,14 +132,13 @@ export class ConnectWallet {
    * @returns return selected provider class.
    * @example connectWallet.chooseProvider('MetaMask'); //=> new MetamaskConnect()
    */
-  private async chooseProvider(name: string): Promise<MetamaskConnect | WalletsConnect> {
+  private chooseProvider(name: string): MetamaskConnect | WalletsConnect {
     this.providerName = name;
     switch (name) {
       case 'MetaMask':
         return new MetamaskConnect(this.network);
       case 'WalletConnect':
-        console.log(await new WalletsConnect(this.provider))
-        return await new WalletsConnect(this.provider);
+        return new WalletsConnect();
       case 'CoinbaseWallet':
         return new CoinbaseWalletConnect(this.network);
       case 'KardiaChain':
