@@ -37,6 +37,7 @@ export class WalletsConnect extends AbstractConnector {
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
+      console.log('this.connector', this.connector)
 
       await this.connector
         .connect({
