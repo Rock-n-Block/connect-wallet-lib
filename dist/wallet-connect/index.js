@@ -232,7 +232,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             console.log('this?.connector?.connector?.connected', (_b = (_a = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _a === void 0 ? void 0 : _a.connector) === null || _b === void 0 ? void 0 : _b.connected);
             console.log('this?.connector?.connected', (_c = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _c === void 0 ? void 0 : _c.connected);
             if (!((_e = (_d = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _d === void 0 ? void 0 : _d.connector) === null || _e === void 0 ? void 0 : _e.connected)) {
-                _this.connector.enable();
+                _this.connector.connect();
             }
             resolve({
                 address: _this.connector.accounts[0],

@@ -191,7 +191,7 @@ export class WalletsConnect extends AbstractConnector {
       console.log('this?.connector?.connector?.connected', this?.connector?.connector?.connected);
       console.log('this?.connector?.connected', this?.connector?.connected);
       if (!this?.connector?.connector?.connected) {
-        this.connector.enable();
+        this.connector.connect();
       }
 
       resolve({
