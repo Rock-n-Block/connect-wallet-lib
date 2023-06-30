@@ -88,7 +88,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
-                                            .enable()
+                                            .connect()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
@@ -194,7 +194,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new Promise(function (resolve) {
             console.log('this.connector', _this.connector);
             if (!_this.connector.connected) {
-                _this.connector.enable();
+                _this.connector.connect();
             }
             resolve({
                 address: _this.connector.accounts[0],

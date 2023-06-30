@@ -37,7 +37,7 @@ export class WalletsConnect extends AbstractConnector {
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
       await this.connector
-        .enable()
+        .connect()
         .then(() => {
           resolve({
             code: 1,
@@ -152,7 +152,7 @@ export class WalletsConnect extends AbstractConnector {
     return new Promise((resolve) => {
       console.log('this.connector', this.connector);
       if (!this.connector.connected) {
-        this.connector.enable();
+        this.connector.connect();
       }
 
       resolve({
