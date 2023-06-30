@@ -84,36 +84,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc,
-                                            events: [
-                                                'accountsChanged',
-                                                'chainChanged',
-                                                'message',
-                                                'disconnect',
-                                                'connect',
-                                            ],
-                                            methods: [
-                                                'personal_sign',
-                                                'eth_sendTransaction',
-                                                'eth_accounts',
-                                                'eth_requestAccounts',
-                                                'eth_call',
-                                                'eth_getBalance',
-                                                'eth_sendRawTransaction',
-                                                'eth_sign',
-                                                'eth_signTransaction',
-                                                'eth_signTypedData',
-                                                'eth_signTypedData_v3',
-                                                'eth_signTypedData_v4',
-                                                'wallet_switchEthereumChain',
-                                                'wallet_addEthereumChain',
-                                                'wallet_getPermissions',
-                                                'wallet_requestPermissions',
-                                                'wallet_registerOnboarding',
-                                                'wallet_watchAsset',
-                                                'wallet_scanQRCode',
-                                            ]
+                                            showQrModal: provider.provider[provider.useProvider].showQrModal
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
@@ -198,24 +169,24 @@ var WalletsConnect = /** @class */ (function (_super) {
                     name: 'accountsChanged'
                 });
             });
-            _this.connector.on('chainChanged', function (chainId) {
-                console.log('WalletConnect chain changed:', chainId);
-            });
-            _this.connector.on('wc_sessionUpdate', function (error, payload) {
-                console.log(error || payload, 'wc_sessionUpdate');
-            });
-            _this.connector.on('wc_sessionRequest', function (error, payload) {
-                console.log(error || payload, 'wc_sessionRequest');
-            });
-            _this.connector.on('call_request', function (error, payload) {
-                console.log(error || payload, 'call_request');
-            });
-            _this.connector.on('session_update', function (error, payload) {
-                console.log(error || payload, 'session_update');
-            });
-            _this.connector.on('session_request', function (error, payload) {
-                console.log(error || payload, 'session_request');
-            });
+            // this.connector.on('chainChanged', (chainId: any) => {
+            //   console.log('WalletConnect chain changed:', chainId);
+            // });
+            // this.connector.on('wc_sessionUpdate', (error, payload) => {
+            //   console.log(error || payload, 'wc_sessionUpdate');
+            // });
+            // this.connector.on('wc_sessionRequest', (error, payload) => {
+            //   console.log(error || payload, 'wc_sessionRequest');
+            // });
+            // this.connector.on('call_request', (error, payload) => {
+            //   console.log(error || payload, 'call_request');
+            // });
+            // this.connector.on('session_update', (error, payload) => {
+            //   console.log(error || payload, 'session_update');
+            // });
+            // this.connector.on('session_request', (error, payload) => {
+            //   console.log(error || payload, 'session_request');
+            // });
         });
     };
     /**
@@ -228,9 +199,9 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve) {
             console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
-            if (!_this.connector.connected) {
-                _this.connector.connect();
-            }
+            // if (!this.connector.connected) {
+            //   this.connector.connect();
+            // }
             resolve({
                 address: _this.connector.accounts[0],
                 network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]

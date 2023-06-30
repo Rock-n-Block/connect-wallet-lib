@@ -36,35 +36,35 @@ export class WalletsConnect extends AbstractConnector {
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
-        rpcMap: provider.provider[provider.useProvider].rpc,
-        events: [
-          'accountsChanged',
-          'chainChanged',
-          'message',
-          'disconnect',
-          'connect',
-        ],
-        methods: [
-          'personal_sign',
-          'eth_sendTransaction',
-          'eth_accounts',
-          'eth_requestAccounts',
-          'eth_call',
-          'eth_getBalance',
-          'eth_sendRawTransaction',
-          'eth_sign',
-          'eth_signTransaction',
-          'eth_signTypedData',
-          'eth_signTypedData_v3',
-          'eth_signTypedData_v4',
-          'wallet_switchEthereumChain',
-          'wallet_addEthereumChain',
-          'wallet_getPermissions',
-          'wallet_requestPermissions',
-          'wallet_registerOnboarding',
-          'wallet_watchAsset',
-          'wallet_scanQRCode',
-        ],
+        // rpcMap: provider.provider[provider.useProvider].rpc,
+        // events: [
+        //   'accountsChanged',
+        //   'chainChanged',
+        //   'message',
+        //   'disconnect',
+        //   'connect',
+        // ],
+        // methods: [
+        //   'personal_sign',
+        //   'eth_sendTransaction',
+        //   'eth_accounts',
+        //   'eth_requestAccounts',
+        //   'eth_call',
+        //   'eth_getBalance',
+        //   'eth_sendRawTransaction',
+        //   'eth_sign',
+        //   'eth_signTransaction',
+        //   'eth_signTypedData',
+        //   'eth_signTypedData_v3',
+        //   'eth_signTypedData_v4',
+        //   'wallet_switchEthereumChain',
+        //   'wallet_addEthereumChain',
+        //   'wallet_getPermissions',
+        //   'wallet_requestPermissions',
+        //   'wallet_registerOnboarding',
+        //   'wallet_watchAsset',
+        //   'wallet_scanQRCode',
+        // ],
       });
 
       await this.connector
@@ -150,29 +150,29 @@ export class WalletsConnect extends AbstractConnector {
         });
       });
 
-      this.connector.on('chainChanged', (chainId: any) => {
-        console.log('WalletConnect chain changed:', chainId);
-      });
+      // this.connector.on('chainChanged', (chainId: any) => {
+      //   console.log('WalletConnect chain changed:', chainId);
+      // });
 
-      this.connector.on('wc_sessionUpdate', (error, payload) => {
-        console.log(error || payload, 'wc_sessionUpdate');
-      });
+      // this.connector.on('wc_sessionUpdate', (error, payload) => {
+      //   console.log(error || payload, 'wc_sessionUpdate');
+      // });
 
-      this.connector.on('wc_sessionRequest', (error, payload) => {
-        console.log(error || payload, 'wc_sessionRequest');
-      });
+      // this.connector.on('wc_sessionRequest', (error, payload) => {
+      //   console.log(error || payload, 'wc_sessionRequest');
+      // });
 
-      this.connector.on('call_request', (error, payload) => {
-        console.log(error || payload, 'call_request');
-      });
+      // this.connector.on('call_request', (error, payload) => {
+      //   console.log(error || payload, 'call_request');
+      // });
 
-      this.connector.on('session_update', (error, payload) => {
-        console.log(error || payload, 'session_update');
-      });
+      // this.connector.on('session_update', (error, payload) => {
+      //   console.log(error || payload, 'session_update');
+      // });
 
-      this.connector.on('session_request', (error, payload) => {
-        console.log(error || payload, 'session_request');
-      });
+      // this.connector.on('session_request', (error, payload) => {
+      //   console.log(error || payload, 'session_request');
+      // });
     });
   }
 
@@ -188,9 +188,9 @@ export class WalletsConnect extends AbstractConnector {
         'parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]',
         parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]
       );
-      if (!this.connector.connected) {
-        this.connector.connect();
-      }
+      // if (!this.connector.connected) {
+      //   this.connector.connect();
+      // }
 
       resolve({
         address: this.connector.accounts[0],
