@@ -75,6 +75,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
+                        var _this = this;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
@@ -88,11 +89,11 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
                                             .connect()
-                                            .then(function (provider) {
+                                            .then(function () {
                                             resolve({
                                                 code: 1,
                                                 connected: true,
-                                                provider: provider,
+                                                provider: _this.connector,
                                                 message: {
                                                     title: 'Success',
                                                     subtitle: 'Wallet Connect',

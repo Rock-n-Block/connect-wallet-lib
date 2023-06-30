@@ -38,11 +38,11 @@ export class WalletsConnect extends AbstractConnector {
       });
       await this.connector
         .connect()
-        .then((provider) => {
+        .then(() => {
           resolve({
             code: 1,
             connected: true,
-            provider,
+            provider: this.connector,
             message: {
               title: 'Success',
               subtitle: 'Wallet Connect',
