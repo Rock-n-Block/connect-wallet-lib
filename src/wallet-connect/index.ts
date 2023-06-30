@@ -37,7 +37,7 @@ export class WalletsConnect extends AbstractConnector {
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       });
       await this.connector
-        .enable()
+        .connect()
         .then((provider) => {
           resolve({
             code: 1,

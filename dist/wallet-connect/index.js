@@ -87,7 +87,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
-                                            .enable()
+                                            .connect()
                                             .then(function (provider) {
                                             resolve({
                                                 code: 1,
