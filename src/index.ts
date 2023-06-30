@@ -103,7 +103,7 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
-    console.log('public async connect', this.connector);
+    console.log('public async connect', this.connector.connect);
 
     return new Promise<IConnectorMessage>((resolve, reject) => {
       this.connector

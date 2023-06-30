@@ -149,7 +149,7 @@ var ConnectWallet = /** @class */ (function () {
                 this.network = network;
                 this.settings = settings ? settings : { providerType: false };
                 this.connector = this.chooseProvider(provider.name);
-                console.log('public async connect', this.connector);
+                console.log('public async connect', this.connector.connect);
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         _this.connector
                             .connect(provider)

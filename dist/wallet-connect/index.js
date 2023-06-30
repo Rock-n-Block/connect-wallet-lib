@@ -79,6 +79,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
+                                    console.log('public async connect(provider', provider);
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
