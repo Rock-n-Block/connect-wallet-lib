@@ -230,7 +230,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
             console.log('this.connector.connector.connected', _this.connector.connector.connected);
             if (!_this.connector.connector.connected) {
-                _this.connector.enable();
+                _this.connector.connect();
             }
             resolve({
                 address: _this.connector.accounts[0],
