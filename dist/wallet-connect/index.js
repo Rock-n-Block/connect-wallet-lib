@@ -122,6 +122,7 @@ var WalletsConnect = /** @class */ (function (_super) {
     };
     WalletsConnect.prototype.eventSubscriber = function () {
         var _this = this;
+        console.log('eventSubscriber');
         return new rxjs_1.Observable(function (observer) {
             console.log('observer', observer);
             console.log('this.connector', _this.connector);
@@ -194,7 +195,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new Promise(function (resolve) {
             console.log('this.connector', _this.connector);
             if (!_this.connector.connected) {
-                _this.connector.connect();
+                _this.connector.enable();
             }
             resolve({
                 address: _this.connector.accounts[0],

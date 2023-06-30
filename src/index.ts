@@ -103,6 +103,7 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
+    console.log('public async connect', this.connector)
 
     return new Promise<IConnectorMessage>((resolve, reject) => {
       this.connector
@@ -147,6 +148,7 @@ export class ConnectWallet {
    * @example connectWallet.initWeb3(provider);
    */
   private initWeb3(provider: any): void {
+    console.log('initWeb3', provider)
     if (this.Web3) {
       this.Web3.setProvider(provider);
     } else {

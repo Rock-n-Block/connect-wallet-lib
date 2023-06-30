@@ -65,6 +65,7 @@ export class WalletsConnect extends AbstractConnector {
   }
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
+    console.log('eventSubscriber');
     return new Observable((observer) => {
       console.log('observer', observer);
       console.log('this.connector', this.connector);
@@ -152,7 +153,7 @@ export class WalletsConnect extends AbstractConnector {
     return new Promise((resolve) => {
       console.log('this.connector', this.connector);
       if (!this.connector.connected) {
-        this.connector.connect();
+        this.connector.enable();
       }
 
       resolve({

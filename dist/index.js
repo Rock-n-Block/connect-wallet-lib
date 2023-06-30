@@ -149,6 +149,7 @@ var ConnectWallet = /** @class */ (function () {
                 this.network = network;
                 this.settings = settings ? settings : { providerType: false };
                 this.connector = this.chooseProvider(provider.name);
+                console.log('public async connect', this.connector);
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         _this.connector
                             .connect(provider)
@@ -192,6 +193,7 @@ var ConnectWallet = /** @class */ (function () {
      * @example connectWallet.initWeb3(provider);
      */
     ConnectWallet.prototype.initWeb3 = function (provider) {
+        console.log('initWeb3', provider);
         if (this.Web3) {
             this.Web3.setProvider(provider);
         }
