@@ -13,7 +13,7 @@ import { parameters } from '../helpers';
 import { AbstractConnector } from '../abstract-connector';
 
 export class WalletsConnect extends AbstractConnector {
-  public connector: WalletConnectProvider;
+  public connector: any;
 
   /**
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
@@ -153,7 +153,7 @@ export class WalletsConnect extends AbstractConnector {
     return new Promise((resolve) => {
       console.log('this.connector', this.connector);
       if (!this.connector.connected) {
-        this.connector.enable();
+        this.connector.session();
       }
 
       resolve({

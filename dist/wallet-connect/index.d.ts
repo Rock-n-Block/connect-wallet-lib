@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
-import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { IConnectorMessage, IProvider, IEvent, IEventError } from '../interface';
 import { AbstractConnector } from '../abstract-connector';
 export declare class WalletsConnect extends AbstractConnector {
-    connector: WalletConnectProvider;
+    connector: any;
     /**
      * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
      * in your favourite cryptowallet.

@@ -195,7 +195,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new Promise(function (resolve) {
             console.log('this.connector', _this.connector);
             if (!_this.connector.connected) {
-                _this.connector.enable();
+                _this.connector.session();
             }
             resolve({
                 address: _this.connector.accounts[0],

@@ -247,6 +247,8 @@ var ConnectWallet = /** @class */ (function () {
             }
         };
         return new Promise(function (resolve, reject) {
+            console.log('this.currentWeb3()', _this.currentWeb3());
+            console.log('this.connector', _this.connector);
             if (_this.currentWeb3() && !_this.connector) {
                 var _a = _this.currentWeb3().currentProvider, address = _a.address, accounts = _a.accounts;
                 resolve({ address: address || accounts[0] });
@@ -255,6 +257,7 @@ var ConnectWallet = /** @class */ (function () {
                 var chainID_1 = _this.network.chainID;
                 var chainsMap_1 = helpers_1.parameters.chainsMap, chainIDMap_1 = helpers_1.parameters.chainIDMap;
                 _this.connector.getAccounts().then(function (connectInfo) {
+                    console.log('connectInfo', connectInfo);
                     if (connectInfo.network && connectInfo.network.chainID !== chainID_1) {
                         error.message.text = "Please set network: " + chainsMap_1[chainIDMap_1[chainID_1]].name + ".";
                         reject(_this.applySettings(error));
