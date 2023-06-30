@@ -88,36 +88,34 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    return [4 /*yield*/, this.connector
-                                            .connect({
-                                            chains: provider.provider[provider.useProvider].chains,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
-                                        })
-                                            .then(function () {
-                                            console.log("Wallet Connect connected.");
-                                            resolve({
-                                                code: 1,
-                                                connected: true,
-                                                provider: _this.connector,
-                                                message: {
-                                                    title: 'Success',
-                                                    subtitle: 'Wallet Connect',
-                                                    text: "Wallet Connect connected."
-                                                }
-                                            });
-                                        })["catch"](function () {
-                                            reject({
-                                                code: 5,
-                                                connected: false,
-                                                message: {
-                                                    title: 'Error',
-                                                    subtitle: 'Error connect',
-                                                    text: "User closed qr modal window."
-                                                }
-                                            });
-                                        })];
-                                case 2:
-                                    _b.sent();
+                                    this.connector
+                                        .connect({
+                                    // chains: provider.provider[provider.useProvider].chains,
+                                    // rpcMap: provider.provider[provider.useProvider].rpc,
+                                    })
+                                        .then(function () {
+                                        console.log("Wallet Connect connected.");
+                                        resolve({
+                                            code: 1,
+                                            connected: true,
+                                            provider: _this.connector,
+                                            message: {
+                                                title: 'Success',
+                                                subtitle: 'Wallet Connect',
+                                                text: "Wallet Connect connected."
+                                            }
+                                        });
+                                    })["catch"](function () {
+                                        reject({
+                                            code: 5,
+                                            connected: false,
+                                            message: {
+                                                title: 'Error',
+                                                subtitle: 'Error connect',
+                                                text: "User closed qr modal window."
+                                            }
+                                        });
+                                    });
                                     return [2 /*return*/];
                             }
                         });
@@ -169,24 +167,24 @@ var WalletsConnect = /** @class */ (function (_super) {
                     name: 'accountsChanged'
                 });
             });
-            // this.connector.on('chainChanged', (chainId: any) => {
-            //   console.log('WalletConnect chain changed:', chainId);
-            // });
-            // this.connector.on('wc_sessionUpdate', (error, payload) => {
-            //   console.log(error || payload, 'wc_sessionUpdate');
-            // });
-            // this.connector.on('wc_sessionRequest', (error, payload) => {
-            //   console.log(error || payload, 'wc_sessionRequest');
-            // });
-            // this.connector.on('call_request', (error, payload) => {
-            //   console.log(error || payload, 'call_request');
-            // });
-            // this.connector.on('session_update', (error, payload) => {
-            //   console.log(error || payload, 'session_update');
-            // });
-            // this.connector.on('session_request', (error, payload) => {
-            //   console.log(error || payload, 'session_request');
-            // });
+            _this.connector.on('chainChanged', function (chainId) {
+                console.log('WalletConnect chain changed:', chainId);
+            });
+            _this.connector.on('wc_sessionUpdate', function (error, payload) {
+                console.log(error || payload, 'wc_sessionUpdate');
+            });
+            _this.connector.on('wc_sessionRequest', function (error, payload) {
+                console.log(error || payload, 'wc_sessionRequest');
+            });
+            _this.connector.on('call_request', function (error, payload) {
+                console.log(error || payload, 'call_request');
+            });
+            _this.connector.on('session_update', function (error, payload) {
+                console.log(error || payload, 'session_update');
+            });
+            _this.connector.on('session_request', function (error, payload) {
+                console.log(error || payload, 'session_request');
+            });
         });
     };
     /**
@@ -198,10 +196,9 @@ var WalletsConnect = /** @class */ (function (_super) {
     WalletsConnect.prototype.getAccounts = function () {
         var _this = this;
         return new Promise(function (resolve) {
-            console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
-            // if (!this.connector.connected) {
-            //   this.connector.connect();
-            // }
+            if (!_this.connector.connected) {
+                _this.connector.connect();
+            }
             resolve({
                 address: _this.connector.accounts[0],
                 network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]

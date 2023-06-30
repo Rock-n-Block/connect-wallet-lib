@@ -67,10 +67,10 @@ export class WalletsConnect extends AbstractConnector {
         // ],
       });
 
-      await this.connector
+      this.connector
         .connect({
-          chains: provider.provider[provider.useProvider].chains,
-          rpcMap: provider.provider[provider.useProvider].rpc,
+          // chains: provider.provider[provider.useProvider].chains,
+          // rpcMap: provider.provider[provider.useProvider].rpc,
         })
         .then(() => {
           console.log(`Wallet Connect connected.`);
@@ -150,29 +150,29 @@ export class WalletsConnect extends AbstractConnector {
         });
       });
 
-      // this.connector.on('chainChanged', (chainId: any) => {
-      //   console.log('WalletConnect chain changed:', chainId);
-      // });
+      this.connector.on('chainChanged', (chainId: any) => {
+        console.log('WalletConnect chain changed:', chainId);
+      });
 
-      // this.connector.on('wc_sessionUpdate', (error, payload) => {
-      //   console.log(error || payload, 'wc_sessionUpdate');
-      // });
+      this.connector.on('wc_sessionUpdate', (error, payload) => {
+        console.log(error || payload, 'wc_sessionUpdate');
+      });
 
-      // this.connector.on('wc_sessionRequest', (error, payload) => {
-      //   console.log(error || payload, 'wc_sessionRequest');
-      // });
+      this.connector.on('wc_sessionRequest', (error, payload) => {
+        console.log(error || payload, 'wc_sessionRequest');
+      });
 
-      // this.connector.on('call_request', (error, payload) => {
-      //   console.log(error || payload, 'call_request');
-      // });
+      this.connector.on('call_request', (error, payload) => {
+        console.log(error || payload, 'call_request');
+      });
 
-      // this.connector.on('session_update', (error, payload) => {
-      //   console.log(error || payload, 'session_update');
-      // });
+      this.connector.on('session_update', (error, payload) => {
+        console.log(error || payload, 'session_update');
+      });
 
-      // this.connector.on('session_request', (error, payload) => {
-      //   console.log(error || payload, 'session_request');
-      // });
+      this.connector.on('session_request', (error, payload) => {
+        console.log(error || payload, 'session_request');
+      });
     });
   }
 
@@ -184,14 +184,9 @@ export class WalletsConnect extends AbstractConnector {
    */
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
-      console.log(
-        'parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]',
-        parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]
-      );
-      // if (!this.connector.connected) {
-      //   this.connector.connect();
-      // }
-
+      if (!this.connector.connected) {
+        this.connector.connect();
+      }
       resolve({
         address: this.connector.accounts[0],
         network:
