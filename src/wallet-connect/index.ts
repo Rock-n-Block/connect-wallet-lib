@@ -188,9 +188,10 @@ export class WalletsConnect extends AbstractConnector {
         'parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]',
         parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]
       );
-      console.log('this.connector.connector.connected', this.connector.connector.connected);
-      if (!this.connector.connector.connected) {
-        this.connector.connect();
+      console.log('this?.connector?.connector?.connected', this?.connector?.connector?.connected);
+      console.log('this?.connector?.connected', this?.connector?.connected);
+      if (!this?.connector?.connector?.connected) {
+        this.connector.enable();
       }
 
       resolve({

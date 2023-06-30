@@ -227,10 +227,12 @@ var WalletsConnect = /** @class */ (function (_super) {
     WalletsConnect.prototype.getAccounts = function () {
         var _this = this;
         return new Promise(function (resolve) {
+            var _a, _b, _c, _d, _e;
             console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
-            console.log('this.connector.connector.connected', _this.connector.connector.connected);
-            if (!_this.connector.connector.connected) {
-                _this.connector.connect();
+            console.log('this?.connector?.connector?.connected', (_b = (_a = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _a === void 0 ? void 0 : _a.connector) === null || _b === void 0 ? void 0 : _b.connected);
+            console.log('this?.connector?.connected', (_c = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _c === void 0 ? void 0 : _c.connected);
+            if (!((_e = (_d = _this === null || _this === void 0 ? void 0 : _this.connector) === null || _d === void 0 ? void 0 : _d.connector) === null || _e === void 0 ? void 0 : _e.connected)) {
+                _this.connector.enable();
             }
             resolve({
                 address: _this.connector.accounts[0],
