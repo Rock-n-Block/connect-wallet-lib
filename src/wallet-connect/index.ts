@@ -156,7 +156,7 @@ export class WalletsConnect extends AbstractConnector {
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
       if (!this.connector.connected) {
-        this.connector.connect();
+        this.connector.enable();
       }
       resolve({
         address: this.connector.accounts[0],

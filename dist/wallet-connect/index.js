@@ -199,7 +199,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve) {
             if (!_this.connector.connected) {
-                _this.connector.connect();
+                _this.connector.enable();
             }
             resolve({
                 address: _this.connector.accounts[0],
