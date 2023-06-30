@@ -110,9 +110,7 @@ export class WalletsConnect extends AbstractConnector {
         observer.next({
           address: accounts[0],
           network:
-            parameters.chainsMap[
-              parameters.chainIDMap[this.connector.chainId]
-            ],
+            parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]],
           name: 'accountsChanged',
         });
       });
@@ -151,9 +149,12 @@ export class WalletsConnect extends AbstractConnector {
    */
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
-      console.log('this.connector', this.connector);
-      if (!this.connector.connected) {
-        this.connector.session();
+      console.log(
+        'parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]',
+        parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]
+      );
+      if (!this.connector.accounts) {
+        this.connector.enable();
       }
 
       resolve({
