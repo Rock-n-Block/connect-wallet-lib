@@ -31,42 +31,13 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      console.log('public async connect(provider', provider);
       this.connector = await EthereumProvider.init({
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
         rpcMap: provider.provider[provider.useProvider].rpc,
-        events: [
-          'accountsChanged',
-          'chainChanged',
-          'message',
-          'disconnect',
-          'connect',
-        ],
-        methods: [
-          'personal_sign',
-          'eth_sendTransaction',
-          'eth_accounts',
-          'eth_requestAccounts',
-          'eth_call',
-          'eth_getBalance',
-          'eth_sendRawTransaction',
-          'eth_sign',
-          'eth_signTransaction',
-          'eth_signTypedData',
-          'eth_signTypedData_v3',
-          'eth_signTypedData_v4',
-          'wallet_switchEthereumChain',
-          'wallet_addEthereumChain',
-          'wallet_getPermissions',
-          'wallet_requestPermissions',
-          'wallet_registerOnboarding',
-          'wallet_watchAsset',
-          'wallet_scanQRCode',
-        ],
       });
-      console.log('this.connector', this.connector);
+
       if (!this.connector.connected) {
         await this.connector
           .connect({
@@ -113,12 +84,8 @@ export class WalletsConnect extends AbstractConnector {
   }
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
-    console.log('eventSubscriber');
     return new Observable((observer) => {
-      console.log('observer', observer);
-      console.log('this.connector', this.connector);
       this.connector.on('connect', (error: any, payload: any) => {
-        console.log('payload', payload);
         if (error) {
           observer.error({
             code: 3,
@@ -152,7 +119,6 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       this.connector.on('accountsChanged', (accounts: any) => {
-        console.log('accounts', accounts);
         console.log('WalletConnect account changed', accounts, accounts);
 
         observer.next({
