@@ -118,8 +118,12 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     return [4 /*yield*/, this.connector
-                                            .connect()
+                                            .connect({
+                                            chains: provider.provider[provider.useProvider].chains,
+                                            rpcMap: provider.provider[provider.useProvider].rpc
+                                        })
                                             .then(function () {
+                                            console.log("Wallet Connect connected.");
                                             resolve({
                                                 code: 1,
                                                 connected: true,
@@ -224,7 +228,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve) {
             console.log('parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]', helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]);
-            if (!_this.connector.accounts) {
+            if (!_this.connector.connected()) {
                 _this.connector.enable();
             }
             resolve({

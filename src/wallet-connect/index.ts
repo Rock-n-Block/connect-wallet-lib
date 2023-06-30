@@ -31,7 +31,7 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      console.log('public async connect(provider', provider)
+      console.log('public async connect(provider', provider);
       this.connector = await EthereumProvider.init({
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
@@ -68,8 +68,12 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       await this.connector
-        .connect()
+        .connect({
+          chains: provider.provider[provider.useProvider].chains,
+          rpcMap: provider.provider[provider.useProvider].rpc,
+        })
         .then(() => {
+          console.log(`Wallet Connect connected.`);
           resolve({
             code: 1,
             connected: true,
@@ -184,7 +188,7 @@ export class WalletsConnect extends AbstractConnector {
         'parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]',
         parameters.chainsMap[parameters.chainIDMap[this.connector.chainId]]
       );
-      if (!this.connector.accounts) {
+      if (!this.connector.connected()) {
         this.connector.enable();
       }
 
