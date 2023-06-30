@@ -79,45 +79,15 @@ var WalletsConnect = /** @class */ (function (_super) {
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
-                                    console.log('public async connect(provider', provider);
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
                                             showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc,
-                                            events: [
-                                                'accountsChanged',
-                                                'chainChanged',
-                                                'message',
-                                                'disconnect',
-                                                'connect',
-                                            ],
-                                            methods: [
-                                                'personal_sign',
-                                                'eth_sendTransaction',
-                                                'eth_accounts',
-                                                'eth_requestAccounts',
-                                                'eth_call',
-                                                'eth_getBalance',
-                                                'eth_sendRawTransaction',
-                                                'eth_sign',
-                                                'eth_signTransaction',
-                                                'eth_signTypedData',
-                                                'eth_signTypedData_v3',
-                                                'eth_signTypedData_v4',
-                                                'wallet_switchEthereumChain',
-                                                'wallet_addEthereumChain',
-                                                'wallet_getPermissions',
-                                                'wallet_requestPermissions',
-                                                'wallet_registerOnboarding',
-                                                'wallet_watchAsset',
-                                                'wallet_scanQRCode',
-                                            ]
+                                            rpcMap: provider.provider[provider.useProvider].rpc
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    console.log('this.connector', this.connector);
                                     if (!!this.connector.connected) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector
                                             .connect({
@@ -171,12 +141,8 @@ var WalletsConnect = /** @class */ (function (_super) {
     };
     WalletsConnect.prototype.eventSubscriber = function () {
         var _this = this;
-        console.log('eventSubscriber');
         return new rxjs_1.Observable(function (observer) {
-            console.log('observer', observer);
-            console.log('this.connector', _this.connector);
             _this.connector.on('connect', function (error, payload) {
-                console.log('payload', payload);
                 if (error) {
                     observer.error({
                         code: 3,
@@ -205,7 +171,6 @@ var WalletsConnect = /** @class */ (function (_super) {
                 }
             });
             _this.connector.on('accountsChanged', function (accounts) {
-                console.log('accounts', accounts);
                 console.log('WalletConnect account changed', accounts, accounts);
                 observer.next({
                     address: accounts[0],
