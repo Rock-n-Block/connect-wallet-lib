@@ -71,16 +71,15 @@ var WalletsConnect = /** @class */ (function (_super) {
      */
     WalletsConnect.prototype.connect = function (provider) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this;
-            var _this_1 = this;
+            var _this = this;
             return __generator(this, function (_a) {
-                _this = this;
-                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this_1, void 0, void 0, function () {
+                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
+                        var _this = this;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
-                                    _a = _this;
+                                    _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
@@ -88,8 +87,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    return [4 /*yield*/, _this.connector
-                                            .connect()
+                                    return [4 /*yield*/, this.connector
+                                            .enable()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
@@ -122,9 +121,11 @@ var WalletsConnect = /** @class */ (function (_super) {
         });
     };
     WalletsConnect.prototype.eventSubscriber = function () {
-        var _this_1 = this;
+        var _this = this;
         return new rxjs_1.Observable(function (observer) {
-            _this_1.connector.on('connect', function (payload) {
+            console.log('observer', observer);
+            console.log('this.connector', _this.connector);
+            _this.connector.on('connect', function (payload) {
                 console.log('payload', payload);
                 if (payload.error) {
                     observer.error({
@@ -139,7 +140,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                 var _a = payload.params[0], accounts = _a.accounts, chainId = _a.chainId;
                 observer.next({ address: accounts, network: chainId, name: 'connect' });
             });
-            _this_1.connector.on('disconnect', function (error) {
+            _this.connector.on('disconnect', function (error) {
                 console.log('error', error);
                 if (error) {
                     console.log('wallet connect on connect error', error, error.data);
@@ -153,16 +154,16 @@ var WalletsConnect = /** @class */ (function (_super) {
                     });
                 }
             });
-            _this_1.connector.on('accountsChanged', function (accounts) {
+            _this.connector.on('accountsChanged', function (accounts) {
                 console.log('accounts', accounts);
                 console.log('WalletConnect account changed', accounts, accounts);
                 observer.next({
                     address: accounts[0],
-                    network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this_1.connector.chainId]],
+                    network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]],
                     name: 'accountsChanged'
                 });
             });
-            _this_1.connector.on('chainChanged', function (chainId) {
+            _this.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
             });
             // this.connector.on('wc_sessionUpdate', (error, payload) => {
@@ -189,15 +190,15 @@ var WalletsConnect = /** @class */ (function (_super) {
      * @example this.getAccounts().subscribe((account: any)=> {console.log('account',account)});
      */
     WalletsConnect.prototype.getAccounts = function () {
-        var _this_1 = this;
+        var _this = this;
         return new Promise(function (resolve) {
-            console.log('this.connector', _this_1.connector);
-            if (!_this_1.connector.connected) {
-                _this_1.connector.enable();
+            console.log('this.connector', _this.connector);
+            if (!_this.connector.connected) {
+                _this.connector.enable();
             }
             resolve({
-                address: _this_1.connector.accounts[0],
-                network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this_1.connector.chainId]]
+                address: _this.connector.accounts[0],
+                network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]
             });
         });
     };
