@@ -66,37 +66,40 @@ export class WalletsConnect extends AbstractConnector {
           'wallet_scanQRCode',
         ],
       });
-      console.log('this.connector', this.connector)
-
-      await this.connector
-        .connect({
-          chains: provider.provider[provider.useProvider].chains,
-          rpcMap: provider.provider[provider.useProvider].rpc,
-        })
-        .then(() => {
-          console.log(`Wallet Connect connected.`);
-          resolve({
-            code: 1,
-            connected: true,
-            provider: this.connector,
-            message: {
-              title: 'Success',
-              subtitle: 'Wallet Connect',
-              text: `Wallet Connect connected.`,
-            },
+      console.log('this.connector', this.connector);
+      if (!this.connector.connected) {
+        await this.connector
+          .connect({
+            chains: provider.provider[provider.useProvider].chains,
+            rpcMap: provider.provider[provider.useProvider].rpc,
+          })
+          .then(() => {
+            console.log(`Wallet Connect connected.`);
+            resolve({
+              code: 1,
+              connected: true,
+              provider: this.connector,
+              message: {
+                title: 'Success',
+                subtitle: 'Wallet Connect',
+                text: `Wallet Connect connected.`,
+              },
+            });
+          })
+          .catch(() => {
+            reject({
+              code: 5,
+              connected: false,
+              message: {
+                title: 'Error',
+                subtitle: 'Error connect',
+                text: `User closed qr modal window.`,
+              },
+            });
           });
-        })
-        .catch(() => {
-          reject({
-            code: 5,
-            connected: false,
-            message: {
-              title: 'Error',
-              subtitle: 'Error connect',
-              text: `User closed qr modal window.`,
-            },
-          });
-        });
+      } else {
+        this.connector.enable();
+      }
     });
   }
 
@@ -185,9 +188,6 @@ export class WalletsConnect extends AbstractConnector {
    */
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
-      if (!this.connector.connected) {
-        this.connector.enable();
-      }
       resolve({
         address: this.connector.accounts[0],
         network:

@@ -118,6 +118,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     console.log('this.connector', this.connector);
+                                    if (!!this.connector.connected) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector
                                             .connect({
                                             chains: provider.provider[provider.useProvider].chains,
@@ -148,7 +149,11 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 2:
                                     _b.sent();
-                                    return [2 /*return*/];
+                                    return [3 /*break*/, 4];
+                                case 3:
+                                    this.connector.enable();
+                                    _b.label = 4;
+                                case 4: return [2 /*return*/];
                             }
                         });
                     }); })];
@@ -228,9 +233,6 @@ var WalletsConnect = /** @class */ (function (_super) {
     WalletsConnect.prototype.getAccounts = function () {
         var _this = this;
         return new Promise(function (resolve) {
-            if (!_this.connector.connected) {
-                _this.connector.enable();
-            }
             resolve({
                 address: _this.connector.accounts[0],
                 network: helpers_1.parameters.chainsMap[helpers_1.parameters.chainIDMap[_this.connector.chainId]]
