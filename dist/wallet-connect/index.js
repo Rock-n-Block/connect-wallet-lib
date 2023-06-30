@@ -85,7 +85,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.sent();
                                     return [4 /*yield*/, this.connector
-                                            .connect()
+                                            .enable()
                                             .then(function () {
                                             resolve({
                                                 code: 1,
@@ -123,9 +123,9 @@ var WalletsConnect = /** @class */ (function (_super) {
         return new rxjs_1.Observable(function (observer) {
             console.log('observer', observer);
             console.log('this.connector', _this.connector);
-            _this.connector.on('connect', function (payload) {
+            _this.connector.on('connect', function (error, payload) {
                 console.log('payload', payload);
-                if (payload.error) {
+                if (error) {
                     observer.error({
                         code: 3,
                         message: {

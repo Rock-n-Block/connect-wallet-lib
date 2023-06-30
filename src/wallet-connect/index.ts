@@ -36,9 +36,9 @@ export class WalletsConnect extends AbstractConnector {
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
       }).then((provider) => (this.connector = provider));
-      
+
       await this.connector
-        .connect()
+        .enable()
         .then(() => {
           resolve({
             code: 1,
@@ -70,9 +70,9 @@ export class WalletsConnect extends AbstractConnector {
     return new Observable((observer) => {
       console.log('observer', observer);
       console.log('this.connector', this.connector);
-      this.connector.on('connect', (payload: any) => {
+      this.connector.on('connect', (error:any, payload: any) => {
         console.log('payload', payload);
-        if (payload.error) {
+        if (error) {
           observer.error({
             code: 3,
             message: {
