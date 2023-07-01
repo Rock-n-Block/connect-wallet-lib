@@ -38,7 +38,7 @@ export class WalletsConnect extends AbstractConnector {
         rpcMap: provider.provider[provider.useProvider].rpc,
       });
 
-      if (!this.connector.connected) {
+      if (!this.connector.connected || !this.connector.accounts.length) {
         await this.connector
           .connect({
             chains: provider.provider[provider.useProvider].chains,

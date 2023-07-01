@@ -88,7 +88,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    if (!!this.connector.connected) return [3 /*break*/, 3];
+                                    if (!(!this.connector.connected || !this.connector.accounts.length)) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector
                                             .connect({
                                             chains: provider.provider[provider.useProvider].chains,
