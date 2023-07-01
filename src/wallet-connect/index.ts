@@ -38,7 +38,13 @@ export class WalletsConnect extends AbstractConnector {
         rpcMap: provider.provider[provider.useProvider].rpc,
       });
 
-      if (!this.connector.connected || !this.connector.accounts.length) {
+      if (
+        !this.connector.connected ||
+        !this.connector.accounts.length ||
+        !provider.provider[provider.useProvider].chains.includes(
+          this.connector.chainId
+        )
+      ) {
         await this.connector
           .connect({
             chains: provider.provider[provider.useProvider].chains,
@@ -164,7 +170,7 @@ export class WalletsConnect extends AbstractConnector {
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
       if (!this.connector.connected) {
-        this.connector.enable()
+        this.connector.enable();
       }
       resolve({
         address: this.connector.accounts[0],
