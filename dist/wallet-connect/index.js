@@ -83,8 +83,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
+                                            showQrModal: provider.provider[provider.useProvider].showQrModal
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
