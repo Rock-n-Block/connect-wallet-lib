@@ -35,6 +35,7 @@ export class WalletsConnect extends AbstractConnector {
         projectId: provider.provider[provider.useProvider].projectId,
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
+        rpcMap: provider.provider[provider.useProvider].rpc,
       });
 
       if (
