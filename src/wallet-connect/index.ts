@@ -38,54 +38,35 @@ export class WalletsConnect extends AbstractConnector {
         rpcMap: provider.provider[provider.useProvider].rpc,
       });
 
-      if (
-        !this.connector.connected ||
-        !this.connector.accounts.length ||
-        !provider.provider[provider.useProvider].chains.includes(
-          this.connector.chainId
-        )
-      ) {
-        await this.connector
-          .connect({
-            chains: provider.provider[provider.useProvider].chains,
-            rpcMap: provider.provider[provider.useProvider].rpc,
-          })
-          .then(() => {
-            console.log(`Wallet Connect V2 connected.`);
-            resolve({
-              code: 1,
-              connected: true,
-              provider: this.connector,
-              message: {
-                title: 'Success',
-                subtitle: 'Wallet Connect',
-                text: `Wallet Connect connected.`,
-              },
-            });
-          })
-          .catch(() => {
-            reject({
-              code: 5,
-              connected: false,
-              message: {
-                title: 'Error',
-                subtitle: 'Error connect',
-                text: `User closed qr modal window.`,
-              },
-            });
+      await this.connector
+        .connect({
+          chains: provider.provider[provider.useProvider].chains,
+          rpcMap: provider.provider[provider.useProvider].rpc,
+        })
+        .then(() => {
+          console.log(`Wallet Connect V2 connected.`);
+          resolve({
+            code: 1,
+            connected: true,
+            provider: this.connector,
+            message: {
+              title: 'Success',
+              subtitle: 'Wallet Connect',
+              text: `Wallet Connect connected.`,
+            },
           });
-      } else {
-        resolve({
-          code: 1,
-          connected: true,
-          provider: this.connector,
-          message: {
-            title: 'Success',
-            subtitle: 'Wallet Connect',
-            text: `Wallet Connect connected.`,
-          },
+        })
+        .catch(() => {
+          reject({
+            code: 5,
+            connected: false,
+            message: {
+              title: 'Error',
+              subtitle: 'Error connect',
+              text: `User closed qr modal window.`,
+            },
+          });
         });
-      }
     });
   }
 

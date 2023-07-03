@@ -88,9 +88,6 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    if (!(!this.connector.connected ||
-                                        !this.connector.accounts.length ||
-                                        !provider.provider[provider.useProvider].chains.includes(this.connector.chainId))) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector
                                             .connect({
                                             chains: provider.provider[provider.useProvider].chains,
@@ -121,20 +118,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 2:
                                     _b.sent();
-                                    return [3 /*break*/, 4];
-                                case 3:
-                                    resolve({
-                                        code: 1,
-                                        connected: true,
-                                        provider: this.connector,
-                                        message: {
-                                            title: 'Success',
-                                            subtitle: 'Wallet Connect',
-                                            text: "Wallet Connect connected."
-                                        }
-                                    });
-                                    _b.label = 4;
-                                case 4: return [2 /*return*/];
+                                    return [2 /*return*/];
                             }
                         });
                     }); })];
