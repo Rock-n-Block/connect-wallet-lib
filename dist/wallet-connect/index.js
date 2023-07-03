@@ -88,38 +88,40 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    if (this.connector.session) {
-                                        this.connector.disconnect();
-                                    }
-                                    return [4 /*yield*/, this.connector
-                                            .connect({
-                                            chains: provider.provider[provider.useProvider].chains,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
-                                        })
-                                            .then(function () {
-                                            console.log("Wallet Connect V2 connected.");
-                                            resolve({
-                                                code: 1,
-                                                connected: true,
-                                                provider: _this.connector,
-                                                message: {
-                                                    title: 'Success',
-                                                    subtitle: 'Wallet Connect',
-                                                    text: "Wallet Connect connected."
-                                                }
-                                            });
-                                        })["catch"](function () {
-                                            reject({
-                                                code: 5,
-                                                connected: false,
-                                                message: {
-                                                    title: 'Error',
-                                                    subtitle: 'Error connect',
-                                                    text: "User closed qr modal window."
-                                                }
-                                            });
-                                        })];
+                                    if (!this.connector.session) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, this.connector.disconnect()];
                                 case 2:
+                                    _b.sent();
+                                    _b.label = 3;
+                                case 3: return [4 /*yield*/, this.connector
+                                        .connect({
+                                        chains: provider.provider[provider.useProvider].chains,
+                                        rpcMap: provider.provider[provider.useProvider].rpc
+                                    })
+                                        .then(function () {
+                                        console.log("Wallet Connect V2 connected.");
+                                        resolve({
+                                            code: 1,
+                                            connected: true,
+                                            provider: _this.connector,
+                                            message: {
+                                                title: 'Success',
+                                                subtitle: 'Wallet Connect',
+                                                text: "Wallet Connect connected."
+                                            }
+                                        });
+                                    })["catch"](function () {
+                                        reject({
+                                            code: 5,
+                                            connected: false,
+                                            message: {
+                                                title: 'Error',
+                                                subtitle: 'Error connect',
+                                                text: "User closed qr modal window."
+                                            }
+                                        });
+                                    })];
+                                case 4:
                                     _b.sent();
                                     return [2 /*return*/];
                             }
