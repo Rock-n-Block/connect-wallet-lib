@@ -39,7 +39,9 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       if (this.connector.session || this.connector.connected) {
-        await this.connector.disconnect();
+        await this.connector.disconnect({
+          topic: this.connector.session.topic
+        });
       }
 
       await this.connector

@@ -89,7 +89,9 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     if (!(this.connector.session || this.connector.connected)) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, this.connector.disconnect()];
+                                    return [4 /*yield*/, this.connector.disconnect({
+                                            topic: this.connector.session.topic
+                                        })];
                                 case 2:
                                     _b.sent();
                                     _b.label = 3;
