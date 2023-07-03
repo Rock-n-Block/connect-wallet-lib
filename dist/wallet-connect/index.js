@@ -90,7 +90,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _b.sent();
                                     console.log('this.connector', this.connector);
-                                    if (!this.connector.session) return [3 /*break*/, 3];
+                                    if (!(this.connector.session || this.connector.connected)) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector.disconnect()];
                                 case 2:
                                     _b.sent();
