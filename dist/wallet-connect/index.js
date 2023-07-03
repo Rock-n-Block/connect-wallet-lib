@@ -97,7 +97,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             rpcMap: provider.provider[provider.useProvider].rpc
                                         })
                                             .then(function () {
-                                            console.log("Wallet Connect connected.");
+                                            console.log("Wallet Connect V2 connected.");
                                             resolve({
                                                 code: 1,
                                                 connected: true,
@@ -159,7 +159,6 @@ var WalletsConnect = /** @class */ (function (_super) {
                 observer.next({ address: accounts, network: chainId, name: 'connect' });
             });
             _this.connector.on('disconnect', function (error) {
-                console.log('error', error);
                 if (error) {
                     console.log('wallet connect on connect error', error, error.data);
                     observer.error({

@@ -103,18 +103,15 @@ export class ConnectWallet {
     this.settings = settings ? settings : { providerType: false };
 
     this.connector = this.chooseProvider(provider.name);
-    console.log('public async connect', this.connector.connect);
 
     return new Promise<IConnectorMessage>((resolve, reject) => {
       this.connector
         .connect(provider)
         .then((connect) => {
-          console.log('.then((connect) ', connect);
           return this.applySettings(connect);
         })
         .then(
           (connect: IConnectorMessage) => {
-            console.log('connect IConnectorMessage', connect);
             connect.connected
               ? this.initWeb3(connect.provider)
               : reject(connect);
@@ -157,7 +154,6 @@ export class ConnectWallet {
    * @example connectWallet.initWeb3(provider);
    */
   private initWeb3(provider: any): void {
-    console.log('initWeb3', provider);
     if (this.Web3) {
       this.Web3.setProvider(provider);
     } else {
@@ -221,8 +217,6 @@ export class ConnectWallet {
     };
 
     return new Promise((resolve, reject) => {
-      console.log('this.currentWeb3()', this.currentWeb3());
-      console.log('this.connector', this.connector);
       if (this.currentWeb3() && !this.connector) {
         const { address, accounts } = this.currentWeb3().currentProvider as any;
         resolve({ address: address || accounts[0] });
@@ -232,7 +226,6 @@ export class ConnectWallet {
 
         this.connector.getAccounts().then(
           (connectInfo: IConnect) => {
-            console.log('connectInfo', connectInfo);
             if (
               connectInfo.network &&
               connectInfo.network.chainID !== chainID

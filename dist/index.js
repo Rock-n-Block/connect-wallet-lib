@@ -149,16 +149,13 @@ var ConnectWallet = /** @class */ (function () {
                 this.network = network;
                 this.settings = settings ? settings : { providerType: false };
                 this.connector = this.chooseProvider(provider.name);
-                console.log('public async connect', this.connector.connect);
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         _this.connector
                             .connect(provider)
                             .then(function (connect) {
-                            console.log('.then((connect) ', connect);
                             return _this.applySettings(connect);
                         })
                             .then(function (connect) {
-                            console.log('connect IConnectorMessage', connect);
                             connect.connected
                                 ? _this.initWeb3(connect.provider)
                                 : reject(connect);
@@ -199,7 +196,6 @@ var ConnectWallet = /** @class */ (function () {
      * @example connectWallet.initWeb3(provider);
      */
     ConnectWallet.prototype.initWeb3 = function (provider) {
-        console.log('initWeb3', provider);
         if (this.Web3) {
             this.Web3.setProvider(provider);
         }
@@ -253,8 +249,6 @@ var ConnectWallet = /** @class */ (function () {
             }
         };
         return new Promise(function (resolve, reject) {
-            console.log('this.currentWeb3()', _this.currentWeb3());
-            console.log('this.connector', _this.connector);
             if (_this.currentWeb3() && !_this.connector) {
                 var _a = _this.currentWeb3().currentProvider, address = _a.address, accounts = _a.accounts;
                 resolve({ address: address || accounts[0] });
@@ -263,7 +257,6 @@ var ConnectWallet = /** @class */ (function () {
                 var chainID_1 = _this.network.chainID;
                 var chainsMap_1 = helpers_1.parameters.chainsMap, chainIDMap_1 = helpers_1.parameters.chainIDMap;
                 _this.connector.getAccounts().then(function (connectInfo) {
-                    console.log('connectInfo', connectInfo);
                     if (connectInfo.network &&
                         connectInfo.network.chainID !== chainID_1) {
                         error.message.text = "Please set network: " + chainsMap_1[chainIDMap_1[chainID_1]].name + ".";

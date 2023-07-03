@@ -51,7 +51,7 @@ export class WalletsConnect extends AbstractConnector {
             rpcMap: provider.provider[provider.useProvider].rpc,
           })
           .then(() => {
-            console.log(`Wallet Connect connected.`);
+            console.log(`Wallet Connect V2 connected.`);
             resolve({
               code: 1,
               connected: true,
@@ -109,8 +109,6 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       this.connector.on('disconnect', (error) => {
-        console.log('error', error);
-
         if (error) {
           console.log('wallet connect on connect error', error, error.data);
           observer.error({
