@@ -73,7 +73,6 @@ var WalletsConnect = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                console.log('provider', provider);
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
@@ -89,10 +88,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    console.log('this.connector', this.connector);
-                                    console.log('this.connector.session', this.connector.session);
                                     if (!(this.connector.session || this.connector.connected)) return [3 /*break*/, 3];
-                                    console.log('here');
                                     return [4 /*yield*/, this.connector.disconnect()];
                                 case 2:
                                     _b.sent();
