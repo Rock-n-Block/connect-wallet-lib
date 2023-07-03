@@ -38,6 +38,10 @@ export class WalletsConnect extends AbstractConnector {
         rpcMap: provider.provider[provider.useProvider].rpc,
       });
 
+      if (this.connector.session) {
+        this.connector.disconnect();
+      }
+
       await this.connector
         .connect({
           chains: provider.provider[provider.useProvider].chains,
