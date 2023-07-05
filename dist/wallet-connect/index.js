@@ -103,9 +103,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _c.sent();
                                     _c.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
-                                        .connect({
-                                        namespaces: provider.provider[provider.useProvider].wcConfig.namespaces
-                                    })
+                                        .connect(__assign({}, provider.provider[provider.useProvider].wcConfig))
                                         .then(function () {
                                         console.log("Wallet Connect V2 connected.");
                                         resolve({
