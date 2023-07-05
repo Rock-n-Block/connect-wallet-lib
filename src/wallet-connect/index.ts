@@ -40,14 +40,14 @@ export class WalletsConnect extends AbstractConnector {
           topic: this.connector.session.topic,
         });
       }
-      console.log('this.connector', this.connector)
+      console.log('this.connector', this.connector);
       await this.connector
         .connect({
           ...provider.provider[provider.useProvider].wcConfig,
         })
         .then((provider) => {
           console.log(`Wallet Connect V2 connected.`);
-          console.log('provider', provider)
+          console.log('provider', provider);
           resolve({
             code: 1,
             connected: true,
@@ -75,6 +75,7 @@ export class WalletsConnect extends AbstractConnector {
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
+      console.log('this.connector', this.connector);
       this.connector.on('connect', (error: any, payload: any) => {
         if (error) {
           observer.error({
