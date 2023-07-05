@@ -84,7 +84,12 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             projectId: provider.provider[provider.useProvider].projectId,
                                             chains: provider.provider[provider.useProvider].chains,
                                             showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
+                                            rpcMap: provider.provider[provider.useProvider].rpc,
+                                            qrModalOptions: {
+                                                themeVariables: {
+                                                    '--wcm-z-index': '9999'
+                                                }
+                                            }
                                         })];
                                 case 1:
                                     _a.connector = _b.sent();

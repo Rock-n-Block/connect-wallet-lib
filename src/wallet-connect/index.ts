@@ -36,6 +36,11 @@ export class WalletsConnect extends AbstractConnector {
         chains: provider.provider[provider.useProvider].chains,
         showQrModal: provider.provider[provider.useProvider].showQrModal,
         rpcMap: provider.provider[provider.useProvider].rpc,
+        qrModalOptions: {
+          themeVariables: {
+            '--wcm-z-index': '9999'
+          }
+        }
       });
 
       if (this.connector.session) {
