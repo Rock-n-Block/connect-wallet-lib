@@ -41,7 +41,7 @@ export class WalletsConnect extends AbstractConnector {
         });
       }
       console.log('this.connector', this.connector)
-      const result = await this.connector.signer.client
+      await this.connector
         .connect({
           ...provider.provider[provider.useProvider].wcConfig,
         })
@@ -70,7 +70,6 @@ export class WalletsConnect extends AbstractConnector {
             },
           });
         });
-        console.log('result', result)
     });
   }
 

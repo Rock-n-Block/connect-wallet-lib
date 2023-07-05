@@ -85,7 +85,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, result;
+                        var _a;
                         var _this = this;
                         var _b;
                         return __generator(this, function (_c) {
@@ -104,7 +104,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _c.label = 3;
                                 case 3:
                                     console.log('this.connector', this.connector);
-                                    return [4 /*yield*/, this.connector.signer.client
+                                    return [4 /*yield*/, this.connector
                                             .connect(__assign({}, provider.provider[provider.useProvider].wcConfig))
                                             .then(function (provider) {
                                             console.log("Wallet Connect V2 connected.");
@@ -131,8 +131,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 4:
-                                    result = _c.sent();
-                                    console.log('result', result);
+                                    _c.sent();
                                     return [2 /*return*/];
                             }
                         });
