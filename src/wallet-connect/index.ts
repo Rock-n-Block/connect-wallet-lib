@@ -43,8 +43,7 @@ export class WalletsConnect extends AbstractConnector {
 
       await this.connector
         .connect({
-          chains: provider.provider[provider.useProvider].wcConfig.chains,
-          rpcMap: provider.provider[provider.useProvider].rpc,
+          chains: provider.provider[provider.useProvider].wcConfig.namespaces
         })
         .then(() => {
           console.log(`Wallet Connect V2 connected.`);
