@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -76,25 +87,21 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
                                     _a = this;
-                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
-                                            projectId: provider.provider[provider.useProvider].projectId,
-                                            chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
-                                        })];
+                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _b.sent();
-                                    if (!this.connector.session) return [3 /*break*/, 3];
+                                    _a.connector = _c.sent();
+                                    if (!((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic)) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector.disconnect({
                                             topic: this.connector.session.topic
                                         })];
                                 case 2:
-                                    _b.sent();
-                                    _b.label = 3;
+                                    _c.sent();
+                                    _c.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
                                         .connect({
                                         chains: provider.provider[provider.useProvider].chains,
@@ -124,7 +131,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         });
                                     })];
                                 case 4:
-                                    _b.sent();
+                                    _c.sent();
                                     return [2 /*return*/];
                             }
                         });

@@ -32,15 +32,12 @@ export class WalletsConnect extends AbstractConnector {
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
       this.connector = await EthereumProvider.init({
-        projectId: provider.provider[provider.useProvider].projectId,
-        chains: provider.provider[provider.useProvider].chains,
-        showQrModal: provider.provider[provider.useProvider].showQrModal,
-        rpcMap: provider.provider[provider.useProvider].rpc,
+        ...provider.provider[provider.useProvider].wcConfig,
       });
 
-      if (this.connector.session) {
+      if (this.connector.session?.topic) {
         await this.connector.disconnect({
-          topic: this.connector.session.topic
+          topic: this.connector.session.topic,
         });
       }
 
