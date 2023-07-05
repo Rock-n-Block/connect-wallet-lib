@@ -41,7 +41,7 @@ export class WalletsConnect extends AbstractConnector {
         });
       }
 
-      await this.connector
+      await this.connector.signer
         .connect({
           ...provider.provider[provider.useProvider].wcConfig,
         })
