@@ -177,6 +177,9 @@ var WalletsConnect = /** @class */ (function (_super) {
             _this.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
             });
+            _this.connector.on('display_uri', function (displayUri) {
+                console.log('WalletConnect display_uri:', displayUri);
+            });
             _this.connector.on('wc_sessionUpdate', function (error, payload) {
                 console.log(error || payload, 'wc_sessionUpdate');
             });

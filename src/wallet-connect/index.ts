@@ -120,6 +120,10 @@ export class WalletsConnect extends AbstractConnector {
         console.log('WalletConnect chain changed:', chainId);
       });
 
+      this.connector.on('display_uri', (displayUri: any) => {
+        console.log('WalletConnect display_uri:', displayUri);
+      });
+
       this.connector.on('wc_sessionUpdate', (error, payload) => {
         console.log(error || payload, 'wc_sessionUpdate');
       });
