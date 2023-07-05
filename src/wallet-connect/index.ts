@@ -1,7 +1,5 @@
 import { Observable } from 'rxjs';
-import WalletConnectProvider, {
-  EthereumProvider,
-} from '@walletconnect/ethereum-provider';
+import UniversalProvider from "@walletconnect/universal-provider";
 
 import {
   IConnectorMessage,
@@ -31,7 +29,7 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      this.connector = await EthereumProvider.init({
+      this.connector = await UniversalProvider.init({
         ...provider.provider[provider.useProvider].wcConfig,
       });
 
@@ -43,7 +41,8 @@ export class WalletsConnect extends AbstractConnector {
 
       await this.connector
         .connect({
-          ...provider.provider[provider.useProvider].wcConfig,
+          namespaces:
+            provider.provider[provider.useProvider].wcConfig.namespaces,
         })
         .then(() => {
           console.log(`Wallet Connect V2 connected.`);

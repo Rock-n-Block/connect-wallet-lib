@@ -29,6 +29,7 @@
     "@coinbase/wallet-sdk": "^3.4.2",
     "@walletconnect/ethereum-provider": "^2.0.0",
     "@walletconnect/modal": "^2.5.9",
+    "@walletconnect/universal-provider": "^2.8.6",
     "rxjs": "^7.5.5",
     "tslib": "^2.0.0",
     "web3": "^1.6.1"
