@@ -85,7 +85,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a;
+                        var _a, result;
                         var _this = this;
                         var _b;
                         return __generator(this, function (_c) {
@@ -131,7 +131,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 4:
-                                    _c.sent();
+                                    result = _c.sent();
+                                    console.log('result', result);
                                     return [2 /*return*/];
                             }
                         });
@@ -194,6 +195,9 @@ var WalletsConnect = /** @class */ (function (_super) {
             });
             _this.connector.on('session_update', function (error, payload) {
                 console.log(error || payload, 'session_update');
+            });
+            _this.connector.on('session_event', function (error, payload) {
+                console.log(error || payload, 'session_event');
             });
             _this.connector.on('session_request', function (error, payload) {
                 console.log(error || payload, 'session_request');

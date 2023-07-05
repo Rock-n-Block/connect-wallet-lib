@@ -41,7 +41,7 @@ export class WalletsConnect extends AbstractConnector {
         });
       }
       console.log('this.connector', this.connector)
-      await this.connector
+      const result = await this.connector
         .connect({
           ...provider.provider[provider.useProvider].wcConfig,
         })
@@ -70,6 +70,7 @@ export class WalletsConnect extends AbstractConnector {
             },
           });
         });
+        console.log('result', result)
     });
   }
 
@@ -139,6 +140,10 @@ export class WalletsConnect extends AbstractConnector {
 
       this.connector.on('session_update', (error, payload) => {
         console.log(error || payload, 'session_update');
+      });
+
+      this.connector.on('session_event', (error, payload) => {
+        console.log(error || payload, 'session_event');
       });
 
       this.connector.on('session_request', (error, payload) => {
