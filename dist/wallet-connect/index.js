@@ -119,7 +119,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                                 text: "Wallet Connect connected."
                                             }
                                         });
-                                    })["catch"](function () {
+                                    })["catch"](function (error) {
+                                        alert(JSON.stringify(error));
                                         reject({
                                             code: 5,
                                             connected: false,

@@ -60,7 +60,8 @@ export class WalletsConnect extends AbstractConnector {
             },
           });
         })
-        .catch(() => {
+        .catch((error) => {
+          alert(JSON.stringify(error))
           reject({
             code: 5,
             connected: false,
