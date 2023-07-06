@@ -73,7 +73,6 @@ export class WalletsConnect extends AbstractConnector {
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
-      console.log('this.connector', this.connector);
       this.connector.on('connect', (error: any, payload: any) => {
         if (error) {
           observer.error({

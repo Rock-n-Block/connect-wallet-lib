@@ -139,7 +139,6 @@ var WalletsConnect = /** @class */ (function (_super) {
     WalletsConnect.prototype.eventSubscriber = function () {
         var _this = this;
         return new rxjs_1.Observable(function (observer) {
-            console.log('this.connector', _this.connector);
             _this.connector.on('connect', function (error, payload) {
                 if (error) {
                     observer.error({
