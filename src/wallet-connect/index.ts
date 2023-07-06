@@ -35,16 +35,16 @@ export class WalletsConnect extends AbstractConnector {
         ...provider.provider[provider.useProvider].wcConfig,
       });
 
-      if (this.connector.session?.topic) {
-        await this.connector.disconnect({
-          topic: this.connector.session.topic,
-        });
+      if (this.connector.session?.topic || this.connector.connected) {
+        await this.connector.disconnect(
+          this.connector.session?.topic && {
+            topic: this.connector.session.topic,
+          }
+        );
       }
       console.log('this.connector', this.connector);
       await this.connector
-        .connect(
-          // {...provider.provider[provider.useProvider].wcConfig,}
-        )
+        .connect()
         .then((provider) => {
           console.log(`Wallet Connect V2 connected.`);
           console.log('provider', provider);

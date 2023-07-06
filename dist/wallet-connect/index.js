@@ -87,27 +87,25 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        var _b;
-                        return __generator(this, function (_c) {
-                            switch (_c.label) {
+                        var _b, _c;
+                        return __generator(this, function (_d) {
+                            switch (_d.label) {
                                 case 0:
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _c.sent();
-                                    if (!((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic)) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, this.connector.disconnect({
+                                    _a.connector = _d.sent();
+                                    if (!(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) || this.connector.connected)) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, this.connector.disconnect(((_c = this.connector.session) === null || _c === void 0 ? void 0 : _c.topic) && {
                                             topic: this.connector.session.topic
                                         })];
                                 case 2:
-                                    _c.sent();
-                                    _c.label = 3;
+                                    _d.sent();
+                                    _d.label = 3;
                                 case 3:
                                     console.log('this.connector', this.connector);
                                     return [4 /*yield*/, this.connector
-                                            .connect(
-                                        // {...provider.provider[provider.useProvider].wcConfig,}
-                                        )
+                                            .connect()
                                             .then(function (provider) {
                                             console.log("Wallet Connect V2 connected.");
                                             console.log('provider', provider);
@@ -133,7 +131,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 4:
-                                    _c.sent();
+                                    _d.sent();
                                     return [2 /*return*/];
                             }
                         });
