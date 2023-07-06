@@ -103,8 +103,10 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _d.sent();
                                     _d.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
-                                        .connect()
-                                        .then(function (provider) {
+                                        .connect({
+                                        chains: provider.provider[provider.useProvider].wcConfig.chains
+                                    })
+                                        .then(function () {
                                         console.log("Wallet Connect V2 connected.");
                                         resolve({
                                             code: 1,
