@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -48,10 +59,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 exports.WalletsConnect = void 0;
 var rxjs_1 = require("rxjs");
-var ethereum_provider_1 = require("@walletconnect/ethereum-provider");
+var universal_provider_1 = __importDefault(require("@walletconnect/universal-provider"));
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
 var WalletsConnect = /** @class */ (function (_super) {
@@ -76,30 +90,23 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var _b, _c;
+                        return __generator(this, function (_d) {
+                            switch (_d.label) {
                                 case 0:
                                     _a = this;
-                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init({
-                                            projectId: provider.provider[provider.useProvider].projectId,
-                                            chains: provider.provider[provider.useProvider].chains,
-                                            showQrModal: provider.provider[provider.useProvider].showQrModal,
-                                            rpcMap: provider.provider[provider.useProvider].rpc
-                                        })];
+                                    return [4 /*yield*/, universal_provider_1["default"].init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _b.sent();
-                                    if (!this.connector.session) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, this.connector.disconnect({
+                                    _a.connector = _d.sent();
+                                    if (!(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) || this.connector.connected)) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, this.connector.disconnect(((_c = this.connector.session) === null || _c === void 0 ? void 0 : _c.topic) && {
                                             topic: this.connector.session.topic
                                         })];
                                 case 2:
-                                    _b.sent();
-                                    _b.label = 3;
+                                    _d.sent();
+                                    _d.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
-                                        .connect({
-                                        chains: provider.provider[provider.useProvider].chains,
-                                        rpcMap: provider.provider[provider.useProvider].rpc
-                                    })
+                                        .connect(__assign({}, provider.provider[provider.useProvider].namespaces))
                                         .then(function () {
                                         console.log("Wallet Connect V2 connected.");
                                         resolve({
@@ -124,7 +131,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         });
                                     })];
                                 case 4:
-                                    _b.sent();
+                                    _d.sent();
                                     return [2 /*return*/];
                             }
                         });
@@ -173,6 +180,9 @@ var WalletsConnect = /** @class */ (function (_super) {
             _this.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
             });
+            _this.connector.on('display_uri', function (displayUri) {
+                console.log('WalletConnect display_uri:', displayUri);
+            });
             _this.connector.on('wc_sessionUpdate', function (error, payload) {
                 console.log(error || payload, 'wc_sessionUpdate');
             });
@@ -184,6 +194,9 @@ var WalletsConnect = /** @class */ (function (_super) {
             });
             _this.connector.on('session_update', function (error, payload) {
                 console.log(error || payload, 'session_update');
+            });
+            _this.connector.on('session_event', function (error, payload) {
+                console.log(error || payload, 'session_event');
             });
             _this.connector.on('session_request', function (error, payload) {
                 console.log(error || payload, 'session_request');
@@ -200,7 +213,7 @@ var WalletsConnect = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve) {
             if (!_this.connector.connected) {
-                _this.connector.enable();
+                _this.connector.connect();
             }
             resolve({
                 address: _this.connector.accounts[0],

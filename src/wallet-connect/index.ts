@@ -1,7 +1,5 @@
 import { Observable } from 'rxjs';
-import WalletConnectProvider, {
-  EthereumProvider,
-} from '@walletconnect/ethereum-provider';
+import UniversalProvider from '@walletconnect/universal-provider';
 
 import {
   IConnectorMessage,
@@ -31,24 +29,19 @@ export class WalletsConnect extends AbstractConnector {
    */
   public async connect(provider: IProvider): Promise<IConnectorMessage> {
     return new Promise<any>(async (resolve, reject) => {
-      this.connector = await EthereumProvider.init({
-        projectId: provider.provider[provider.useProvider].projectId,
-        chains: provider.provider[provider.useProvider].chains,
-        showQrModal: provider.provider[provider.useProvider].showQrModal,
-        rpcMap: provider.provider[provider.useProvider].rpc,
+      this.connector = await UniversalProvider.init({
+        ...provider.provider[provider.useProvider].wcConfig,
       });
 
-      if (this.connector.session) {
-        await this.connector.disconnect({
-          topic: this.connector.session.topic
-        });
+      if (this.connector.session?.topic || this.connector.connected) {
+        await this.connector.disconnect(
+          this.connector.session?.topic && {
+            topic: this.connector.session.topic,
+          }
+        );
       }
-
       await this.connector
-        .connect({
-          chains: provider.provider[provider.useProvider].chains,
-          rpcMap: provider.provider[provider.useProvider].rpc,
-        })
+        .connect({...provider.provider[provider.useProvider].namespaces})
         .then(() => {
           console.log(`Wallet Connect V2 connected.`);
           resolve({
@@ -124,6 +117,10 @@ export class WalletsConnect extends AbstractConnector {
         console.log('WalletConnect chain changed:', chainId);
       });
 
+      this.connector.on('display_uri', (displayUri: any) => {
+        console.log('WalletConnect display_uri:', displayUri);
+      });
+
       this.connector.on('wc_sessionUpdate', (error, payload) => {
         console.log(error || payload, 'wc_sessionUpdate');
       });
@@ -138,6 +135,10 @@ export class WalletsConnect extends AbstractConnector {
 
       this.connector.on('session_update', (error, payload) => {
         console.log(error || payload, 'session_update');
+      });
+
+      this.connector.on('session_event', (error, payload) => {
+        console.log(error || payload, 'session_event');
       });
 
       this.connector.on('session_request', (error, payload) => {
@@ -155,7 +156,7 @@ export class WalletsConnect extends AbstractConnector {
   public getAccounts(): Promise<any> {
     return new Promise((resolve) => {
       if (!this.connector.connected) {
-        this.connector.enable();
+        this.connector.connect();
       }
       resolve({
         address: this.connector.accounts[0],
