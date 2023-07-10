@@ -59,13 +59,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 exports.WalletsConnect = void 0;
 var rxjs_1 = require("rxjs");
-var universal_provider_1 = __importDefault(require("@walletconnect/universal-provider"));
+var ethereum_provider_1 = require("@walletconnect/ethereum-provider");
 var helpers_1 = require("../helpers");
 var abstract_connector_1 = require("../abstract-connector");
 var WalletsConnect = /** @class */ (function (_super) {
@@ -95,7 +92,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                             switch (_d.label) {
                                 case 0:
                                     _a = this;
-                                    return [4 /*yield*/, universal_provider_1["default"].init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
+                                    return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
                                     _a.connector = _d.sent();
                                     if (!(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) || this.connector.connected)) return [3 /*break*/, 3];
@@ -106,7 +103,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _d.sent();
                                     _d.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
-                                        .connect(__assign({}, provider.provider[provider.useProvider].namespaces))
+                                        .connect()
                                         .then(function () {
                                         console.log("Wallet Connect V2 connected.");
                                         resolve({
@@ -131,6 +128,16 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         });
                                     })];
                                 case 4:
+                                    _d.sent();
+                                    this.connector.on('connect', function (error, payload) {
+                                        console.log('error', error);
+                                        console.log('payload', payload);
+                                    });
+                                    this.connector.on('display_uri', function (displayUri) {
+                                        console.log('WalletConnect display_uri:', displayUri);
+                                    });
+                                    return [4 /*yield*/, this.connector.enable()];
+                                case 5:
                                     _d.sent();
                                     return [2 /*return*/];
                             }
