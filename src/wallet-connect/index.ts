@@ -40,6 +40,7 @@ export class WalletsConnect extends AbstractConnector {
           }
         );
       }
+      
       await this.connector
         .connect({...provider.provider[provider.useProvider].namespaces})
         .then(() => {
