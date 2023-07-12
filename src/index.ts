@@ -392,13 +392,13 @@ export class ConnectWallet {
     console.log('this.connector', this.connector)
     console.log('this.connector.connector', this.connector.connector)
     // @ts-ignore
-    if (this.connector.session?.topic || this.connector.connected) {
+    if (this.connector.connector.session?.topic || this.connector.connector.connected) {
       // @ts-ignore
-      this.connector.disconnect(
+      this.connector.connector.disconnect(
         // @ts-ignore
-        this.connector.session?.topic && {
+        this.connector.connector.session?.topic && {
           // @ts-ignore
-          topic: this.connector.session.topic,
+          topic: this.connector.connector.session.topic,
         }
       );
     } else {

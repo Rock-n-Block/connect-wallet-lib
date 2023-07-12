@@ -111,13 +111,13 @@ var ConnectWallet = /** @class */ (function () {
             console.log('this.connector', _this.connector);
             console.log('this.connector.connector', _this.connector.connector);
             // @ts-ignore
-            if (((_a = _this.connector.session) === null || _a === void 0 ? void 0 : _a.topic) || _this.connector.connected) {
+            if (((_a = _this.connector.connector.session) === null || _a === void 0 ? void 0 : _a.topic) || _this.connector.connector.connected) {
                 // @ts-ignore
-                _this.connector.disconnect(
+                _this.connector.connector.disconnect(
                 // @ts-ignore
-                ((_b = _this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
+                ((_b = _this.connector.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
                     // @ts-ignore
-                    topic: _this.connector.session.topic
+                    topic: _this.connector.connector.session.topic
                 });
             }
             else {
