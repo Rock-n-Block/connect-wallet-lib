@@ -391,9 +391,15 @@ export class ConnectWallet {
   public resetConect = (): void => {
     console.log('this.connector', this.connector)
     // @ts-ignore
-    if (this.connector?.disconnect) {
+    if (this.connector.session?.topic || this.connector.connected) {
       // @ts-ignore
-      this.connector.disconnect();
+      this.connector.disconnect(
+        // @ts-ignore
+        this.connector.session?.topic && {
+          // @ts-ignore
+          topic: this.connector.session.topic,
+        }
+      );
     } else {
       this.connector = undefined;
     }

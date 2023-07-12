@@ -107,12 +107,17 @@ var ConnectWallet = /** @class */ (function () {
          * @example connectWallet.resetConect();
          */
         this.resetConect = function () {
-            var _a;
+            var _a, _b;
             console.log('this.connector', _this.connector);
             // @ts-ignore
-            if ((_a = _this.connector) === null || _a === void 0 ? void 0 : _a.disconnect) {
+            if (((_a = _this.connector.session) === null || _a === void 0 ? void 0 : _a.topic) || _this.connector.connected) {
                 // @ts-ignore
-                _this.connector.disconnect();
+                _this.connector.disconnect(
+                // @ts-ignore
+                ((_b = _this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
+                    // @ts-ignore
+                    topic: _this.connector.session.topic
+                });
             }
             else {
                 _this.connector = undefined;
