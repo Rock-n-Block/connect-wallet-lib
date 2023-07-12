@@ -39,7 +39,7 @@ export class WalletsConnect extends AbstractConnector {
       await this.connector
         .connect(
           this.connector.session?.topic && {
-            pairingTopic: this.connector.session.topic,
+            pairingTopic: this.connector.session.pairingTopic,
           }
         )
         .then(() => {
