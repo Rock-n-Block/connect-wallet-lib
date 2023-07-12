@@ -67,6 +67,10 @@ export class WalletsConnect extends AbstractConnector {
       this.connector.on('display_uri', (displayUri: any) => {
         console.log('WalletConnect display_uri:', displayUri);
       });
+      
+      this.connector.on('disconnect', (payload) => {
+        console.log('disconnect payload', payload)
+      });
     });
   }
 

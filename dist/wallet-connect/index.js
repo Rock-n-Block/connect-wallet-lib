@@ -128,6 +128,9 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     this.connector.on('display_uri', function (displayUri) {
                                         console.log('WalletConnect display_uri:', displayUri);
                                     });
+                                    this.connector.on('disconnect', function (payload) {
+                                        console.log('disconnect payload', payload);
+                                    });
                                     return [2 /*return*/];
                             }
                         });
