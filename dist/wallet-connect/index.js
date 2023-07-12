@@ -87,24 +87,19 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _b.sent();
+                                    _a.connector = _c.sent();
                                     console.log('this.connector', this.connector);
-                                    // if (this.connector.session?.topic || this.connector.connected) {
-                                    //   await this.connector.enable();
-                                    // await this.connector.disconnect(
-                                    //   this.connector.session?.topic && {
-                                    //     topic: this.connector.session.topic,
-                                    //   }
-                                    // );
-                                    // } else {
                                     return [4 /*yield*/, this.connector
-                                            .connect()
+                                            .connect(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
+                                            pairingTopic: this.connector.session.topic
+                                        })
                                             .then(function () {
                                             console.log("Wallet Connect V2 connected.");
                                             resolve({
@@ -129,16 +124,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                                             });
                                         })];
                                 case 2:
-                                    // if (this.connector.session?.topic || this.connector.connected) {
-                                    //   await this.connector.enable();
-                                    // await this.connector.disconnect(
-                                    //   this.connector.session?.topic && {
-                                    //     topic: this.connector.session.topic,
-                                    //   }
-                                    // );
-                                    // } else {
-                                    _b.sent();
-                                    // }
+                                    _c.sent();
                                     this.connector.on('connect', function (error, payload) {
                                         console.log('error', error);
                                         console.log('payload', payload);

@@ -34,43 +34,38 @@ export class WalletsConnect extends AbstractConnector {
       this.connector = await EthereumProvider.init({
         ...provider.provider[provider.useProvider].wcConfig,
       });
-      console.log('this.connector', this.connector)
+      console.log('this.connector', this.connector);
 
-      // if (this.connector.session?.topic || this.connector.connected) {
-      //   await this.connector.enable();
-        // await this.connector.disconnect(
-        //   this.connector.session?.topic && {
-        //     topic: this.connector.session.topic,
-        //   }
-        // );
-      // } else {
-        await this.connector
-          .connect()
-          .then(() => {
-            console.log(`Wallet Connect V2 connected.`);
-            resolve({
-              code: 1,
-              connected: true,
-              provider: this.connector,
-              message: {
-                title: 'Success',
-                subtitle: 'Wallet Connect',
-                text: `Wallet Connect connected.`,
-              },
-            });
-          })
-          .catch(() => {
-            reject({
-              code: 5,
-              connected: false,
-              message: {
-                title: 'Error',
-                subtitle: 'Error connect',
-                text: `User closed qr modal window.`,
-              },
-            });
+      await this.connector
+        .connect(
+          this.connector.session?.topic && {
+            pairingTopic: this.connector.session.topic,
+          }
+        )
+        .then(() => {
+          console.log(`Wallet Connect V2 connected.`);
+          resolve({
+            code: 1,
+            connected: true,
+            provider: this.connector,
+            message: {
+              title: 'Success',
+              subtitle: 'Wallet Connect',
+              text: `Wallet Connect connected.`,
+            },
           });
-      // }
+        })
+        .catch(() => {
+          reject({
+            code: 5,
+            connected: false,
+            message: {
+              title: 'Error',
+              subtitle: 'Error connect',
+              text: `User closed qr modal window.`,
+            },
+          });
+        });
       this.connector.on('connect', (error: any, payload: any) => {
         console.log('error', error);
         console.log('payload', payload);
