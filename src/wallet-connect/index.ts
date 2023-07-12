@@ -34,9 +34,8 @@ export class WalletsConnect extends AbstractConnector {
       this.connector = await EthereumProvider.init({
         ...provider.provider[provider.useProvider].wcConfig,
       });
-      console.log('this.connector', this.connector);
 
-      if (!this.connector.session?.pairingTopic) {
+      if (!this.connector.session) {
         await this.connector.connect();
       }
 

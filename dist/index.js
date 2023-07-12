@@ -107,15 +107,12 @@ var ConnectWallet = /** @class */ (function () {
          * @example connectWallet.resetConect();
          */
         this.resetConect = function () {
-            var _a, _b;
-            console.log('this.connector', _this.connector);
-            console.log('this.connector.connector', _this.connector.connector);
+            var _a;
             // @ts-ignore
-            if (((_a = _this.connector.connector.session) === null || _a === void 0 ? void 0 : _a.topic) || _this.connector.connector.connected) {
+            if (((_a = _this.connector.connector.session) === null || _a === void 0 ? void 0 : _a.topic) ||
+                _this.connector.connector.connected) {
                 // @ts-ignore
-                _this.connector.connector.disconnect(
-                // @ts-ignore
-                ((_b = _this.connector.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
+                _this.connector.connector.disconnect({
                     // @ts-ignore
                     topic: _this.connector.connector.session.topic
                 });

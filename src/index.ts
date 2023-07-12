@@ -389,18 +389,16 @@ export class ConnectWallet {
    * @example connectWallet.resetConect();
    */
   public resetConect = (): void => {
-    console.log('this.connector', this.connector)
-    console.log('this.connector.connector', this.connector.connector)
     // @ts-ignore
-    if (this.connector.connector.session?.topic || this.connector.connector.connected) {
+    if (
+      this.connector.connector.session?.topic ||
+      this.connector.connector.connected
+    ) {
       // @ts-ignore
-      this.connector.connector.disconnect(
+      this.connector.connector.disconnect({
         // @ts-ignore
-        this.connector.connector.session?.topic && {
-          // @ts-ignore
-          topic: this.connector.connector.session.topic,
-        }
-      );
+        topic: this.connector.connector.session.topic,
+      });
     } else {
       this.connector = undefined;
     }
