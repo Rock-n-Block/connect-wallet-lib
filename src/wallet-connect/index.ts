@@ -35,39 +35,41 @@ export class WalletsConnect extends AbstractConnector {
         ...provider.provider[provider.useProvider].wcConfig,
       });
 
-      // if (this.connector.session?.topic || this.connector.connected) {
-      //   await this.connector.disconnect(
-      //     this.connector.session?.topic && {
-      //       topic: this.connector.session.topic,
-      //     }
-      //   );
-      // }
-      await this.connector
-        .connect()
-        .then(() => {
-          console.log(`Wallet Connect V2 connected.`);
-          resolve({
-            code: 1,
-            connected: true,
-            provider: this.connector,
-            message: {
-              title: 'Success',
-              subtitle: 'Wallet Connect',
-              text: `Wallet Connect connected.`,
-            },
+      if (this.connector.session?.topic || this.connector.connected) {
+        await this.connector.enable();
+        // await this.connector.disconnect(
+        //   this.connector.session?.topic && {
+        //     topic: this.connector.session.topic,
+        //   }
+        // );
+      } else {
+        await this.connector
+          .connect()
+          .then(() => {
+            console.log(`Wallet Connect V2 connected.`);
+            resolve({
+              code: 1,
+              connected: true,
+              provider: this.connector,
+              message: {
+                title: 'Success',
+                subtitle: 'Wallet Connect',
+                text: `Wallet Connect connected.`,
+              },
+            });
+          })
+          .catch(() => {
+            reject({
+              code: 5,
+              connected: false,
+              message: {
+                title: 'Error',
+                subtitle: 'Error connect',
+                text: `User closed qr modal window.`,
+              },
+            });
           });
-        })
-        .catch(() => {
-          reject({
-            code: 5,
-            connected: false,
-            message: {
-              title: 'Error',
-              subtitle: 'Error connect',
-              text: `User closed qr modal window.`,
-            },
-          });
-        });
+      }
       this.connector.on('connect', (error: any, payload: any) => {
         console.log('error', error);
         console.log('payload', payload);
@@ -75,8 +77,6 @@ export class WalletsConnect extends AbstractConnector {
       this.connector.on('display_uri', (displayUri: any) => {
         console.log('WalletConnect display_uri:', displayUri);
       });
-
-      await this.connector.enable();
     });
   }
 
