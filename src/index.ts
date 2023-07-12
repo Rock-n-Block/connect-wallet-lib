@@ -390,6 +390,7 @@ export class ConnectWallet {
    */
   public resetConect = (): void => {
     console.log('this.connector', this.connector)
+    console.log('this.connector.connector', this.connector.connector)
     // @ts-ignore
     if (this.connector.session?.topic || this.connector.connected) {
       // @ts-ignore
