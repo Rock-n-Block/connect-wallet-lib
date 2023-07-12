@@ -388,7 +388,16 @@ export class ConnectWallet {
    *
    * @example connectWallet.resetConect();
    */
-  public resetConect = (): void => (this.connector = undefined);
+  public resetConect = (): void => {
+    console.log('this.connector', this.connector)
+    // @ts-ignore
+    if (this.connector?.disconnect) {
+      // @ts-ignore
+      this.connector.disconnect();
+    } else {
+      this.connector = undefined;
+    }
+  };
 
   /**
    * Use this method to sign custom mesaage.

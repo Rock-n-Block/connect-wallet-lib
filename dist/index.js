@@ -106,7 +106,18 @@ var ConnectWallet = /** @class */ (function () {
          *
          * @example connectWallet.resetConect();
          */
-        this.resetConect = function () { return (_this.connector = undefined); };
+        this.resetConect = function () {
+            var _a;
+            console.log('this.connector', _this.connector);
+            // @ts-ignore
+            if ((_a = _this.connector) === null || _a === void 0 ? void 0 : _a.disconnect) {
+                // @ts-ignore
+                _this.connector.disconnect();
+            }
+            else {
+                _this.connector = undefined;
+            }
+        };
         /**
          * Use this method to sign custom mesaage.
          *
