@@ -97,8 +97,9 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _a.connector = _c.sent();
                                     console.log('this.connector', this.connector);
                                     return [4 /*yield*/, this.connector
-                                            .connect(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) && {
-                                            pairingTopic: this.connector.session.pairingTopic
+                                            .connect(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.pairingTopic) && {
+                                            pairingTopic: this.connector.session.pairingTopic,
+                                            namespaces: this.connector.session.namespaces
                                         })
                                             .then(function () {
                                             console.log("Wallet Connect V2 connected.");
