@@ -34,15 +34,16 @@ export class WalletsConnect extends AbstractConnector {
       this.connector = await EthereumProvider.init({
         ...provider.provider[provider.useProvider].wcConfig,
       });
+      console.log('this.connector', this.connector)
 
-      if (this.connector.session?.topic || this.connector.connected) {
-        await this.connector.enable();
+      // if (this.connector.session?.topic || this.connector.connected) {
+      //   await this.connector.enable();
         // await this.connector.disconnect(
         //   this.connector.session?.topic && {
         //     topic: this.connector.session.topic,
         //   }
         // );
-      } else {
+      // } else {
         await this.connector
           .connect()
           .then(() => {
@@ -69,7 +70,7 @@ export class WalletsConnect extends AbstractConnector {
               },
             });
           });
-      }
+      // }
       this.connector.on('connect', (error: any, payload: any) => {
         console.log('error', error);
         console.log('payload', payload);
