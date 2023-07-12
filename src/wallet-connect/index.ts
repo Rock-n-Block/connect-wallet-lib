@@ -35,13 +35,13 @@ export class WalletsConnect extends AbstractConnector {
         ...provider.provider[provider.useProvider].wcConfig,
       });
 
-      if (this.connector.session?.topic || this.connector.connected) {
-        await this.connector.disconnect(
-          this.connector.session?.topic && {
-            topic: this.connector.session.topic,
-          }
-        );
-      }
+      // if (this.connector.session?.topic || this.connector.connected) {
+      //   await this.connector.disconnect(
+      //     this.connector.session?.topic && {
+      //       topic: this.connector.session.topic,
+      //     }
+      //   );
+      // }
       await this.connector
         .connect()
         .then(() => {

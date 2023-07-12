@@ -87,48 +87,54 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        var _b, _c;
-                        return __generator(this, function (_d) {
-                            switch (_d.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _d.sent();
-                                    if (!(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) || this.connector.connected)) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, this.connector.disconnect(((_c = this.connector.session) === null || _c === void 0 ? void 0 : _c.topic) && {
-                                            topic: this.connector.session.topic
+                                    _a.connector = _b.sent();
+                                    // if (this.connector.session?.topic || this.connector.connected) {
+                                    //   await this.connector.disconnect(
+                                    //     this.connector.session?.topic && {
+                                    //       topic: this.connector.session.topic,
+                                    //     }
+                                    //   );
+                                    // }
+                                    return [4 /*yield*/, this.connector
+                                            .connect()
+                                            .then(function () {
+                                            console.log("Wallet Connect V2 connected.");
+                                            resolve({
+                                                code: 1,
+                                                connected: true,
+                                                provider: _this.connector,
+                                                message: {
+                                                    title: 'Success',
+                                                    subtitle: 'Wallet Connect',
+                                                    text: "Wallet Connect connected."
+                                                }
+                                            });
+                                        })["catch"](function () {
+                                            reject({
+                                                code: 5,
+                                                connected: false,
+                                                message: {
+                                                    title: 'Error',
+                                                    subtitle: 'Error connect',
+                                                    text: "User closed qr modal window."
+                                                }
+                                            });
                                         })];
                                 case 2:
-                                    _d.sent();
-                                    _d.label = 3;
-                                case 3: return [4 /*yield*/, this.connector
-                                        .connect()
-                                        .then(function () {
-                                        console.log("Wallet Connect V2 connected.");
-                                        resolve({
-                                            code: 1,
-                                            connected: true,
-                                            provider: _this.connector,
-                                            message: {
-                                                title: 'Success',
-                                                subtitle: 'Wallet Connect',
-                                                text: "Wallet Connect connected."
-                                            }
-                                        });
-                                    })["catch"](function () {
-                                        reject({
-                                            code: 5,
-                                            connected: false,
-                                            message: {
-                                                title: 'Error',
-                                                subtitle: 'Error connect',
-                                                text: "User closed qr modal window."
-                                            }
-                                        });
-                                    })];
-                                case 4:
-                                    _d.sent();
+                                    // if (this.connector.session?.topic || this.connector.connected) {
+                                    //   await this.connector.disconnect(
+                                    //     this.connector.session?.topic && {
+                                    //       topic: this.connector.session.topic,
+                                    //     }
+                                    //   );
+                                    // }
+                                    _b.sent();
                                     this.connector.on('connect', function (error, payload) {
                                         console.log('error', error);
                                         console.log('payload', payload);
@@ -137,8 +143,8 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         console.log('WalletConnect display_uri:', displayUri);
                                     });
                                     return [4 /*yield*/, this.connector.enable()];
-                                case 5:
-                                    _d.sent();
+                                case 3:
+                                    _b.sent();
                                     return [2 /*return*/];
                             }
                         });
