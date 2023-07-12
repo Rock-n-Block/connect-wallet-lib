@@ -86,7 +86,6 @@ var WalletsConnect = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
-                        var _this = this;
                         var _b;
                         return __generator(this, function (_c) {
                             switch (_c.label) {
@@ -96,36 +95,32 @@ var WalletsConnect = /** @class */ (function (_super) {
                                 case 1:
                                     _a.connector = _c.sent();
                                     console.log('this.connector', this.connector);
-                                    return [4 /*yield*/, this.connector
-                                            .connect(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.pairingTopic) && {
-                                            pairingTopic: this.connector.session.pairingTopic,
-                                            namespaces: this.connector.session.namespaces
-                                        })
-                                            .then(function () {
-                                            console.log("Wallet Connect V2 connected.");
-                                            resolve({
-                                                code: 1,
-                                                connected: true,
-                                                provider: _this.connector,
-                                                message: {
-                                                    title: 'Success',
-                                                    subtitle: 'Wallet Connect',
-                                                    text: "Wallet Connect connected."
-                                                }
-                                            });
-                                        })["catch"](function () {
-                                            reject({
-                                                code: 5,
-                                                connected: false,
-                                                message: {
-                                                    title: 'Error',
-                                                    subtitle: 'Error connect',
-                                                    text: "User closed qr modal window."
-                                                }
-                                            });
-                                        })];
+                                    if (!!((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.pairingTopic)) return [3 /*break*/, 3];
+                                    return [4 /*yield*/, this.connector.connect()];
                                 case 2:
                                     _c.sent();
+                                    _c.label = 3;
+                                case 3:
+                                    console.log("Wallet Connect V2 connected.");
+                                    resolve({
+                                        code: 1,
+                                        connected: true,
+                                        provider: this.connector,
+                                        message: {
+                                            title: 'Success',
+                                            subtitle: 'Wallet Connect',
+                                            text: "Wallet Connect connected."
+                                        }
+                                    });
+                                    reject({
+                                        code: 5,
+                                        connected: false,
+                                        message: {
+                                            title: 'Error',
+                                            subtitle: 'Error connect',
+                                            text: "User closed qr modal window."
+                                        }
+                                    });
                                     this.connector.on('connect', function (error, payload) {
                                         console.log('error', error);
                                         console.log('payload', payload);
