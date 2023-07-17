@@ -35,6 +35,8 @@ export class WalletsConnect extends AbstractConnector {
         ...provider.provider[provider.useProvider].wcConfig,
       });
 
+      console.log('EthereumProvider', this.connector)
+
       if (!this.connector.session) {
         await this.connector.connect();
       }
