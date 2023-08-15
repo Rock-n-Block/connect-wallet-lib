@@ -93,7 +93,6 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
                                     _a.connector = _b.sent();
-                                    console.log('EthereumProvider', this.connector);
                                     if (!!this.connector.session) return [3 /*break*/, 3];
                                     return [4 /*yield*/, this.connector.connect()];
                                 case 2:
