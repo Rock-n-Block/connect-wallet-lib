@@ -109,8 +109,7 @@ var ConnectWallet = /** @class */ (function () {
         this.resetConect = function () {
             var _a;
             // @ts-ignore
-            if (((_a = _this.connector.connector.session) === null || _a === void 0 ? void 0 : _a.topic) ||
-                _this.connector.connector.connected) {
+            if ((_a = _this.connector.connector.session) === null || _a === void 0 ? void 0 : _a.topic) {
                 // @ts-ignore
                 _this.connector.connector.disconnect({
                     // @ts-ignore
