@@ -146,12 +146,13 @@ var WalletsConnect = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.connector.disconnect(((_a = this.connector.session) === null || _a === void 0 ? void 0 : _a.topic) && {
-                            topic: this.connector.session.topic
-                        })];
+                    case 0:
+                        if (!((_a = this.connector.session) === null || _a === void 0 ? void 0 : _a.topic)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.connector.disconnect({ topic: this.connector.session.topic })];
                     case 1:
                         _b.sent();
-                        return [2 /*return*/];
+                        _b.label = 2;
+                    case 2: return [2 /*return*/];
                 }
             });
         });

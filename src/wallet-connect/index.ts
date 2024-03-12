@@ -76,11 +76,10 @@ export class WalletsConnect extends AbstractConnector {
    */
   
   public async disconnect() {
-    await this.connector.disconnect(
-      this.connector.session?.topic && {
-        topic: this.connector.session.topic,
-      }
-    );
+    if (this.connector.session?.topic) {
+      await this.connector.disconnect({ topic: this.connector.session.topic });
+    }
+    
   }
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
