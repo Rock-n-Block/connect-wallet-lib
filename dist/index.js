@@ -101,12 +101,22 @@ var ConnectWallet = /** @class */ (function () {
         };
         /**
          * Logout function. Use this function if you want to do logout from your application. Function will reset
-         * current connection to defoult then you need to initialize connect() function again to connect to your
+         * current connection and call own connector disconnect func to defoult then you need to initialize connect() function again to connect to your
          * provider.
          *
          * @example connectWallet.resetConect();
          */
-        this.resetConect = function () { return (_this.connector = undefined); };
+        this.resetConect = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.connector.disconnect()];
+                    case 1:
+                        _a.sent();
+                        this.connector = undefined;
+                        return [2 /*return*/];
+                }
+            });
+        }); };
         /**
          * Use this method to sign custom mesaage.
          *

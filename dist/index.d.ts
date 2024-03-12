@@ -165,12 +165,12 @@ export declare class ConnectWallet {
     getBalance: (address: string) => Promise<string | number>;
     /**
      * Logout function. Use this function if you want to do logout from your application. Function will reset
-     * current connection to defoult then you need to initialize connect() function again to connect to your
+     * current connection and call own connector disconnect func to defoult then you need to initialize connect() function again to connect to your
      * provider.
      *
      * @example connectWallet.resetConect();
      */
-    resetConect: () => void;
+    resetConect: () => Promise<void>;
     /**
      * Use this method to sign custom mesaage.
      *
