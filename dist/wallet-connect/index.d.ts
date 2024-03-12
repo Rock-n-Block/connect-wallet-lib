@@ -4,6 +4,11 @@ import { AbstractConnector } from '../abstract-connector';
 export declare class WalletsConnect extends AbstractConnector {
     connector: any;
     /**
+     * lastObservedChainId needs becouse WC sends multiply chainChanged events, so we store new chain ID and
+     * compare it with next chainChanged response. And reset it after disconnect session
+     */
+    private lastObservedChainId;
+    /**
      * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
      * in your favourite cryptowallet.
      */
@@ -23,6 +28,7 @@ export declare class WalletsConnect extends AbstractConnector {
    * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
    */
     disconnect(): Promise<void>;
+    private handleChainChanged;
     eventSubscriber(): Observable<IEvent | IEventError>;
     /**
      * Get account address and chain information from connected wallet.

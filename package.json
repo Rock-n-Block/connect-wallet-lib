@@ -27,7 +27,7 @@
   "homepage": "https://github.com/laumiqv/connect-wallet#readme",
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.4.2",
-    "@walletconnect/ethereum-provider": "^2.7.4",
+    "@walletconnect/ethereum-provider": "^2.11.2",
     "@walletconnect/modal": "^2.5.9",
     "rxjs": "^7.5.5",
     "tslib": "^2.0.0",

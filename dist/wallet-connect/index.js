@@ -72,7 +72,13 @@ var WalletsConnect = /** @class */ (function (_super) {
      * in your favourite cryptowallet.
      */
     function WalletsConnect() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        /**
+         * lastObservedChainId needs becouse WC sends multiply chainChanged events, so we store new chain ID and
+         * compare it with next chainChanged response. And reset it after disconnect session
+         */
+        _this.lastObservedChainId = '';
+        return _this;
     }
     /**
      * Connect WalletConnect to application. Create connection with connect wallet and return provider for Web3.
@@ -152,10 +158,18 @@ var WalletsConnect = /** @class */ (function (_super) {
                     case 1:
                         _b.sent();
                         _b.label = 2;
-                    case 2: return [2 /*return*/];
+                    case 2:
+                        this.lastObservedChainId = '';
+                        return [2 /*return*/];
                 }
             });
         });
+    };
+    WalletsConnect.prototype.handleChainChanged = function (observer, chainId) {
+        if (this.lastObservedChainId !== chainId) {
+            observer.next({ address: '', network: helpers_1.parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
+            this.lastObservedChainId = chainId;
+        }
     };
     WalletsConnect.prototype.eventSubscriber = function () {
         var _this = this;
@@ -195,10 +209,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                     name: 'accountsChanged'
                 });
             });
-            _this.connector.on('chainChanged', function (chainId) {
-                console.log('WalletConnect chain changed:', chainId);
-                observer.next({ address: '', network: helpers_1.parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
-            });
+            _this.connector.on('chainChanged', _this.handleChainChanged.bind(_this, observer));
             _this.connector.on('display_uri', function (displayUri) {
                 console.log('WalletConnect display_uri:', displayUri);
             });

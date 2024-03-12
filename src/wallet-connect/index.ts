@@ -16,6 +16,12 @@ export class WalletsConnect extends AbstractConnector {
   public connector: any;
 
   /**
+   * lastObservedChainId needs becouse WC sends multiply chainChanged events, so we store new chain ID and
+   * compare it with next chainChanged response. And reset it after disconnect session
+   */
+  private lastObservedChainId = '';
+
+  /**
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
    * in your favourite cryptowallet.
    */
@@ -80,6 +86,15 @@ export class WalletsConnect extends AbstractConnector {
       await this.connector.disconnect({ topic: this.connector.session.topic });
     }
     
+    this.lastObservedChainId = '';
+  }
+
+  private handleChainChanged(observer: any, chainId: any) {
+    if (this.lastObservedChainId !== chainId) {
+      observer.next({ address: '', network: parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
+        
+      this.lastObservedChainId = chainId;
+    }
   }
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
@@ -126,11 +141,7 @@ export class WalletsConnect extends AbstractConnector {
         });
       });
 
-      this.connector.on('chainChanged', (chainId: any) => {
-        console.log('WalletConnect chain changed:', chainId);
-
-        observer.next({ address: '', network: parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
-      });
+      this.connector.on('chainChanged', this.handleChainChanged.bind(this, observer));
 
       this.connector.on('display_uri', (displayUri: any) => {
         console.log('WalletConnect display_uri:', displayUri);
