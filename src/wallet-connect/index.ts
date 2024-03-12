@@ -36,11 +36,7 @@ export class WalletsConnect extends AbstractConnector {
       });
 
       if (this.connector.session?.topic || this.connector.connected) {
-        await this.connector.disconnect(
-          this.connector.session?.topic && {
-            topic: this.connector.session.topic,
-          }
-        );
+        await this.disconnect()
       }
       await this.connector
         .connect()
@@ -69,6 +65,22 @@ export class WalletsConnect extends AbstractConnector {
           });
         });
     });
+  }
+
+    /**
+   * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+   * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+   * 
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+   */
+  
+  public async disconnect() {
+    await this.connector.disconnect(
+      this.connector.session?.topic && {
+        topic: this.connector.session.topic,
+      }
+    );
   }
 
   public eventSubscriber(): Observable<IEvent | IEventError> {
@@ -117,6 +129,8 @@ export class WalletsConnect extends AbstractConnector {
 
       this.connector.on('chainChanged', (chainId: any) => {
         console.log('WalletConnect chain changed:', chainId);
+
+        observer.next({ address: '', network: parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
       });
 
       this.connector.on('display_uri', (displayUri: any) => {

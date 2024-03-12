@@ -87,21 +87,19 @@ var WalletsConnect = /** @class */ (function (_super) {
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                         var _a;
                         var _this = this;
-                        var _b, _c;
-                        return __generator(this, function (_d) {
-                            switch (_d.label) {
+                        var _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
                                     _a = this;
                                     return [4 /*yield*/, ethereum_provider_1.EthereumProvider.init(__assign({}, provider.provider[provider.useProvider].wcConfig))];
                                 case 1:
-                                    _a.connector = _d.sent();
+                                    _a.connector = _c.sent();
                                     if (!(((_b = this.connector.session) === null || _b === void 0 ? void 0 : _b.topic) || this.connector.connected)) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, this.connector.disconnect(((_c = this.connector.session) === null || _c === void 0 ? void 0 : _c.topic) && {
-                                            topic: this.connector.session.topic
-                                        })];
+                                    return [4 /*yield*/, this.disconnect()];
                                 case 2:
-                                    _d.sent();
-                                    _d.label = 3;
+                                    _c.sent();
+                                    _c.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
                                         .connect()
                                         .then(function () {
@@ -128,11 +126,33 @@ var WalletsConnect = /** @class */ (function (_super) {
                                         });
                                     })];
                                 case 4:
-                                    _d.sent();
+                                    _c.sent();
                                     return [2 /*return*/];
                             }
                         });
                     }); })];
+            });
+        });
+    };
+    /**
+   * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+   * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+   *
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+   */
+    WalletsConnect.prototype.disconnect = function () {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.connector.disconnect(((_a = this.connector.session) === null || _a === void 0 ? void 0 : _a.topic) && {
+                            topic: this.connector.session.topic
+                        })];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
@@ -176,6 +196,7 @@ var WalletsConnect = /** @class */ (function (_super) {
             });
             _this.connector.on('chainChanged', function (chainId) {
                 console.log('WalletConnect chain changed:', chainId);
+                observer.next({ address: '', network: helpers_1.parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
             });
             _this.connector.on('display_uri', function (displayUri) {
                 console.log('WalletConnect display_uri:', displayUri);

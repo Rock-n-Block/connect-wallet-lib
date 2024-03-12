@@ -61,6 +61,19 @@ export class KardiaChainConnect extends AbstractConnector {
     });
   }
 
+  /**
+   * Disconnect from the KardiaChain Wallet browser extension. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+   * It serves as a placeholder method to fulfill the requirements of an abstract class.
+   * 
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+   */
+    
+  public disconnect() {
+    return Promise.resolve();
+  }
+
+  
   private ethRequestAccounts(): Promise<any> {
     return this.connector.request({ method: 'eth_requestAccounts' });
   }

@@ -15,6 +15,14 @@ export declare class WalletsConnect extends AbstractConnector {
      * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
      */
     connect(provider: IProvider): Promise<IConnectorMessage>;
+    /**
+   * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+   * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+   *
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+   */
+    disconnect(): Promise<void>;
     eventSubscriber(): Observable<IEvent | IEventError>;
     /**
      * Get account address and chain information from connected wallet.
