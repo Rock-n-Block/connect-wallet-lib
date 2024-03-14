@@ -72,13 +72,7 @@ var WalletsConnect = /** @class */ (function (_super) {
      * in your favourite cryptowallet.
      */
     function WalletsConnect() {
-        var _this = _super.call(this) || this;
-        /**
-         * lastObservedChainId needs becouse WC sends multiply chainChanged events, so we store new chain ID and
-         * compare it with next chainChanged response. And reset it after disconnect session
-         */
-        _this.lastObservedChainId = '';
-        return _this;
+        return _super.call(this) || this;
     }
     /**
      * Connect WalletConnect to application. Create connection with connect wallet and return provider for Web3.
@@ -108,19 +102,37 @@ var WalletsConnect = /** @class */ (function (_super) {
                                     _c.label = 3;
                                 case 3: return [4 /*yield*/, this.connector
                                         .connect()
-                                        .then(function () {
-                                        console.log("Wallet Connect V2 connected.");
-                                        resolve({
-                                            code: 1,
-                                            connected: true,
-                                            provider: _this.connector,
-                                            message: {
-                                                title: 'Success',
-                                                subtitle: 'Wallet Connect',
-                                                text: "Wallet Connect connected."
+                                        .then(function () { return __awaiter(_this, void 0, void 0, function () {
+                                        var session, namespace, chains;
+                                        var _a, _b, _c;
+                                        return __generator(this, function (_d) {
+                                            session = (_a = this.connector) === null || _a === void 0 ? void 0 : _a.session;
+                                            namespace = (_b = this.connector) === null || _b === void 0 ? void 0 : _b.namespace;
+                                            chains = (_c = session === null || session === void 0 ? void 0 : session.namespaces[namespace]) === null || _c === void 0 ? void 0 : _c.chains;
+                                            if ((chains === null || chains === void 0 ? void 0 : chains.length) > 1) {
+                                                reject({
+                                                    code: 4,
+                                                    connected: false,
+                                                    message: {
+                                                        title: 'Error',
+                                                        subtitle: 'Error connect with this chain',
+                                                        text: "Switch chain"
+                                                    }
+                                                });
                                             }
+                                            resolve({
+                                                code: 1,
+                                                connected: true,
+                                                provider: this.connector,
+                                                message: {
+                                                    title: 'Success',
+                                                    subtitle: 'Wallet Connect',
+                                                    text: "Wallet Connect connected."
+                                                }
+                                            });
+                                            return [2 /*return*/];
                                         });
-                                    })["catch"](function () {
+                                    }); })["catch"](function () {
                                         reject({
                                             code: 5,
                                             connected: false,
@@ -141,12 +153,12 @@ var WalletsConnect = /** @class */ (function (_super) {
         });
     };
     /**
-   * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
-   * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
-   *
-   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
-   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
-   */
+     * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+     * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+     *
+     * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+     * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+     */
     WalletsConnect.prototype.disconnect = function () {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
@@ -158,18 +170,10 @@ var WalletsConnect = /** @class */ (function (_super) {
                     case 1:
                         _b.sent();
                         _b.label = 2;
-                    case 2:
-                        this.lastObservedChainId = '';
-                        return [2 /*return*/];
+                    case 2: return [2 /*return*/];
                 }
             });
         });
-    };
-    WalletsConnect.prototype.handleChainChanged = function (observer, chainId) {
-        if (this.lastObservedChainId !== chainId) {
-            observer.next({ address: '', network: helpers_1.parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
-            this.lastObservedChainId = chainId;
-        }
     };
     WalletsConnect.prototype.eventSubscriber = function () {
         var _this = this;
@@ -201,7 +205,7 @@ var WalletsConnect = /** @class */ (function (_super) {
                     });
                 }
             });
-            _this.connector.on('accountsChanged', function (accounts) {
+            _this.connector.once('accountsChanged', function (accounts) {
                 console.log('WalletConnect account changed', accounts, accounts);
                 observer.next({
                     address: accounts[0],
@@ -209,9 +213,12 @@ var WalletsConnect = /** @class */ (function (_super) {
                     name: 'accountsChanged'
                 });
             });
-            _this.connector.on('chainChanged', _this.handleChainChanged.bind(_this, observer));
+            _this.connector.once('chainChanged', function (chainId) {
+                console.log(chainId, chainId);
+                observer.next({ address: '', network: helpers_1.parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
+            });
             _this.connector.on('display_uri', function (displayUri) {
-                console.log('WalletConnect display_uri:', displayUri);
+                console.log('display_uri:', displayUri);
             });
             _this.connector.on('wc_sessionUpdate', function (error, payload) {
                 console.log(error || payload, 'wc_sessionUpdate');

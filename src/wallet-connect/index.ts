@@ -14,13 +14,7 @@ import { AbstractConnector } from '../abstract-connector';
 
 export class WalletsConnect extends AbstractConnector {
   public connector: any;
-
-  /**
-   * lastObservedChainId needs becouse WC sends multiply chainChanged events, so we store new chain ID and
-   * compare it with next chainChanged response. And reset it after disconnect session
-   */
-  private lastObservedChainId = '';
-
+  
   /**
    * Connect wallet to application using connect wallet via WalletConnect by scanning Qr Code
    * in your favourite cryptowallet.
@@ -28,7 +22,6 @@ export class WalletsConnect extends AbstractConnector {
   constructor() {
     super();
   }
-
   /**
    * Connect WalletConnect to application. Create connection with connect wallet and return provider for Web3.
    *
@@ -40,14 +33,32 @@ export class WalletsConnect extends AbstractConnector {
       this.connector = await EthereumProvider.init({
         ...provider.provider[provider.useProvider].wcConfig,
       });
-
+      
       if (this.connector.session?.topic || this.connector.connected) {
         await this.disconnect()
       }
+      
       await this.connector
         .connect()
-        .then(() => {
-          console.log(`Wallet Connect V2 connected.`);
+        .then(async () => {
+          const session =  this.connector?.session
+          const namespace = this.connector?.namespace
+
+          const chains = session?.namespaces[namespace]?.chains
+          
+          if (chains?.length > 1) {
+            reject({
+              code: 4,
+              connected: false,
+              message: {
+                title: 'Error',
+                subtitle: 'Error connect with this chain',
+                text: `Switch chain`,
+              },
+            })
+          }
+          
+          
           resolve({
             code: 1,
             connected: true,
@@ -72,11 +83,11 @@ export class WalletsConnect extends AbstractConnector {
         });
     });
   }
-
-    /**
+  
+  /**
    * Disconnect from  WalletConnect to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
    * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
-   * 
+   *
    * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
    * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
    */
@@ -85,18 +96,8 @@ export class WalletsConnect extends AbstractConnector {
     if (this.connector.session?.topic) {
       await this.connector.disconnect({ topic: this.connector.session.topic });
     }
-    
-    this.lastObservedChainId = '';
   }
-
-  private handleChainChanged(observer: any, chainId: any) {
-    if (this.lastObservedChainId !== chainId) {
-      observer.next({ address: '', network: parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
-        
-      this.lastObservedChainId = chainId;
-    }
-  }
-
+  
   public eventSubscriber(): Observable<IEvent | IEventError> {
     return new Observable((observer) => {
       this.connector.on('connect', (error: any, payload: any) => {
@@ -110,12 +111,12 @@ export class WalletsConnect extends AbstractConnector {
             },
           });
         }
-
+        
         const { accounts, chainId } = payload.params[0];
-
+        
         observer.next({ address: accounts, network: chainId, name: 'connect' });
       });
-
+      
       this.connector.on('disconnect', (error) => {
         if (error) {
           console.log('wallet connect on connect error', error, error.data);
@@ -129,10 +130,10 @@ export class WalletsConnect extends AbstractConnector {
           });
         }
       });
-
-      this.connector.on('accountsChanged', (accounts: any) => {
+      
+      this.connector.once('accountsChanged', (accounts: any) => {
         console.log('WalletConnect account changed', accounts, accounts);
-
+        
         observer.next({
           address: accounts[0],
           network:
@@ -140,39 +141,43 @@ export class WalletsConnect extends AbstractConnector {
           name: 'accountsChanged',
         });
       });
-
-      this.connector.on('chainChanged', this.handleChainChanged.bind(this, observer));
-
-      this.connector.on('display_uri', (displayUri: any) => {
-        console.log('WalletConnect display_uri:', displayUri);
+      
+      this.connector.once('chainChanged', (chainId: number | string) => {
+        console.log(chainId, chainId);
+        
+        observer.next({ address: '', network: parameters.chainsMap[chainId].chainID, name: 'chainChanged' });
       });
-
+      
+      this.connector.on('display_uri', (displayUri: any) => {
+        console.log('display_uri:', displayUri);
+      });
+      
       this.connector.on('wc_sessionUpdate', (error, payload) => {
         console.log(error || payload, 'wc_sessionUpdate');
       });
-
+      
       this.connector.on('wc_sessionRequest', (error, payload) => {
         console.log(error || payload, 'wc_sessionRequest');
       });
-
+      
       this.connector.on('call_request', (error, payload) => {
         console.log(error || payload, 'call_request');
       });
-
+      
       this.connector.on('session_update', (error, payload) => {
         console.log(error || payload, 'session_update');
       });
-
+      
       this.connector.on('session_event', (error, payload) => {
         console.log(error || payload, 'session_event');
       });
-
+      
       this.connector.on('session_request', (error, payload) => {
         console.log(error || payload, 'session_request');
       });
     });
   }
-
+  
   /**
    * Get account address and chain information from connected wallet.
    *
