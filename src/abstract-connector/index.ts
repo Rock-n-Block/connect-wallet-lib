@@ -17,4 +17,6 @@ export abstract class AbstractConnector {
   public abstract eventSubscriber(): Observable<IEvent | IEventError>;
 
   public abstract getAccounts(): Promise<any>;
+
+  public abstract disconnect(): Promise<void>
 }

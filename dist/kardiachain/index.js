@@ -99,6 +99,16 @@ var KardiaChainConnect = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * Disconnect from the KardiaChain Wallet browser extension. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+     * It serves as a placeholder method to fulfill the requirements of an abstract class.
+     *
+     * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+     * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+     */
+    KardiaChainConnect.prototype.disconnect = function () {
+        return Promise.resolve();
+    };
     KardiaChainConnect.prototype.ethRequestAccounts = function () {
         return this.connector.request({ method: 'eth_requestAccounts' });
     };

@@ -61,6 +61,20 @@ export class OntoConnect extends AbstractConnector {
     });
   }
 
+   /**
+   * Disconnect from Onto browser or mobile extention to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+   * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+   * 
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+   * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+   */
+    
+
+  public disconnect() {
+    return Promise.resolve();
+  }
+
+
   private ethRequestAccounts(): Promise<any> {
     return this.connector.request({ method: 'eth_requestAccounts' });
   }

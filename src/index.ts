@@ -383,12 +383,15 @@ export class ConnectWallet {
 
   /**
    * Logout function. Use this function if you want to do logout from your application. Function will reset
-   * current connection to defoult then you need to initialize connect() function again to connect to your
+   * current connection and call own connector disconnect func to defoult then you need to initialize connect() function again to connect to your
    * provider.
-   *
+   * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
    * @example connectWallet.resetConect();
    */
-  public resetConect = (): void => (this.connector = undefined);
+  public resetConect = async (): Promise<void> => {
+    await this.connector.disconnect()
+    this.connector = undefined
+  };
 
   /**
    * Use this method to sign custom mesaage.

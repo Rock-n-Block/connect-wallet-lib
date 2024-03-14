@@ -6,4 +6,5 @@ export declare abstract class AbstractConnector {
     abstract connect(provider?: IProvider): Promise<IConnectorMessage>;
     abstract eventSubscriber(): Observable<IEvent | IEventError>;
     abstract getAccounts(): Promise<any>;
+    abstract disconnect(): Promise<void>;
 }

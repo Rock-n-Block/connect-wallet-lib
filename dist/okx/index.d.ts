@@ -26,6 +26,14 @@ export declare class OkxConnect extends AbstractConnector {
      * @example this.connect().then((connector: IConnectorMessage) => console.log(connector),(err: IConnectorMessage) => console.log(err));
      */
     connect(): Promise<IConnectorMessage>;
+    /**
+     * Disconnect from the Okx browser or mobile extention to application. This method aborts the connection with the wallet and returns a Promise that resolves to void.
+     * This method acts as a placeholder to meet the requirements of an abstract class or to customize the functionality for the current connector.
+     *
+     * @returns {Promise<void>} A Promise that resolves when the disconnection is complete.
+     * @example this.disconnect().then((res) => console.log(res),(err) => console.log(err));
+     */
+    disconnect(): Promise<void>;
     private ethRequestAccounts;
     private getChainId;
     private checkNet;
