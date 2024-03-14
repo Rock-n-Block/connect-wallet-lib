@@ -41,9 +41,11 @@ export class WalletsConnect extends AbstractConnector {
       await this.connector
         .connect()
         .then(async () => {
+          // Get current session namespaces
           const session =  this.connector?.session
           const namespace = this.connector?.namespace
-
+          // By default, walletconnect has the chainid that was passed during initialization. 
+          // If you connect to a different network, wc adds it to the initial one.
           const chains = session?.namespaces[namespace]?.chains
           
           if (chains?.length > 1) {
